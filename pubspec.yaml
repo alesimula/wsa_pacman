@@ -1,0 +1,47 @@
+name: wsa_pacman
+description: A GUI package manager and package installer for Windows Subsystem for Android (WSA).
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  fluent_ui:
+    git: https://github.com/bdlukaa/fluent_ui.git
+  shared_value: ^2.1.0
+  synchronized: ^3.0.0
+  provider: ^6.0.0
+  system_theme: ^1.0.1
+  bitsdojo_window: ^0.1.1+1
+  flutter_acrylic: ^0.0.3
+  url_strategy: ^0.2.0
+  yaml: ^3.1.0
+  #transparent_pointer: ^1.0.0
+  archive: ^3.1.6
+  #flutter_svg: ^0.23.0+1
+  jovial_svg: ^1.0.6
+  protobuf: ^2.0.0
+  #path_provider: ^2.0.6
+  
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_native_splash: ^1.1.7+1
+  flutter_lints: ^1.0.4
+
+flutter:
+  uses-material-design: true
+  
+  #assets:
+    #- assets/example.png
+
+flutter_native_splash:
+  color: "#42a5f5"
+  image: web/assets/flutter_logo.png
+
