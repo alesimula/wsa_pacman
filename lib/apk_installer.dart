@@ -128,6 +128,8 @@ class ApkReader {
        ((type ??= getResType(m.group(2)!)) == ResType.FILE) ? int.parse(m.group(3)!, radix: 16) : m.group(3)! );
     if (resCodes.isNotEmpty) {
       if (DEBUG) log("found RES-VALUES: $resCodes of RES-TYPE: $type for RES-ID: $resId");
+      //Fix 'type' not resolved in release mode because of the lazy nature of the 'map' function
+      resCodes.first;
       if (type == ResType.COLOR) return Resource(resCodes.map((e)=>e), type!);
       //resCodes as Iterable<int>;
       String strings = await stringDump;
