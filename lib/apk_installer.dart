@@ -82,7 +82,7 @@ class Resource {
 class ApkReader {
   //I just put '&& true' there so I could conveniently switch it off
   static bool DEBUG = !kReleaseMode && true;
-  static String TEST_FILE = r'C:\Users\Alex\Downloads\com.atono.dropticket.apk';
+  static String TEST_FILE = /*r'C:\Users\Alex\Downloads\com.atono.dropticket.apk'*/ '';
   static late Future<String> resourceDump;
   static late Future<String> stringDump;
   static late Future<Archive> apkArchive;
@@ -98,7 +98,7 @@ class ApkReader {
 
   ///Decodes a binary xml
   static Future<Uint8List> _decodeXml(Uint8List encoded) async {
-    var axmldec = await Process.start(r'.\embedded-adb\axmldec.exe', []);
+    var axmldec = await Process.start('${Env.TOOLS_DIR}\\axmldec.exe', []);
     axmldec.stdin.add(encoded);
     //For some reason i need this
     axmldec.stdin.writeln();
@@ -208,11 +208,12 @@ class ApkReader {
   }
 
   //Retrieves APK information (Make sync?)
-  static void init() async {
-    resourceDump = Process.run(r'.\embedded-adb\aapt.exe', ['dump', 'resources', TEST_FILE]).then<String>((p) => p.stdout.toString());
-    stringDump = Process.run(r'.\embedded-adb\aapt.exe', ['dump', 'strings', TEST_FILE]).then<String>((p) => p.stdout.toString());
+  static void init(String fileName) async {
+    TEST_FILE = fileName;
+    resourceDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'resources', TEST_FILE]).then<String>((p) => p.stdout.toString());
+    stringDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'strings', TEST_FILE]).then<String>((p) => p.stdout.toString());
     initArchive();
-    Process.run(r'.\embedded-adb\aapt.exe', ['dump', 'badging', TEST_FILE]).then((value) {
+    Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'badging', TEST_FILE]).then((value) {
       if (value.exitCode == 0) {
         String dump = value.stdout.toString();
 
@@ -229,7 +230,7 @@ class ApkReader {
         GState.apkTitle.update((_) => title ?? "UNKNOWN_TITLE");
         //TODO check type of installation
         GState.apkInstallType.update((p0) => InstallType.INSTALL);
-        if (icon?.endsWith(".xml") ?? false) Process.run(r'.\embedded-adb\aapt2.exe', ['dump', 'xmltree', '--file', icon!, TEST_FILE]).then((value) {
+        if (icon?.endsWith(".xml") ?? false) Process.run('${Env.TOOLS_DIR}\\aapt2.exe', ['dump', 'xmltree', '--file', icon!, TEST_FILE]).then((value) {
           if (value.exitCode != 0) {log("XML ICON ERROR"); return;}
           String iconData = value.stdout.toString();
           String? background = iconData.find(r'(^|\n|\s)*E:[\s]?background\s[^\n]*\n\s*A:.*=@([^\s\n]*)', 2);
@@ -261,7 +262,7 @@ class ApkInstaller extends StatefulWidget {
 
   static void installApk(String apkFile, String ipAddress, int port) async {
     log("INSTALLING \"$apkFile\" on on $ipAddress:$port...");
-    var installation = Process.run(r'.\embedded-adb\adb.exe', ['-s', '$ipAddress:$port', 'install', apkFile])
+    var installation = Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'install', apkFile])
       .timeout(const Duration(seconds: 30)).onError((error, stackTrace) => ProcessResult(-1, -1, null, null));
     GState.apkInstallState.update((_) => InstallState.INSTALLING);
     var result = await installation;
@@ -338,11 +339,11 @@ class _ApkInstallerState extends State<ApkInstaller> {
                 checked: true,
                 onChanged: installType == null ? null : (_){ApkInstaller.installApk(ApkReader.TEST_FILE, ipAddress, port) ;},
               )),
-              const SizedBox(width: 15),noMoveWindow(ToggleButton(
+              /*const SizedBox(width: 15),noMoveWindow(ToggleButton(
                 child: const Text('TEST-ICON'),
                 checked: true,
                 onChanged: (_){ApkReader.init();},
-              ))
+              ))*/
             ]
           )
         ];
@@ -370,7 +371,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
               (){return isLaunchable ? noMoveWindow(ToggleButton(
                 child: const Text('Open app'),
                 checked: true,
-                onChanged: (_){log('am start -n ${GState.package.of(context)}/${GState.activity.of(context)}'); Process.run(r'.\embedded-adb\adb.exe', ['-s', '$ipAddress:$port', 'shell', 'am start -n ${GState.package.of(context)}/${GState.activity.of(context)}']);},
+                onChanged: (_){log('am start -n ${GState.package.of(context)}/${GState.activity.of(context)}'); Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'shell', 'am start -n ${GState.package.of(context)}/${GState.activity.of(context)}']);},
               )) : const SizedBox.shrink();}()
             ]
           )

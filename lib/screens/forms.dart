@@ -56,6 +56,9 @@ class _FormsState extends State<Forms> {
           right: PageHeader.horizontalPadding(context),
         ),
         children: [
+          const Text("This app still contains a lot of test interfaces and tabs, please ignore them"),
+          const Text("To try the installer, associate the .apk extension to the .exe executable"),
+          const SizedBox(height: 20),
           Text("COMMAND_ARGS: ${args}"),
           const SizedBox(height: 5),
           Padding(
@@ -78,7 +81,7 @@ class _FormsState extends State<Forms> {
             child: Row(children: [
             Expanded(
               child: Button(child: const Text('Manage Applications'), onPressed: connectionStatus.severity != InfoBarSeverity.success ? 
-                null : () => Process.run(r'.\embedded-adb\adb.exe', ['-s', '${GState.ipAddress.of(context)}:${GState.androidPort.of(context)}', 
+                null : () => Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '${GState.ipAddress.of(context)}:${GState.androidPort.of(context)}', 
                   'shell', r'am start com.android.settings/.Settings\$ManageApplicationsActivity'])
               ),
             )
@@ -89,7 +92,7 @@ class _FormsState extends State<Forms> {
             child: Row(children: [
             Expanded(
               child: Button(child: const Text('Manage Settings'), onPressed: connectionStatus.severity != InfoBarSeverity.success ?
-                null : () => Process.run(r'.\embedded-adb\adb.exe', ['-s', '${GState.ipAddress.of(context)}:${GState.androidPort.of(context)}', 
+                null : () => Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '${GState.ipAddress.of(context)}:${GState.androidPort.of(context)}', 
                   'shell', r'am start com.android.settings/.Settings']) ),
             )
             ,EMPTY, EMPTY])
@@ -97,7 +100,7 @@ class _FormsState extends State<Forms> {
           const SizedBox(height: 20),
 
 
-          
+          /*
           const SizedBox(height: 20),
           TextBox(
             maxLines: null,
@@ -191,7 +194,7 @@ class _FormsState extends State<Forms> {
             ),
           ),
           const SizedBox(height: 20),
-
+          */
 
 
 

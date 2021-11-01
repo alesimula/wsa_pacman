@@ -79,6 +79,8 @@ extension __EnumExtension on Enum {
 class Env {
   static final String SYSTEM_ROOT = Platform.environment["SystemRoot"] ?? "";
   static final String USER_PROFILE = Platform.environment["UserProfile"] ?? "";
+  static final String EXEC_DIR = Platform.resolvedExecutable.replaceFirst(RegExp(r'[/\\][^/\\]*$'), r'\');
+  static final String TOOLS_DIR = "${EXEC_DIR}embedded-adb\\";
 }
 
 class WSAPeriodicConnector {
@@ -98,13 +100,13 @@ class WSAPeriodicConnector {
     }
 
     var prevStatus = status;
-    var process = await Process.run(r'.\embedded-adb\adb.exe', ['devices']);
+    var process = await Process.run('${Env.TOOLS_DIR}\\adb.exe', ['devices']);
     var output = process.stdout.toString();
     if (output.contains(RegExp('(^|\\n)(localhost|127.0.0.1):${GState.androidPort.$}\\s+'))) {
       if (output.contains(RegExp('(^|\\n)(localhost|127.0.0.1):${GState.androidPort.$}\\s+offline(\$|\\n|\\s)')))
         status = ConnectionStatus.OFFLINE;
       /*else if (output.contains(RegExp('(^|\\n)(localhost|127.0.0.1):${GState.androidPort.$}\\s+host(\$|\\n|\\s)'))) {
-        await Process.run(r'.\embedded-adb\adb.exe', ['disconnect', '127.0.0.1:${GState.androidPort.$}']);
+        await Process.run('${Env.TOOLS_DIR}\\adb.exe', ['disconnect', '127.0.0.1:${GState.androidPort.$}']);
         _tryConnect();
       }*/
       else {
@@ -126,7 +128,7 @@ class WSAPeriodicConnector {
   }
 
   static Future<void> _tryConnect() async {
-    ProcessResult? process = await Process.run(r'.\embedded-adb\adb.exe', ['connect', '127.0.0.1:${GState.androidPort.$}'])
+    ProcessResult? process = await Process.run('${Env.TOOLS_DIR}\\adb.exe', ['connect', '127.0.0.1:${GState.androidPort.$}'])
       .timeout(const Duration(milliseconds:200), onTimeout: () => Future.value(ProcessResult(-1, -1, null, null)));
     if (process.stdout?.toString().contains(RegExp(r'(^|\n)(cannot|failed to) connect\s.*')) ?? true) 
       status = ConnectionStatus.ARRESTED;
@@ -150,7 +152,12 @@ void main(List<String> arguments) async {
   WidgetsFlutterBinding.ensureInitialized();
   //TODO args = arguments;
   //args = [r'C:\Users\Alex\Downloads\youtube.apk'];
-  args = [];
+  //args = [];
+  const app = MyApp();
+  final wrappedApp = SharedValue.wrapApp(app);
+  //arguments = [r'C:\Users\Alex\Downloads\youtube.apk'];
+  if (arguments.isNotEmpty) ApkReader.init(arguments.first);
+  args = arguments;
 
   setPathUrlStrategy();
 
@@ -174,8 +181,7 @@ void main(List<String> arguments) async {
 
   WSAPeriodicConnector._checkConnectionStatus();
   Timer.periodic(WSAPeriodicConnector.PERIODIC_CHECK_TIMER, (Timer t) => WSAPeriodicConnector._checkConnectionStatus());
-  const app = MyApp();
-  runApp(SharedValue.wrapApp(app));
+  runApp(wrappedApp);
 
   if (isDesktop) {
     doWhenWindowReady(() {
@@ -348,17 +354,17 @@ class _MyHomePageState extends State<MyHomePage> {
           // PaneItemHeader(header: Text('User Interaction')),
           PaneItem(
             icon: const Icon(FluentIcons.text_field),
-            title: const Text('Forms'),
+            title: const Text('WSA'),
           ),
           PaneItemSeparator(),
-          PaneItem(
+          /*PaneItem(
             icon: Icon(
               appTheme.displayMode == PaneDisplayMode.top
                   ? FluentIcons.more
                   : FluentIcons.more_vertical,
             ),
             title: const Text('Others'),
-          ),
+          ),*/
         ],
         footerItems: [
           PaneItemSeparator(),
@@ -369,7 +375,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       content: NavigationBody(index: index, children: [
         const Forms(),
-        const Others(),
+        //const Others(),
         Settings(controller: settingsController),
       ]),
     );
