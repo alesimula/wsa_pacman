@@ -97,7 +97,7 @@ class ApkReader {
   static void initArchive() {
     //Maintain a lock on the file
     File file = File(TEST_FILE)..open();
-    apkArchive = compute(_initArchive, file);
+    apkArchive = _initArchive(file);
   }
 
   ///Decodes a binary xml
@@ -227,8 +227,8 @@ class ApkReader {
     data = pData;
     TEST_FILE = data.fileName;
     //resourceDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'resources', TEST_FILE]).then<String>((p) => p.stdout.toString());
-    resourceDump = compute( (String file) async {return await Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'resources', file]).then<String>((p) => p.stdout.toString());}, TEST_FILE );
-    stringDump = compute( (String file) async {return await Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'strings', file]).then<String>((p) => p.stdout.toString());}, TEST_FILE );
+    resourceDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'resources', TEST_FILE]).then<String>((p) => p.stdout.toString());
+    stringDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'strings', TEST_FILE]).then<String>((p) => p.stdout.toString());
     initArchive();
 
     Future? iconUpdThread;
