@@ -45,6 +45,12 @@ extension on String {
       return (matches.isNotEmpty) ? matches.first.group(group)! : null;
   }
 
+  Map<K, V> foldToMap<K,V>(String regexp, K Function(RegExpMatch match) key, V Function(RegExpMatch match, V? prev) value) {
+    Map<K,V> map = {};
+    for (var m in RegExp(regexp).allMatches(this)) map.update(key(m), (v) => value(m, v), ifAbsent: () => value(m, null));
+    return map;
+  }
+
   Map<K, V> toMap<K,V>(String regexp, K Function(RegExpMatch match) key, V Function(RegExpMatch match) value) {
     return {for (var m in RegExp(regexp).allMatches(this)) key(m) : value(m)};
   }
@@ -100,7 +106,7 @@ class ApkReader {
   //I just put '&& true' there so I could conveniently switch it off
   static bool DEBUG = !kReleaseMode && true;
   static String TEST_FILE = /*r'C:\Users\Alex\Downloads\com.atono.dropticket.apk'*/ '';
-  static late Future<String> resourceDump;
+  static late Future<Map<String, Resource>> resourceDump;
   static late Future<Map<int, String>> stringDump;
   static late Future<Archive> apkArchive;
 
@@ -137,24 +143,18 @@ class ApkReader {
       .replaceAllMapped(RegExp('([cC]olor=[\'"])(type([0-9])+/([0-9]*))'), (m) => m.group(1)!+'#'+(int.parse(m.group(4)!).toRadixString(16).padLeft(8, '0')) )
       .replaceAllMapped(RegExp('([\\s\\n]android:fillType=[\'"])([0-9]*)'), (m) => m.group(1)!+ (fillType[m.group(2)!] ?? "winding") );
   }
-
-  //TODO use a map to avoid searching for values twice
+  
   static Future<Resource?> getResources(String resId) async {
-    String resources = await resourceDump;
-    ResType? type;
+    Map<String, Resource> resources = await resourceDump;
     if (DEBUG) log("checking RES-ID: $resId");
-    Iterable<dynamic>? resCodes = resources.findAllAnd('(^|\\s|\\n)*$resId[\\s]+.*\\st=0x0*([^\\s\\n]*).*\\sd=0x0*([^\\s\\n]*)[\\s|\\n]', (m) =>
-       ((type ??= getResType(m.group(2)!)) == ResType.FILE) ? int.parse(m.group(3)!, radix: 16) : m.group(3)! );
-    if (resCodes.isNotEmpty) {
-      if (DEBUG) log("found RES-VALUES: $resCodes of RES-TYPE: $type for RES-ID: $resId");
-      //Fix 'type' not resolved in release mode because of the lazy nature of the 'map' function
-      resCodes.first;
-      if (type == ResType.COLOR) return Resource(resCodes.map((e)=>e), type!);
-      //resCodes as Iterable<int>;
+    var resource = resources[resId];
+    if (resource != null) {
+      if (DEBUG) log("found RES-VALUES: ${resource.values} of RES-TYPE: ${resource.type} for RES-ID: $resId");
+      if (resource.type == ResType.COLOR) return resource;
       Map<int, String> strings = await stringDump;
-      Iterable<String> files = strings.getAll(resCodes.map((e) => e));
-      if (DEBUG) log("found RES-FILES: $files of RES-TYPE: $type for RES-ID: $resId");
-      return files.isNotEmpty ? Resource(files, type!) : null;
+      Iterable<String> files = strings.getAll(resource.values.map((e) => int.parse(e, radix: 16)));
+      if (DEBUG) log("found RES-FILES: $files of RES-TYPE: ${resource.type} for RES-ID: $resId");
+      return files.isNotEmpty ? Resource(files, resource.type) : null;
     }
     else return null;
   }
@@ -242,9 +242,12 @@ class ApkReader {
     data = pData;
     TEST_FILE = data.fileName;
     //resourceDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'resources', TEST_FILE]).then<String>((p) => p.stdout.toString());
-    resourceDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'resources', TEST_FILE]).then<String>((p) => p.stdout.toString());
+    resourceDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'resources', TEST_FILE]).then((p) => 
+      p.stdout.toString().foldToMap(r'(^|\n)\s*resource (0x[0-9a-zA-Z]*)[\s]+.*\st=0x0*([^\s\n]*).*\sd=0x0*([^\s\n]*)[\s|\n]', (m) => m.group(2)!, 
+      (m,old) => Resource((old != null) ? ((old.values as ListQueue<String>)..addAll([m.group(4)!])) : ListQueue<String>.from([m.group(4)!]), old?.type ?? getResType(m.group(3)!)) )
+    );
     //strings.findAll('(^|\\n|\\s)*String\\s+#(${resCodes.join("|")})\\s*:\\s*([^\\s\\n]*)', 3);
-    stringDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'strings', TEST_FILE]).then<Map<int,String>>((p) => 
+    stringDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'strings', TEST_FILE]).then((p) => 
       p.stdout.toString().toMap(r'(^|\n|\s)*String\s+#([0-9]*)\s*:\s*([^\s\n]*)', (m) => int.parse(m.group(2)!), (m) => m.group(3)!)
     );
     initArchive();
