@@ -143,7 +143,7 @@ class ApkReader {
       .replaceAllMapped(RegExp('([cC]olor=[\'"])(type([0-9])+/([0-9]*))'), (m) => m.group(1)!+'#'+(int.parse(m.group(4)!).toRadixString(16).padLeft(8, '0')) )
       .replaceAllMapped(RegExp('([\\s\\n]android:fillType=[\'"])([0-9]*)'), (m) => m.group(1)!+ (fillType[m.group(2)!] ?? "winding") );
   }
-  
+
   static Future<Resource?> getResources(String resId) async {
     Map<String, Resource> resources = await resourceDump;
     if (DEBUG) log("checking RES-ID: $resId");
@@ -243,12 +243,12 @@ class ApkReader {
     TEST_FILE = data.fileName;
     //resourceDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'resources', TEST_FILE]).then<String>((p) => p.stdout.toString());
     resourceDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'resources', TEST_FILE]).then((p) => 
-      p.stdout.toString().foldToMap(r'(^|\n)\s*resource (0x[0-9a-zA-Z]*)[\s]+.*\st=0x0*([^\s\n]*).*\sd=0x0*([^\s\n]*)[\s|\n]', (m) => m.group(2)!, 
+      p.stdout.toString().foldToMap(r'(^|\n)\s*resource\s+(0x[0-9a-zA-Z]*)[\s]+.*\st=0x0*([^\s\n]*).*\sd=0x0*([^\s\n]*)[\s|\n]', (m) => m.group(2)!, 
       (m,old) => Resource((old != null) ? ((old.values as ListQueue<String>)..addAll([m.group(4)!])) : ListQueue<String>.from([m.group(4)!]), old?.type ?? getResType(m.group(3)!)) )
     );
     //strings.findAll('(^|\\n|\\s)*String\\s+#(${resCodes.join("|")})\\s*:\\s*([^\\s\\n]*)', 3);
     stringDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'strings', TEST_FILE]).then((p) => 
-      p.stdout.toString().toMap(r'(^|\n|\s)*String\s+#([0-9]*)\s*:\s*([^\s\n]*)', (m) => int.parse(m.group(2)!), (m) => m.group(3)!)
+      p.stdout.toString().toMap(r'(^|\n)\s*String\s+#([0-9]*)\s*:\s*([^\s\n]*)', (m) => int.parse(m.group(2)!), (m) => m.group(3)!)
     );
     initArchive();
 
