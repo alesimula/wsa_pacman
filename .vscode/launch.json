@@ -53,6 +53,60 @@
                 // (see the for field above).
                 "title": "${debugType} (release)"
             },
+        },
+        {
+            "name": "Release build",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib/main.dart",
+            // Any custom environment variables to set when running the app with this
+            // launch config.
+            "env": {
+                "RELEASE_MODE": true
+            },
+            // Arguments to be passed to the Dart or Flutter app.
+            "args": [
+                //"--no-sound-null-safety"
+            ],
+            // "debugConsole" or "terminal". If set to "terminal", will run in the built-in
+            // terminal and will support reading from `stdin`. However some other debug
+            // features may be limited.
+            "console": "debugConsole",
+
+            // Set to run a Flutter app on a specific device, ignoring the device selected
+            // in the status bar.
+            "deviceId": "windows",
+
+            // "debug", "profile" or "release".
+            "flutterMode": "release",
+
+            // Allows running Flutter tests on a real device instead of the default headless
+            // flutter-tester device.
+            "runTestsOnDevice": false,
+
+            // If codeLens is defined, this launch configuration can be launched from custom
+            // CodeLens links in the editor (see the page linked above for more info).
+            "codeLens": {
+
+                // This array sets where custom CodeLens links will be rendered:
+                // - run-test: Above test functions as a Run link
+                // - debug-test: Above test functions as a Debug link
+                // - run-test-file: Above main functions in test files as a Run link
+                // - debug-test-file: Above main functions in test files as a Debug link
+                // - run-file: Above main functions in bin/tool/lib files as a Run link
+                // - debug-file: Above main functions in bin/tool/lib files as a Debug link
+                "for": [ "run-test", "run-test-file", "debug-test", "debug-test-file" ],
+
+                // If specificed, the custom CodeLens will only appear for files that begin
+                // with this path.
+                "path": "test/integration_tests",
+
+                // Text for the custom CodeLens. If not specified, will use the name field
+                // from the parent launch configuration. The string "${debugType}" here will
+                // be replaced with "run" or "debug" depending on the rendered position
+                // (see the for field above).
+                "title": "${debugType} (release)"
+            },
         }
     ]
 }

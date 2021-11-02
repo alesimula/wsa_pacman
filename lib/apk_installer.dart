@@ -4,9 +4,11 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:ffi';
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:math' hide log;
 import 'dart:typed_data';
 
+import 'package:shared_value/shared_value.dart';
 import 'package:wsa_pacman/global_state.dart';
 import 'package:wsa_pacman/main.dart';
 import 'package:wsa_pacman/widget/adaptive_icon.dart';
@@ -87,13 +89,15 @@ class ApkReader {
   static late Future<String> stringDump;
   static late Future<Archive> apkArchive;
 
+  static late final ProcessData data;
+
   static Future<Archive> _initArchive(File file) async {
     return ZipDecoder().decodeBytes(file.readAsBytesSync());
   }
   static void initArchive() {
     //Maintain a lock on the file
     File file = File(TEST_FILE)..open();
-    apkArchive = _initArchive(file);
+    apkArchive = compute(_initArchive, file);
   }
 
   ///Decodes a binary xml
@@ -140,17 +144,18 @@ class ApkReader {
     else return null;
   }
 
-  static void _getIconFile(String fileName) async {
+  static Future _getIconFile(String fileName) async {
     bool isXml = fileName.endsWith(".xml");
     Archive apkFile = await apkArchive;
     ArchiveFile IconFile = apkFile.findFile(fileName)!;
     
     Uint8List image = IconFile.content;
-    Widget widget = isXml ? ScalableImageWidget(si: ScalableImage.fromAvdString(await decodeXml(image))) : Image.memory(image);
-    GState.apkIcon.update((_) => widget);
+    String xmlData = isXml ? await decodeXml(image) : "";
+    Widget? widget = isXml ? null : Image.memory(image);
+    data.execute(() => GState.apkIcon.update((_) => isXml ? ScalableImageWidget(si: ScalableImage.fromAvdString(xmlData)) : widget));
   }
 
-  static void _getAdaptiveIconFiles(String? backgroundId, String foregroundId) async {
+  static Future _getAdaptiveIconFiles(String? backgroundId, String foregroundId) async {
     /*String resources = await resourceDump;
     Iterable<int>? bCode = (backgroundId != null) ? resources.findAll('(^|\\s|\\n)*$backgroundId[\\s]+.*\\sd=0x0*([^\\s\\n]*)[\\s|\\n]', 2).map((s) => int.parse(s, radix: 16)) : null;
     Iterable<int> fCode = resources.findAll('(^|\\s|\\n)*$foregroundId[\\s]+.*\\sd=0x0*([^\\s\\n]*)[\\s|\\n]', 2).map((s) => int.parse(s, radix: 16));
@@ -183,13 +188,21 @@ class ApkReader {
     var foreXml = isForeXml ? decodeXml(foreImg) : null;
     var backXml = isBackXml ? decodeXml(foreImg) : null;
     Widget? backWidget;
-    Widget foreWidget;
+    Widget? foreWidget;
+
     
-    foreWidget = isForeXml ? ScalableImageWidget(si: ScalableImage.fromAvdString(await foreXml!)) : Image.memory(foreImg);
-    backWidget = isBackColor ? null : isBackXml ? ScalableImageWidget(si: ScalableImage.fromAvdString(await backXml!)) : (backImg != null) ? Image.memory(backImg) : null;
-    if (isBackColor) GState.apkBackgroundColor.update((_)=>Color(int.parse(background!.values.first, radix: 16)));
-    else if (backWidget != null) GState.apkBackgroundIcon.update((_)=>backWidget);
-    GState.apkForegroundIcon.update((_)=>foreWidget);
+    if (!isForeXml) foreWidget = Image.memory(foreImg);
+    if (!isBackXml) backWidget = isBackColor ? null : (backImg != null) ? Image.memory(backImg) : null;
+
+    String backXmlData = isBackXml ? await backXml! : "";
+    String foreXmlData = isForeXml ? await foreXml! : "";
+
+    if (isBackColor) {
+      final color = Color(int.parse(background!.values.first, radix: 16));
+      data.execute(() => GState.apkBackgroundColor.update((_)=>color));
+    }
+    else if (backWidget != null) data.execute(() => GState.apkBackgroundIcon.update((_)=>!isBackXml ? backWidget : ScalableImageWidget(si: ScalableImage.fromAvdString(backXmlData))));
+    data.execute(() => GState.apkForegroundIcon.update((_)=>!isForeXml ? foreWidget : ScalableImageWidget(si: ScalableImage.fromAvdString(foreXmlData)) ));
     
     /*log('XML: ${foreXml}');
     GState.apkForegroundIcon.update((a)=>ScalableImageWidget(si: ScalableImage.fromAvdString(foreXml)) );
@@ -210,33 +223,39 @@ class ApkReader {
   }
 
   //Retrieves APK information (Make sync?)
-  static void init(String fileName) async {
-    TEST_FILE = fileName;
-    resourceDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'resources', TEST_FILE]).then<String>((p) => p.stdout.toString());
-    stringDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'strings', TEST_FILE]).then<String>((p) => p.stdout.toString());
+  static void _init(ProcessData pData) async {
+    data = pData;
+    TEST_FILE = data.fileName;
+    //resourceDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'resources', TEST_FILE]).then<String>((p) => p.stdout.toString());
+    resourceDump = compute( (String file) async {return await Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'resources', file]).then<String>((p) => p.stdout.toString());}, TEST_FILE );
+    stringDump = compute( (String file) async {return await Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'strings', file]).then<String>((p) => p.stdout.toString());}, TEST_FILE );
     initArchive();
-    Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'badging', TEST_FILE]).then((value) {
+
+    Future? iconUpdThread;
+    Future<ProcessResult>? inner;
+    var process = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'badging', TEST_FILE])..then((value) {
       if (value.exitCode == 0) {
         String dump = value.stdout.toString();
-
         String? info = dump.find(r'(^|\n)package:.*');
-        GState.package.update((_) => info?.find(r"(^|\n|\s)name=\s*'([^'\n\s$]*)", 2) ?? "");
-        String versionCode = info?.find(r"(^|\n|\s)versionCode=\s*'([^'\n\s$]*)", 2) ?? "";
-        GState.version.update((_) => info?.find(r"(^|\n|\s)versionName=\s*'([^'\n\s$]*)", 2) ?? "");
 
-        GState.activity.update((_) => dump.find(r"(^|\n)launchable-activity:.*name='([^'\n\s$]*)", 2) ?? "");
+        data.execute(() => GState.package.update((_) => info?.find(r"(^|\n|\s)name=\s*'([^'\n\s$]*)", 2) ?? ""));
+        String versionCode = info?.find(r"(^|\n|\s)versionCode=\s*'([^'\n\s$]*)", 2) ?? "";
+        data.execute(() => GState.version.update((_) => info?.find(r"(^|\n|\s)versionName=\s*'([^'\n\s$]*)", 2) ?? ""));
+        data.execute(() => GState.activity.update((_) => dump.find(r"(^|\n)launchable-activity:.*name='([^'\n\s$]*)", 2) ?? ""));
 
         String? application = dump.find(r'(^|\n)application:\s*(.*)');
         String? title = application?.find(r"(^|\n|\s)label='([^']*)'", 2);
         String? icon = application?.find(r"(^|\n|\s)icon='([^']*)'", 2);
-        GState.apkTitle.update((_) => title ?? "UNKNOWN_TITLE");
+        data.execute(() => GState.apkTitle.update((_) => title ?? "UNKNOWN_TITLE"));
         //TODO check type of installation
-        GState.apkInstallType.update((p0) => InstallType.INSTALL);
-        if (icon?.endsWith(".xml") ?? false) Process.run('${Env.TOOLS_DIR}\\aapt2.exe', ['dump', 'xmltree', '--file', icon!, TEST_FILE]).then((value) {
+        data.execute(() => GState.apkInstallType.update((p0) => InstallType.INSTALL));
+        
+        if (icon?.endsWith(".xml") ?? false) inner = Process.run('${Env.TOOLS_DIR}\\aapt2.exe', ['dump', 'xmltree', '--file', icon!, TEST_FILE])..then((value) {
           if (value.exitCode != 0) {log("XML ICON ERROR"); return;}
           String iconData = value.stdout.toString();
           String? background = iconData.find(r'(^|\n|\s)*E:[\s]?background\s[^\n]*\n\s*A:.*=@([^\s\n]*)', 2);
           String? foreground = iconData.find(r'(^|\n|\s)*E:[\s]?foreground\s[^\n]*\n\s*A:.*=@([^\s\n]*)', 2);
+          
           if (DEBUG) log("APK-ICON-IDS: background_id=$background, foreground_id=$foreground");
 
           //then is apparently not called immediately
@@ -244,19 +263,50 @@ class ApkReader {
             String resources = value.stdout.toString();
             log(resources.findAll('(^|\\s|\\n)*$background[\\s]+.*\\sd=0x0*([^\\s\\n]*)[\\s|\\n]', 2).map((s)=>'#$s').toString());
           });*/
-          if (foreground != null) _getAdaptiveIconFiles(background, foreground);
-          else _getIconFile(icon);
+          if (foreground != null) iconUpdThread = _getAdaptiveIconFiles(background, foreground);
+          else iconUpdThread= _getIconFile(icon);
         }); else if (icon != null && icon.isNotEmpty) {
           //Probably a png
-          _getIconFile(icon);
+          iconUpdThread = _getIconFile(icon);
         }
         if (DEBUG) log("APK-INFO:  title='$title', icon='$icon'");
       }
       else {
         log("ERROR");
       }
+    }).onError((error, stackTrace) {
+      //data.pipe.send("WEEEERROR: $stackTrace");
     });
+    await process;
+    if (inner != null) await inner;
+    if (iconUpdThread != null) await iconUpdThread;
+    //data.pipe.send("WOOOOOOOO2: ${coso.stdout.toString()}");
   }
+
+  FutureOr<R> computeOrDebug<Q, R>(ComputeCallback<Q, R> callback, Q message, {String? debugLabel}) => (DEBUG && false) ? 
+      callback(message) : compute(callback, message, debugLabel: debugLabel);
+
+  static void init(String fileName) async {
+    ReceivePort port = ReceivePort();
+    port.listen((message) {
+      if (message is VoidCallback) {
+        log("RECEIVED-FUNCTION");
+        message();
+      }
+      else log("RECEIVED-MESSAGE: $message");
+    });
+    compute(_init, ProcessData(fileName, port.sendPort));
+  }
+}
+
+class ProcessData {
+  final String fileName;
+  final SendPort pipe;
+  //Listener has to execute this in the main thread
+  execute(VoidCallback callback) {
+    pipe.send(callback);
+  }
+  ProcessData(this.fileName, this.pipe);
 }
 
 class ApkInstaller extends StatefulWidget {
