@@ -28,10 +28,25 @@ import 'dart:convert';
 import 'package:yaml/yaml.dart';
 import 'package:jovial_svg/jovial_svg.dart';
 
+extension <K,V> on Map<K,V> {
+  List<V> getAll(Iterable<K> keys) {
+    List<V> list = [];
+    for (var key in keys) {
+      final value = this[key];
+      if (value!=null) list.add(value);
+    }
+    return list;
+  }
+}
+
 extension on String {
   String? find(String regexp, [int group = 0]) {
     var matches = RegExp(regexp).allMatches(this);
       return (matches.isNotEmpty) ? matches.first.group(group)! : null;
+  }
+
+  Map<K, V> toMap<K,V>(String regexp, K Function(RegExpMatch match) key, V Function(RegExpMatch match) value) {
+    return {for (var m in RegExp(regexp).allMatches(this)) key(m) : value(m)};
   }
 
   Iterable<String> findAll(String regexp, [int group = 0]) {
@@ -86,7 +101,7 @@ class ApkReader {
   static bool DEBUG = !kReleaseMode && true;
   static String TEST_FILE = /*r'C:\Users\Alex\Downloads\com.atono.dropticket.apk'*/ '';
   static late Future<String> resourceDump;
-  static late Future<String> stringDump;
+  static late Future<Map<int, String>> stringDump;
   static late Future<Archive> apkArchive;
 
   static late final ProcessData data;
@@ -136,8 +151,8 @@ class ApkReader {
       resCodes.first;
       if (type == ResType.COLOR) return Resource(resCodes.map((e)=>e), type!);
       //resCodes as Iterable<int>;
-      String strings = await stringDump;
-      Iterable<String> files = strings.findAll('(^|\\n|\\s)*String\\s+#(${resCodes.join("|")})\\s*:\\s*([^\\s\\n]*)', 3);
+      Map<int, String> strings = await stringDump;
+      Iterable<String> files = strings.getAll(resCodes.map((e) => e));
       if (DEBUG) log("found RES-FILES: $files of RES-TYPE: $type for RES-ID: $resId");
       return files.isNotEmpty ? Resource(files, type!) : null;
     }
@@ -228,7 +243,10 @@ class ApkReader {
     TEST_FILE = data.fileName;
     //resourceDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'resources', TEST_FILE]).then<String>((p) => p.stdout.toString());
     resourceDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'resources', TEST_FILE]).then<String>((p) => p.stdout.toString());
-    stringDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'strings', TEST_FILE]).then<String>((p) => p.stdout.toString());
+    //strings.findAll('(^|\\n|\\s)*String\\s+#(${resCodes.join("|")})\\s*:\\s*([^\\s\\n]*)', 3);
+    stringDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'strings', TEST_FILE]).then<Map<int,String>>((p) => 
+      p.stdout.toString().toMap(r'(^|\n|\s)*String\s+#([0-9]*)\s*:\s*([^\s\n]*)', (m) => int.parse(m.group(2)!), (m) => m.group(3)!)
+    );
     initArchive();
 
     Future? iconUpdThread;
