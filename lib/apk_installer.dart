@@ -41,16 +41,18 @@ extension <K,V> on Map<K,V> {
 
 extension on String {
   String? find(String regexp, [int group = 0]) {
-    var matches = RegExp(regexp).allMatches(this);
-      return (matches.isNotEmpty) ? matches.first.group(group)! : null;
+    var matches = RegExp(regexp).firstMatch(this);
+      return  matches?.group(group)!;
   }
 
+  /// Maps folding repeated entries per key
   Map<K, V> foldToMap<K,V>(String regexp, K Function(RegExpMatch match) key, V Function(RegExpMatch match, V? prev) value) {
     Map<K,V> map = {};
     for (var m in RegExp(regexp).allMatches(this)) map.update(key(m), (v) => value(m, v), ifAbsent: () => value(m, null));
     return map;
   }
 
+  /// Maps the string, assumes a single match per key
   Map<K, V> toMap<K,V>(String regexp, K Function(RegExpMatch match) key, V Function(RegExpMatch match) value) {
     return {for (var m in RegExp(regexp).allMatches(this)) key(m) : value(m)};
   }
