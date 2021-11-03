@@ -368,6 +368,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
     InstallState installState = GState.apkInstallState.of(context);
 
     String package = GState.package.of(context);
+    String version = GState.version.of(context);
     String activity = GState.activity.of(context);
     bool isLaunchable = package.isNotEmpty && activity.isNotEmpty;
 
@@ -394,9 +395,11 @@ class _ApkInstallerState extends State<ApkInstaller> {
           titleWidget,
           Column (
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              SizedBox(height: 10),
-              Text("Do you want to install this application?"),
+            children: [
+              const SizedBox(height: 10),
+              const Text("Do you want to install this application?"),
+              const SizedBox(height: 10),
+              Text("Version: $version\nPackage: $package", style: TextStyle(color: FluentTheme.of(context).disabledColor) )
             ]
           ),
           const Spacer(),
