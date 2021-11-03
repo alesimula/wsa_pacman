@@ -37,9 +37,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  
-  #assets:
-    #- assets/example.png
+  assets:
+    - assets/icons/missing_icon_background.xml
+    - assets/icons/missing_icon_foreground.xml
 
 flutter_native_splash:
   color: "#42a5f5"

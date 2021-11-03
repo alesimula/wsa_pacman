@@ -303,6 +303,14 @@ class ApkReader {
     await process;
     if (inner != null) await inner;
     if (iconUpdThread != null) await iconUpdThread;
+    data.execute(() async {if (GState.apkForegroundIcon.$ == null && GState.apkIcon.$ == null) {
+      final fBackground = ScalableImage.fromAvdAsset(rootBundle, "assets/icons/missing_icon_background.xml");
+      final fForeground = ScalableImage.fromAvdAsset(rootBundle, "assets/icons/missing_icon_foreground.xml");
+      final background = await fBackground;
+      final foreground = await fForeground;
+      GState.apkBackgroundIcon.update((p0) => (ScalableImageWidget(si: background)));
+      GState.apkForegroundIcon.update((p0) => (ScalableImageWidget(si: foreground)));
+    }});
     //data.pipe.send("WOOOOOOOO2: ${coso.stdout.toString()}");
   }
 
