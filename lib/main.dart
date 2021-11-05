@@ -105,10 +105,10 @@ class WSAPeriodicConnector {
     if (output.contains(RegExp('(^|\\n)(localhost|127.0.0.1):${GState.androidPort.$}\\s+'))) {
       if (output.contains(RegExp('(^|\\n)(localhost|127.0.0.1):${GState.androidPort.$}\\s+offline(\$|\\n|\\s)')))
         status = ConnectionStatus.OFFLINE;
-      /*else if (output.contains(RegExp('(^|\\n)(localhost|127.0.0.1):${GState.androidPort.$}\\s+host(\$|\\n|\\s)'))) {
+      else if (output.contains(RegExp('(^|\\n)(localhost|127.0.0.1):${GState.androidPort.$}\\s+host(\$|\\n|\\s)'))) {
         await Process.run('${Env.TOOLS_DIR}\\adb.exe', ['disconnect', '127.0.0.1:${GState.androidPort.$}']);
         _tryConnect();
-      }*/
+      }
       else {
         status = ConnectionStatus.CONNECTED;
         if (output.contains(RegExp('(^|\\n)127.0.0.1:${GState.androidPort.$}\\s+'))) {
