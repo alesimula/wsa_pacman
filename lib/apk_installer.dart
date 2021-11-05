@@ -438,7 +438,8 @@ class _ApkInstallerState extends State<ApkInstaller> {
           ),
           const SizedBox(height: 10),
           Expanded(child: ClipRRect(borderRadius: BorderRadius.circular(10), child: Container(
-            decoration: InfoBarTheme.of(context).decoration?.call(InfoBarSeverity.info),
+            //decoration: ChipTheme.of(context).decoration?.resolve({ButtonStates.focused})?.lerpTo(SnackbarTheme.of(context).decoration, 0.07),
+            color: FluentTheme.of(context).inactiveBackgroundColor.lerpWith(FluentTheme.of(context).scaffoldBackgroundColor, 0.65),
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
             //color: Colors.red, 
             child: ListView(
