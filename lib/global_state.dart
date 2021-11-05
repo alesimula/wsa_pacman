@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:wsa_pacman/android/permissions.dart';
 import 'package:wsa_pacman/apk_installer.dart';
 import 'package:wsa_pacman/main.dart';
 import 'package:shared_value/shared_value.dart';
@@ -22,6 +23,7 @@ class GState {
   static final package = SharedValue<String>(value: "");
   static final activity = SharedValue<String>(value: "");
   static final version = SharedValue<String>(value: "");
+  static final permissions = SharedValue<Set<AndroidPermission>>(value: {});
   static final apkInstallType = SharedValue<InstallType?>(value: null);
   static final apkInstallState = SharedValue<InstallState>(value: InstallState.PROMPT);
   static final apkIcon = SharedValue<Widget?>(value: null);

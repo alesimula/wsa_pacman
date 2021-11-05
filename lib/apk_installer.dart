@@ -8,7 +8,9 @@ import 'dart:isolate';
 import 'dart:math' hide log;
 import 'dart:typed_data';
 
+import 'package:mdi/mdi.dart';
 import 'package:shared_value/shared_value.dart';
+import 'package:wsa_pacman/android/permissions.dart';
 import 'package:wsa_pacman/global_state.dart';
 import 'package:wsa_pacman/main.dart';
 import 'package:wsa_pacman/widget/adaptive_icon.dart';
@@ -16,7 +18,7 @@ import 'package:wsa_pacman/widget/move_window_nomax.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:archive/archive.dart';
-import 'package:flutter/material.dart' hide Colors;
+import 'package:flutter/material.dart' as material;
 import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
@@ -55,6 +57,17 @@ extension on String {
   /// Maps the string, assumes a single match per key
   Map<K, V> toMap<K,V>(String regexp, K Function(RegExpMatch match) key, V Function(RegExpMatch match) value) {
     return {for (var m in RegExp(regexp).allMatches(this)) key(m) : value(m)};
+  }
+
+  /// Maps the string, assumes a single match per key
+  Set<E> toSet<E>(String regexp, E? Function(RegExpMatch match) value, [int Function(E key1, E key2)? compare]) {
+    final Set<E> set = compare != null ? SplayTreeSet(compare) : <E>{};
+    for (var m in RegExp(regexp).allMatches(this)) {
+      var nv = value(m);
+      if (nv != null) set.add(nv);
+      else if (null is E) (set as Set<E?>).add(nv);
+    }
+    return set;
   }
 
   Iterable<String> findAll(String regexp, [int group = 0]) {
@@ -271,7 +284,11 @@ class ApkReader {
         String? icon = application?.find(r"(^|\n|\s)icon='([^']*)'", 2);
         data.execute(() => GState.apkTitle.update((_) => title ?? "UNKNOWN_TITLE"));
         //TODO check type of installation
-        data.execute(() => GState.apkInstallType.update((p0) => InstallType.INSTALL));
+        data.execute(() => GState.apkInstallType.update((_) => InstallType.INSTALL));
+
+        Set<AndroidPermission> permissions = dump.toSet("(^|\\n)\\s*uses-permission:\\s+name=[\"']([^\"'\\n]*)", 
+          (m) => AndroidPermissionList.get(m.group(2)!), (a,b)=> a.index - b.index);
+        data.execute(() => GState.permissions.update((_) => permissions));
         
         if (icon?.endsWith(".xml") ?? false) inner = Process.run('${Env.TOOLS_DIR}\\aapt2.exe', ['dump', 'xmltree', '--file', icon!, TEST_FILE])..then((value) {
           if (value.exitCode != 0) {log("XML ICON ERROR"); return;}
@@ -407,10 +424,42 @@ class _ApkInstallerState extends State<ApkInstaller> {
               const SizedBox(height: 10),
               const Text("Do you want to install this application?"),
               const SizedBox(height: 10),
-              Text("Version: $version\nPackage: $package", style: TextStyle(color: FluentTheme.of(context).disabledColor) )
+              Text("Version: $version\nPackage: $package", style: TextStyle(color: FluentTheme.of(context).disabledColor) ),
+              /*ListView(
+                padding: EdgeInsets.only(
+                  bottom: kPageDefaultVerticalPadding,
+                  left: PageHeader.horizontalPadding(context),
+                  right: PageHeader.horizontalPadding(context),
+                ),
+                //controller: controller,
+                children: [const Text("Hello darkness my old friend", )]
+              )*/
             ]
           ),
-          const Spacer(),
+          const SizedBox(height: 10),
+          Expanded(child: ClipRRect(borderRadius: BorderRadius.circular(10), child: Container(
+            decoration: InfoBarTheme.of(context).decoration?.call(InfoBarSeverity.info),
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+            //color: Colors.red, 
+            child: ListView(
+            //padding: const EdgeInsets.all(5),
+            children: [
+              for (var permission in GState.permissions.of(context)) Container(
+                padding: EdgeInsets.only(right: 10),
+                child: PaneItem(
+                  title: Text(permission.description),
+                  icon: permission.icon,
+                ).build(
+                  context,
+                  false,
+                  (){1;},
+                  displayMode: PaneDisplayMode.open,
+                )
+              )
+            ],
+          )))),
+          const SizedBox(height: 20),
+          //const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.end,
