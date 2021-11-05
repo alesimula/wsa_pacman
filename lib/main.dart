@@ -155,7 +155,7 @@ void main(List<String> arguments) async {
   //args = [];
   const app = MyApp();
   final wrappedApp = SharedValue.wrapApp(app);
-  //arguments = [r'C:\Users\Alex\Downloads\youtube.apk'];
+  //arguments = [r'C:\Users\Alex\Downloads\com.google.android.googlequicksearchbox_12.41.16.23.x86_64-301172250_minAPI23(x86_64)(nodpi)_apkmirror.com.apk'];
   if (arguments.isNotEmpty) ApkReader.init(arguments.first);
   args = arguments;
 
@@ -192,7 +192,7 @@ void main(List<String> arguments) async {
         win.title = appTitle;
       }
       else {
-        win.size = const Size(400, 280);
+        win.size = const Size(500, 335);
       }
       win.alignment = Alignment.center;
       win.show();
