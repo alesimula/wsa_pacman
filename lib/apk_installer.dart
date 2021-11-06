@@ -335,6 +335,7 @@ class ApkReader {
       callback(message) : compute(callback, message, debugLabel: debugLabel);
 
   static void init(String fileName) async {
+    TEST_FILE = fileName;
     ReceivePort port = ReceivePort();
     port.listen((message) {
       if (message is VoidCallback) {
