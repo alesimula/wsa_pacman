@@ -14,6 +14,7 @@ import 'package:wsa_pacman/android/permissions.dart';
 import 'package:wsa_pacman/global_state.dart';
 import 'package:wsa_pacman/main.dart';
 import 'package:wsa_pacman/widget/adaptive_icon.dart';
+import 'package:wsa_pacman/widget/flexible_info_bar.dart';
 import 'package:wsa_pacman/widget/move_window_nomax.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
@@ -368,10 +369,18 @@ class ApkInstaller extends StatefulWidget {
     GState.apkInstallState.update((_) => InstallState.INSTALLING);
     var result = await installation;
     log("EXIT CODE: ${result.exitCode}");
-    if (exitCode == 0) GState.apkInstallState.update((_) => InstallState.SUCCESS);
+    String error = result.stderr.toString();
+    log("OUTPUT: ${result.stdout}");
+    log("ERROR: ${error}");
+    if (result.exitCode == 0) GState.apkInstallState.update((_) => InstallState.SUCCESS);
     else {
       GState.apkInstallState.update((_) => InstallState.ERROR);
       //TODO add cause
+      RegExpMatch? errorMatch = RegExp(r'(^|\n)\s*adb:\s+failed\s+to\s+install\s+.*:\s+Failure\s+\[([^:]*):\s*([^\s].*[^\s])\s*\]').firstMatch(error);
+      String errorCode = errorMatch?.group(2) ?? "";
+      GState.errorCode.update((_) => errorCode.isNotEmpty ? errorCode : "UNKNOWN_ERROR");
+      String errorDesc = errorMatch?.group(3) ?? "";
+      GState.errorDesc.update((_) => errorDesc.isNotEmpty ? errorDesc : "The installation has failed, but no error was thrown");
     }
   }
 
@@ -516,8 +525,14 @@ class _ApkInstallerState extends State<ApkInstaller> {
         case InstallState.ERROR: return [
           titleWidget,
           const SizedBox(height: 10),
-          Text("The application $appTitle was successifully installed"),
-          const Spacer(),
+          Text("The application $appTitle was not installed"),
+          const SizedBox(height: 10),
+          FlexibleInfoBar(
+            title: Text(GState.errorCode.of(context)),
+            content: Text(GState.errorDesc.of(context)),
+            severity: InfoBarSeverity.error
+          ),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.end,

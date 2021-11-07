@@ -30,6 +30,9 @@ class GState {
   static final apkBackgroundIcon = SharedValue<Widget?>(value: null);
   static final apkForegroundIcon = SharedValue<Widget?>(value: null);
   static final apkBackgroundColor = SharedValue<Color?>(value: null);
+  //Installation info
+  static final errorCode = SharedValue<String>(value: "");
+  static final errorDesc = SharedValue<String>(value: "");
 }
 
 extension Options_Theme_Mode on Options_Theme? {
