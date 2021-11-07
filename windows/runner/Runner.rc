@@ -90,7 +90,7 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.wsa_pacman" "\0"
-            VALUE "FileDescription", "A new Flutter project." "\0"
+            VALUE "FileDescription", "WSA Package Manager" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "wsa_pacman" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2021 com.wsa_pacman. All rights reserved." "\0"
