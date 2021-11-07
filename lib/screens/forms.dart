@@ -56,10 +56,8 @@ class _FormsState extends State<Forms> {
           right: PageHeader.horizontalPadding(context),
         ),
         children: [
-          const Text("This app still contains a lot of test interfaces and tabs, please ignore them"),
-          const Text("To try the installer, associate the .apk extension to the .exe executable"),
-          const SizedBox(height: 20),
-          Text("COMMAND_ARGS: ${args}"),
+          const Text("This app is still in beta, report any bugs and share your suggestions on WSA-pacman Github page"),
+          const Text("To use the installer, associate the .apk extension to this app's .exe executable"),
           const SizedBox(height: 5),
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),

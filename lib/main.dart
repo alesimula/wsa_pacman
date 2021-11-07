@@ -1,5 +1,10 @@
 // ignore_for_file: constant_identifier_names, curly_braces_in_flow_control_structures, non_constant_identifier_names
 
+
+
+import 'package:flutter/material.dart' as material;
+import 'package:flutter/services.dart';
+import 'package:mdi/mdi.dart';
 import 'package:wsa_pacman/apk_installer.dart';
 import 'package:wsa_pacman/widget/move_window_nomax.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -187,12 +192,12 @@ void main(List<String> arguments) async {
     doWhenWindowReady(() {
       final win = appWindow;
       if (args.isEmpty) {
-        win.minSize = const Size(410, 540);
-        win.size = const Size(755, 545);
+        win.minSize = const Size(640, 500);
+        win.size = const Size(740, 540);
         win.title = appTitle;
       }
       else {
-        win.size = const Size(500, 335);
+        win.minSize = win.maxSize = win.size = const Size(500, 335);
       }
       win.alignment = Alignment.center;
       win.show();
@@ -301,10 +306,15 @@ class _MyHomePageState extends State<MyHomePage> {
         header: Container(
           height: kOneLineTileHeight,
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: const FlutterLogo(
-            style: FlutterLogoStyle.horizontal,
-            size: 100,
-          ),
+          child: material.Row(children: [AnimatedContainer(
+            width: 28,
+            height: 28,
+            duration: const Duration(milliseconds: 750),
+            curve: Curves.fastOutSlowIn,
+            decoration: const BoxDecoration (
+              image: DecorationImage(image:  AssetImage("assets/images/logo.png"))
+            ),
+          ), SizedBox(width: 10), Text("WSA PacMan", style: FluentTheme.of(context).typography.bodyLarge)]),
         ),
         displayMode: appTheme.displayMode,
         indicatorBuilder: ({
@@ -353,7 +363,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // It doesn't look good when resizing from compact to open
           // PaneItemHeader(header: Text('User Interaction')),
           PaneItem(
-            icon: const Icon(FluentIcons.text_field),
+            icon: const Icon(Mdi.androidDebugBridge),
             title: const Text('WSA'),
           ),
           PaneItemSeparator(),

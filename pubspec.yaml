@@ -41,6 +41,7 @@ flutter:
   assets:
     - assets/icons/missing_icon_background.xml
     - assets/icons/missing_icon_foreground.xml
+    - assets/images/logo.png
 
 flutter_native_splash:
   color: "#42a5f5"
