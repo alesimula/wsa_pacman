@@ -528,8 +528,8 @@ class _ApkInstallerState extends State<ApkInstaller> {
           Text("The application $appTitle was not installed"),
           const SizedBox(height: 10),
           FlexibleInfoBar(
-            title: Text(GState.errorCode.of(context)),
-            content: Text(GState.errorDesc.of(context)),
+            title: noMoveWindow(material.SelectableText(GState.errorCode.of(context))),
+            content: noMoveWindow(material.SelectableText(GState.errorDesc.of(context))),
             severity: InfoBarSeverity.error
           ),
           const SizedBox(height: 20),
