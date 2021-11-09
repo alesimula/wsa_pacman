@@ -3,12 +3,14 @@
 
 #define tools_dir_name "embedded-adb"
 #define releasedir "..\build\windows\runner\Release\"
+#define instbuilddir "..\build\installer"
 #define toolsdir "..\"+tools_dir_name
 
 #define vcredist_version "14.29.30135.00"
 
 #define executable "WSA-pacman.exe"
 #define app_name "WSA Package Manager"
+#define dist_appname "WSA-pacman"
 #define reg_appname "wsa-pacman"
 #define reg_name_installer "Package installer"
 #define reg_assoc_apk reg_appname + ".apk"
@@ -18,9 +20,9 @@
 #define path_assoc_default ".DEFAULT\"+path_assoc_user 
 
 [Setup]
+AppVersion=0.4.2
 PrivilegesRequired=admin
 AppName=WSA PacMan
-AppVersion=0.4.2
 ArchitecturesInstallIn64BitMode=x64
 WizardStyle=modern
 DefaultDirName={autopf}\WSA PacMan
@@ -30,7 +32,8 @@ Compression=lzma2
 SolidCompression=yes
 ChangesAssociations=yes
 ChangesEnvironment=yes
-OutputDir=userdocs:Inno Setup Examples Output
+OutputBaseFilename={#dist_appname}-v{#SetupSetting("AppVersion")}-installer
+OutputDir={#instbuilddir}
 
 [Tasks]
 Name: fileassoc; Description: "{cm:AssocFileExtension,{#app_name},.apk}";
