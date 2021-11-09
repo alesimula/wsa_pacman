@@ -289,6 +289,7 @@ class ApkReader {
 
         Set<AndroidPermission> permissions = dump.toSet("(^|\\n)\\s*uses-permission:\\s+name=[\"']([^\"'\\n]*)", 
           (m) => AndroidPermissionList.get(m.group(2)!), (a,b)=> a.index - b.index);
+        if (permissions.isEmpty) permissions.add(AndroidPermission.NONE);
         data.execute(() => GState.permissions.update((_) => permissions));
         
         if (icon?.endsWith(".xml") ?? false) inner = Process.run('${Env.TOOLS_DIR}\\aapt2.exe', ['dump', 'xmltree', '--file', icon!, TEST_FILE])..then((value) {

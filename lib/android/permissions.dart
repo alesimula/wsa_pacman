@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:mdi/mdi.dart';
 
 enum AndroidPermission {
+  NONE,
   X_ADMIN_BRICK,
   X_ADMIN_LOCK,
   ADMIN,
@@ -32,6 +33,7 @@ extension AndroidPermissionList on AndroidPermission {
   }
 
   Icon get icon {switch (this) {
+    case AndroidPermission.NONE: return const Icon(Mdi.gitlab);
     case AndroidPermission.X_ADMIN_BRICK: return const Icon(Mdi.bugOutline);
     case AndroidPermission.X_ADMIN_LOCK: return const Icon(Mdi.shieldLockOutline);
     case AndroidPermission.ADMIN: return const Icon(Mdi.shieldAccountOutline);
@@ -51,6 +53,7 @@ extension AndroidPermissionList on AndroidPermission {
   }}
 
   String get description {switch (this) {
+    case AndroidPermission.NONE: return "No permissions required";
     case AndroidPermission.X_ADMIN_BRICK: return "Remotely disable or reset device";
     case AndroidPermission.X_ADMIN_LOCK: return "Remotely lock device";
     case AndroidPermission.ADMIN: return "Manage device as administrator";
