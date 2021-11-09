@@ -23,6 +23,7 @@ class GState {
   static final package = SharedValue<String>(value: "");
   static final activity = SharedValue<String>(value: "");
   static final version = SharedValue<String>(value: "");
+  static final oldVersion = SharedValue<String>(value: "");
   static final permissions = SharedValue<Set<AndroidPermission>>(value: {});
   static final apkInstallType = SharedValue<InstallType?>(value: null);
   static final apkInstallState = SharedValue<InstallState>(value: InstallState.PROMPT);

@@ -96,10 +96,19 @@ enum InstallState {
     PROMPT, INSTALLING, SUCCESS, ERROR
 }
 enum InstallType {
-    INSTALL, UPDATE, DOWNGRADE
+    UNKNOWN, INSTALL, REINSTALL, UPDATE, DOWNGRADE
 }
 enum ResType {
     COLOR, FILE
+}
+extension on InstallType {
+  String get buttonText {switch (this) {
+    case InstallType.UNKNOWN: return "Install?";
+    case InstallType.INSTALL: return "Install";
+    case InstallType.REINSTALL: return "Reinstall";
+    case InstallType.UPDATE: return "Update";
+    case InstallType.DOWNGRADE: return "Downgrade (clear data)";
+  }}
 }
 ResType getResType(String typeId) {switch (typeId) {
   case "1d": return ResType.COLOR;
@@ -269,14 +278,33 @@ class ApkReader {
     initArchive();
 
     Future? iconUpdThread;
+    Future? installedPackage;
     Future<ProcessResult>? inner;
     var process = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'badging', TEST_FILE])..then((value) {
       if (value.exitCode == 0) {
         String dump = value.stdout.toString();
         String? info = dump.find(r'(^|\n)package:.*');
 
-        data.execute(() => GState.package.update((_) => info?.find(r"(^|\n|\s)name=\s*'([^'\n\s$]*)", 2) ?? ""));
-        String versionCode = info?.find(r"(^|\n|\s)versionCode=\s*'([^'\n\s$]*)", 2) ?? "";
+        int versionCode = int.parse(info?.find(r"(^|\n|\s)versionCode=\s*'([^'\n\s$]*)", 2) ?? "0");
+        String package = info?.find(r"(^|\n|\s)name=\s*'([^'\n\s$]*)", 2) ?? "";
+        if (package.isNotEmpty) {
+          data.execute(() => GState.package.update((_) => info?.find(r"(^|\n|\s)name=\s*'([^'\n\s$]*)", 2) ?? ""));
+          installedPackage = Process.run('${Env.TOOLS_DIR}\\adb.exe', ['shell', 'dumpsys package $package']).then((result) {
+            //cmd package dump
+            String insDump = result.stdout.toString();
+            int? oldVersionCode = int.tryParse(insDump.find(r'(\n|\s|^)versionCode=([0-9]*)[^0-9]', 2) ?? "");
+            if (result.exitCode != 0) data.execute(() => GState.apkInstallType.update((_) => InstallType.UNKNOWN));
+            else if (oldVersionCode != null) {
+              data.execute(() => GState.apkInstallType.update((_) => (oldVersionCode < versionCode) ? InstallType.UPDATE : 
+                  (oldVersionCode > versionCode) ? InstallType.DOWNGRADE : InstallType.REINSTALL));
+              String oldVersion = insDump.find(r'(^|\n|\s)versionName=\s*([^\n\s$]*)(\s|\n|$)', 2) ?? "???";
+              data.execute(() => GState.oldVersion.update((_) => oldVersion));
+            }
+            else data.execute(() => GState.apkInstallType.update((_) => InstallType.INSTALL));
+          }).onError((_, __) => data.execute(() => GState.apkInstallType.update((_) => InstallType.UNKNOWN)));
+        }
+        //else data.execute(() => GState.apkInstallType.update((_) => InstallType.INSTALL));
+
         data.execute(() => GState.version.update((_) => info?.find(r"(^|\n|\s)versionName=\s*'([^'\n\s$]*)", 2) ?? ""));
         data.execute(() => GState.activity.update((_) => dump.find(r"(^|\n)launchable-activity:.*name='([^'\n\s$]*)", 2) ?? ""));
 
@@ -284,8 +312,6 @@ class ApkReader {
         String? title = application?.find(r"(^|\n|\s)label='([^']*)'", 2);
         String? icon = application?.find(r"(^|\n|\s)icon='([^']*)'", 2);
         data.execute(() => GState.apkTitle.update((_) => title ?? "UNKNOWN_TITLE"));
-        //TODO check type of installation
-        data.execute(() => GState.apkInstallType.update((_) => InstallType.INSTALL));
 
         Set<AndroidPermission> permissions = dump.toSet("(^|\\n)\\s*uses-permission:\\s+name=[\"']([^\"'\\n]*)", 
           (m) => AndroidPermissionList.get(m.group(2)!), (a,b)=> a.index - b.index);
@@ -330,6 +356,7 @@ class ApkReader {
       GState.apkBackgroundIcon.update((p0) => (ScalableImageWidget(si: background)));
       GState.apkForegroundIcon.update((p0) => (ScalableImageWidget(si: foreground)));
     }});
+    if (installedPackage != null) await installedPackage;
     //data.pipe.send("WOOOOOOOO2: ${coso.stdout.toString()}");
   }
 
@@ -408,6 +435,8 @@ class _ApkInstallerState extends State<ApkInstaller> {
     String activity = GState.activity.of(context);
     bool isLaunchable = package.isNotEmpty && activity.isNotEmpty;
 
+    String oldVersion = GState.oldVersion.of(context);
+
     String ipAddress = GState.ipAddress.of(context);
     int port = GState.androidPort.of(context);
 
@@ -435,7 +464,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
               const SizedBox(height: 10),
               const Text("Do you want to install this application?"),
               const SizedBox(height: 10),
-              Text("Version: $version\nPackage: $package", style: TextStyle(color: FluentTheme.of(context).disabledColor) ),
+              Text("Version: ${oldVersion.isNotEmpty ? '$oldVersion => ' : ''}$version\nPackage: $package", style: TextStyle(color: FluentTheme.of(context).disabledColor) ),
               /*ListView(
                 padding: EdgeInsets.only(
                   bottom: kPageDefaultVerticalPadding,
@@ -482,9 +511,9 @@ class _ApkInstallerState extends State<ApkInstaller> {
               )),
               const SizedBox(width: 15),
               noMoveWindow(ToggleButton(
-                child: const Text('Install'),
+                child: Text(installType != InstallType.DOWNGRADE ? installType?.buttonText ?? "Loading..." : "Downgrade unsupported"),
                 checked: true,
-                onChanged: installType == null ? null : (_){ApkInstaller.installApk(ApkReader.TEST_FILE, ipAddress, port) ;},
+                onChanged: installType == null || installType == InstallType.DOWNGRADE ? null : (_){ApkInstaller.installApk(ApkReader.TEST_FILE, ipAddress, port) ;},
               )),
               /*const SizedBox(width: 15),noMoveWindow(ToggleButton(
                 child: const Text('TEST-ICON'),
