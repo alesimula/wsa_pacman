@@ -297,7 +297,7 @@ class ApkReader {
             else if (oldVersionCode != null) {
               data.execute(() => GState.apkInstallType.update((_) => (oldVersionCode < versionCode) ? InstallType.UPDATE : 
                   (oldVersionCode > versionCode) ? InstallType.DOWNGRADE : InstallType.REINSTALL));
-              String oldVersion = insDump.find(r'(^|\n|\s)versionName=\s*([^\n\s$]*)(\s|\n|$)', 2) ?? "???";
+              String oldVersion = insDump.find(r'(^|\n|\s)versionName=\s*([^\n\s_$]*)', 2) ?? "???";
               data.execute(() => GState.oldVersion.update((_) => oldVersion));
             }
             else data.execute(() => GState.apkInstallType.update((_) => InstallType.INSTALL));
@@ -305,7 +305,7 @@ class ApkReader {
         }
         //else data.execute(() => GState.apkInstallType.update((_) => InstallType.INSTALL));
 
-        data.execute(() => GState.version.update((_) => info?.find(r"(^|\n|\s)versionName=\s*'([^'\n\s$]*)", 2) ?? ""));
+        data.execute(() => GState.version.update((_) => info?.find(r"(^|\n|\s)versionName=\s*'([^'\n\s_$]*)", 2) ?? ""));
         data.execute(() => GState.activity.update((_) => dump.find(r"(^|\n)launchable-activity:.*name='([^'\n\s$]*)", 2) ?? ""));
 
         String? application = dump.find(r'(^|\n)application:\s*(.*)');
@@ -464,7 +464,8 @@ class _ApkInstallerState extends State<ApkInstaller> {
               const SizedBox(height: 10),
               const Text("Do you want to install this application?"),
               const SizedBox(height: 10),
-              Text("Version: ${oldVersion.isNotEmpty ? '$oldVersion => ' : ''}$version\nPackage: $package", style: TextStyle(color: FluentTheme.of(context).disabledColor) ),
+              Text("Version:\u00A0${oldVersion.isNotEmpty ? '$oldVersion\u00A0=>\u00A0' : ''}${version.replaceAll(' ', '\u00A0')}", style: TextStyle(color: FluentTheme.of(context).disabledColor), overflow: TextOverflow.ellipsis, maxLines: 1),
+              Text("Package:\u00A0$package", style: TextStyle(color: FluentTheme.of(context).disabledColor), overflow: TextOverflow.ellipsis, maxLines: 1),
               /*ListView(
                 padding: EdgeInsets.only(
                   bottom: kPageDefaultVerticalPadding,
