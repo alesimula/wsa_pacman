@@ -1,7 +1,5 @@
-; -- Example1.iss --
-; Demonstrates copying 3 files and creating an icon.
-
-; SEE THE DOCUMENTATION FOR DETAILS ON CREATING .ISS SCRIPT FILES!
+; -- installer.iss --
+; Generates an installer with Inno Setup.
 
 #define tools_dir_name "embedded-adb"
 #define releasedir "..\build\windows\runner\Release\"
