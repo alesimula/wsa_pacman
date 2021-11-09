@@ -5,6 +5,8 @@
 #define releasedir "..\build\windows\runner\Release\"
 #define toolsdir "..\"+tools_dir_name
 
+#define vcredist_version "14.29.30135.00"
+
 #define executable "WSA-pacman.exe"
 #define app_name "WSA Package Manager"
 #define reg_appname "wsa-pacman"
@@ -47,6 +49,33 @@ Root: HKCU; Subkey: "{#path_assoc_user}\.apk\UserChoice"; ValueType: none; Flags
 [Files]
 Source: "{#releasedir}\*"; Excludes: "\*.lib,\*.exp,\{#tools_dir_name}"; DestDir: "{app}"; Flags: recursesubdirs
 Source: "{#toolsdir}\*"; DestDir: "{app}\{#tools_dir_name}"; Flags: recursesubdirs
+Source: ".\redist\VC_redist.x64.exe"; DestDir: {tmp}; Flags: dontcopy
+
+[Run]
+Filename: "{tmp}\VC_redist.x64.exe"; StatusMsg: "Installing Visual C++ Redistributable..."; \
+  Parameters: "/quiet /norestart /install"; Check: ShouldInstallVCRedist; Flags: waituntilterminated
 
 [Icons]
 Name: "{group}\WSA PacMan"; Filename: "{app}\{#executable}"
+
+[Code]
+function ShouldInstallVCRedist: Boolean;
+var 
+  Version: String;
+begin
+  if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64', 'Version', Version) then
+  begin 
+    Log('VC Redist Version check : found ' + Version);
+    //Check if the installed version is lower than the version included in the installer
+    Result := (CompareStr(Version, 'v{#vcredist_version}')<0);
+  end
+  else 
+  begin
+    // Not even an old version installed
+    Result := True;
+  end;
+  if (Result) then
+  begin
+    ExtractTemporaryFile('VC_redist.x64.exe');
+  end;
+end;
