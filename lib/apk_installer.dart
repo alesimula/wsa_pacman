@@ -103,7 +103,7 @@ enum ResType {
 }
 extension on InstallType {
   String get buttonText {switch (this) {
-    case InstallType.UNKNOWN: return "Install?";
+    case InstallType.UNKNOWN: return "Install";
     case InstallType.INSTALL: return "Install";
     case InstallType.REINSTALL: return "Reinstall";
     case InstallType.UPDATE: return "Update";
@@ -134,6 +134,7 @@ class ApkReader {
   static late Future<Map<String, Resource>> resourceDump;
   static late Future<Map<int, String>> stringDump;
   static late Future<Archive> apkArchive;
+  static int versionCode = 0;
 
   static late final ProcessData data;
 
@@ -262,6 +263,23 @@ class ApkReader {
     log("done"+apkFile.toString());*/
   }
 
+  static Future loadInstallType(String package, int versionCode, [bool isIsolate = false]) {if (package.isNotEmpty) {
+    Function(VoidCallback) exec = isIsolate ? data.execute : (m)=>m();
+    return Process.run('${Env.TOOLS_DIR}\\adb.exe', ['shell', 'dumpsys package $package']).then((result) {
+      //cmd package dump
+      var verMatch = RegExp(r'(\n|\s|^)versionCode=([0-9]*)[^\n]*(\n([^\s\n]*\s)*versionName=([^\n\s_$]*))?').firstMatch(result.stdout.toString());
+      int? oldVersionCode = int.tryParse(verMatch?.group(2) ?? "");
+      if (result.exitCode != 0) exec(() => GState.apkInstallType.update((_) => InstallType.UNKNOWN));
+      else if (oldVersionCode != null) {
+        exec(() => GState.apkInstallType.update((_) => (oldVersionCode < versionCode) ? InstallType.UPDATE : 
+            (oldVersionCode > versionCode) ? InstallType.DOWNGRADE : InstallType.REINSTALL));
+        String oldVersion = verMatch!.group(5) ?? "???";
+        exec(() => GState.oldVersion.update((_) => oldVersion));
+      }
+      else exec(() => GState.apkInstallType.update((_) => InstallType.INSTALL));
+    }).onError((_, __) => exec(() => GState.apkInstallType.update((_) => InstallType.UNKNOWN)));
+  } else return Future.value();}
+
   //Retrieves APK information (Make sync?)
   static void _init(ProcessData pData) async {
     data = pData;
@@ -286,22 +304,12 @@ class ApkReader {
         String? info = dump.find(r'(^|\n)package:.*');
 
         int versionCode = int.parse(info?.find(r"(^|\n|\s)versionCode=\s*'([^'\n\s$]*)", 2) ?? "0");
+        data.execute(() {ApkReader.versionCode = versionCode;});
+
         String package = info?.find(r"(^|\n|\s)name=\s*'([^'\n\s$]*)", 2) ?? "";
         if (package.isNotEmpty) {
           data.execute(() => GState.package.update((_) => info?.find(r"(^|\n|\s)name=\s*'([^'\n\s$]*)", 2) ?? ""));
-          installedPackage = Process.run('${Env.TOOLS_DIR}\\adb.exe', ['shell', 'dumpsys package $package']).then((result) {
-            //cmd package dump
-            var verMatch = RegExp(r'(\n|\s|^)versionCode=([0-9]*)[^\n]*(\n([^\s\n]*\s)*versionName=([^\n\s_$]*))?').firstMatch(result.stdout.toString());
-            int? oldVersionCode = int.tryParse(verMatch?.group(2) ?? "");
-            if (result.exitCode != 0) data.execute(() => GState.apkInstallType.update((_) => InstallType.UNKNOWN));
-            else if (oldVersionCode != null) {
-              data.execute(() => GState.apkInstallType.update((_) => (oldVersionCode < versionCode) ? InstallType.UPDATE : 
-                  (oldVersionCode > versionCode) ? InstallType.DOWNGRADE : InstallType.REINSTALL));
-              String oldVersion = verMatch!.group(5) ?? "???";
-              data.execute(() => GState.oldVersion.update((_) => oldVersion));
-            }
-            else data.execute(() => GState.apkInstallType.update((_) => InstallType.INSTALL));
-          }).onError((_, __) => data.execute(() => GState.apkInstallType.update((_) => InstallType.UNKNOWN)));
+          installedPackage = loadInstallType(package, versionCode, true);
         }
         //else data.execute(() => GState.apkInstallType.update((_) => InstallType.INSTALL));
 
@@ -373,7 +381,18 @@ class ApkReader {
       }
       else log("RECEIVED-MESSAGE: $message");
     });
+    //Recheck installation type when connected
     compute(_init, ProcessData(fileName, port.sendPort));
+    StreamSubscription? sub;
+    sub = GState.connectionStatus.stream.listen((event) async {
+      String package = GState.package.$;
+      InstallType? installType = GState.apkInstallType.$;
+      if (GState.apkInstallType.$ == InstallType.UNKNOWN) {
+        await loadInstallType(GState.package.$, versionCode);
+        if (GState.apkInstallType.$ != InstallType.UNKNOWN) sub?.cancel();
+      }
+      else if (installType != null) sub?.cancel();
+    });
   }
 }
 
@@ -427,7 +446,9 @@ class _ApkInstallerState extends State<ApkInstaller> {
     Widget? aForeground = GState.apkForegroundIcon.of(context);
     Widget? lIcon = GState.apkIcon.of(context);
     WSAStatusAlert connectionStatus = GState.connectionStatus.of(context);
-    InstallType? installType = (connectionStatus.severity == InfoBarSeverity.success) ? GState.apkInstallType.of(context) : null;
+    bool isConnected = connectionStatus.severity == InfoBarSeverity.success;
+    InstallType? installType = GState.apkInstallType.of(context);
+    bool canInstall = isConnected && installType != null && installType != InstallType.UNKNOWN;
     InstallState installState = GState.apkInstallState.of(context);
 
     String package = GState.package.of(context);
@@ -514,7 +535,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
               noMoveWindow(ToggleButton(
                 child: Text(installType != InstallType.DOWNGRADE ? installType?.buttonText ?? "Loading..." : "Downgrade unsupported"),
                 checked: true,
-                onChanged: installType == null || installType == InstallType.DOWNGRADE ? null : (_){ApkInstaller.installApk(ApkReader.TEST_FILE, ipAddress, port) ;},
+                onChanged: !canInstall ? null : (_){ApkInstaller.installApk(ApkReader.TEST_FILE, ipAddress, port) ;},
               )),
               /*const SizedBox(width: 15),noMoveWindow(ToggleButton(
                 child: const Text('TEST-ICON'),
