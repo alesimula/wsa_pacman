@@ -291,13 +291,13 @@ class ApkReader {
           data.execute(() => GState.package.update((_) => info?.find(r"(^|\n|\s)name=\s*'([^'\n\s$]*)", 2) ?? ""));
           installedPackage = Process.run('${Env.TOOLS_DIR}\\adb.exe', ['shell', 'dumpsys package $package']).then((result) {
             //cmd package dump
-            String insDump = result.stdout.toString();
-            int? oldVersionCode = int.tryParse(insDump.find(r'(\n|\s|^)versionCode=([0-9]*)[^0-9]', 2) ?? "");
+            var verMatch = RegExp(r'(\n|\s|^)versionCode=([0-9]*)[^\n]*(\n([^\s\n]*\s)*versionName=([^\n\s_$]*))?').firstMatch(result.stdout.toString());
+            int? oldVersionCode = int.tryParse(verMatch?.group(2) ?? "");
             if (result.exitCode != 0) data.execute(() => GState.apkInstallType.update((_) => InstallType.UNKNOWN));
             else if (oldVersionCode != null) {
               data.execute(() => GState.apkInstallType.update((_) => (oldVersionCode < versionCode) ? InstallType.UPDATE : 
                   (oldVersionCode > versionCode) ? InstallType.DOWNGRADE : InstallType.REINSTALL));
-              String oldVersion = insDump.find(r'(^|\n|\s)versionName=\s*([^\n\s_$]*)', 2) ?? "???";
+              String oldVersion = verMatch!.group(5) ?? "???";
               data.execute(() => GState.oldVersion.update((_) => oldVersion));
             }
             else data.execute(() => GState.apkInstallType.update((_) => InstallType.INSTALL));
