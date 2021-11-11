@@ -6,7 +6,7 @@ import 'dart:io';
 
 extension StringUtils on String {
 
-  int get ipv4AsInt => InternetAddress.tryParse(this)?.rawAddress.buffer.asByteData().getInt32(0) ?? IntUtils.LOCALHOST;
+  int? get ipv4AsInt => InternetAddress.tryParse(this)?.rawAddress.buffer.asByteData().getInt32(0);
 
   bool isNumeric() => contains(RegExp(r'^[0-9]*$'));
   bool isSignedNumeric() => contains(RegExp(r'^[+-]?[0-9]*$'));

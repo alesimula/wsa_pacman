@@ -16,7 +16,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 class GState {
   static final connectionStatus = SharedValue(value: WSAPeriodicConnector.alertStatus);
   static final theme = PersistableValue(value: Options_Theme.SYSTEM, loader: (o)=>o.theme, setter: (o,e)=> o.theme = e); 
-  static final ipAddress = PersistableValue(value: "127.0.0.1", loader: (o)=>o.ipAddress.asIpv4, setter:  (o,e)=>o.ipAddress = e.ipv4AsInt);
+  static final ipAddress = PersistableValue(value: "127.0.0.1", loader: (o)=>o.ipAddress.asIpv4, setter:  (o,e)=>o.ipAddress = e.ipv4AsInt ?? IntUtils.LOCALHOST);
   static final androidPort = PersistableValue(value: 58526, loader: (o)=>o.port, setter: (o,e)=>o.port = e);
   static final androidPortPending = SharedValue(value: androidPort.$.toString());
   //APK Info
