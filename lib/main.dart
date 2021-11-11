@@ -154,6 +154,7 @@ bool get isDesktop {
 late final List<String> args;
 
 void main(List<String> arguments) async {
+  AppOptions.init();
   WidgetsFlutterBinding.ensureInitialized();
   //TODO args = arguments;
   //args = [r'C:\Users\Alex\Downloads\youtube.apk'];

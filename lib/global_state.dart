@@ -15,7 +15,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 class GState {
   static final connectionStatus = SharedValue(value: WSAPeriodicConnector.alertStatus);
   static final theme = PersistableValue(value: Options_Theme.SYSTEM, loader: (o)=>o.theme, setter: (o,e)=> o.theme = e); 
-  static final ipAddress = SharedValue(value: "127.0.0.1");
+  static final ipAddress = PersistableValue(value: "127.0.0.1", loader: (o)=>o.ipAddress.asIpv4, setter:  (o,e)=>o.ipAddress = e.ipv4AsInt);
   static final androidPort = PersistableValue(value: 58526, loader: (o)=>o.port, setter: (o,e)=>o.port = e);
   static final androidPortPending = SharedValue(value: androidPort.$.toString());
   //APK Info
@@ -47,11 +47,17 @@ extension Options_Theme_Mode on Options_Theme? {
   }
 }
 
-class PersistableValue<T> extends SharedValue<T> {
-  static final _protoLock = Lock();
-  static final _fileLock = Lock();
+extension on String {
+  int get ipv4AsInt => InternetAddress.tryParse(this)?.rawAddress.buffer.asByteData().getInt32(0) ?? 2130706433;
+}
 
-  final Function(Options options, T value) _setter;
+extension on int {
+  String get asIpv4 => InternetAddress.fromRawAddress(Uint8List(4)..buffer.asByteData().setInt32(0, this)).address;
+}
+
+class AppOptions {
+  static final _fileLock = Lock();
+  static final _protoLock = Lock();
   static Options? _options;
   static File? _optionsFile;
   static final Future<Options> _optionsFuture = () async {
@@ -60,31 +66,51 @@ class PersistableValue<T> extends SharedValue<T> {
     return (_options = Options.fromBuffer(_optionsFile!.readAsBytesSync()));
   }();
 
-  PersistableValue({String? key, required T value, required T Function(Options options) loader, required Function(Options options, T value) setter, bool autosave = false})
-      : _setter = setter, super(key: key, value: value, autosave: autosave) {
-    _withOptions((options) {super.$ = loader(options);});
-  }
+  //Call to initialize reading options as soon as possible
+  static void init() {}
 
-  static Future _withOptions(Function(Options options) setter) async {_protoLock.synchronized(() async {
+  static Future withOptions(Function(Options options) setter) {return _protoLock.synchronized(() async {
     setter(_options ?? await _optionsFuture);
   });}
+}
 
-  static Future persistOptions() async {_fileLock.synchronized(() async {
+class PersistableValue<T> extends SharedValue<T> {
+
+  final Function(Options options, T value) _setter;
+  Future? _initializer;
+
+  PersistableValue({String? key, required T value, required T Function(Options options) loader, required Function(Options options, T value) setter, bool autosave = false})
+      : _setter = setter, super(key: key, value: value, autosave: autosave){
+    _initializer = AppOptions.withOptions((options) {super.$ = loader(options); _initializer = null;});
+  }
+
+  static Future persistOptions() {return AppOptions._fileLock.synchronized(() async {
     File optionsFile;
-    if (_optionsFile != null) optionsFile = _optionsFile!;
+    if (AppOptions._optionsFile != null) optionsFile = AppOptions._optionsFile!;
     else {
-      await _optionsFuture;
-      optionsFile = _optionsFile!;
+      await AppOptions._optionsFuture;
+      optionsFile = AppOptions._optionsFile!;
     }
     //optionsFile.writeAsBytesSync((_options ?? await _optionsFuture).writeToBuffer());
     Uint8List? optionBytes;
-    await _withOptions((options) => optionBytes = options.writeToBuffer());
+    await AppOptions.withOptions((options) => optionBytes = options.writeToBuffer());
     optionsFile.writeAsBytesSync(optionBytes!);
   });}
 
   Future persist() => persistOptions();
 
-  void _saveOptions() => _withOptions((options) => _setter(options, $));
+  void _saveOptions() => AppOptions.withOptions((options) => _setter(options, $));
+
+  Future<T> whenReady([BuildContext? context]) async {
+    if (_initializer != null) await _initializer;
+    return context == null ? $ : of(context);
+  }
+
+  @override
+  T of(BuildContext context) {
+    // TODO: implement of
+    return super.of(context);
+  }
 
   @override
   set $(T newValue) {

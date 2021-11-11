@@ -263,22 +263,25 @@ class ApkReader {
     log("done"+apkFile.toString());*/
   }
 
-  static Future loadInstallType(String package, int versionCode, [bool isIsolate = false]) {if (package.isNotEmpty) {
-    Function(VoidCallback) exec = isIsolate ? data.execute : (m)=>m();
-    return Process.run('${Env.TOOLS_DIR}\\adb.exe', ['shell', 'dumpsys package $package']).then((result) {
+  static Future loadInstallType(String package, int versionCode) async {if (package.isNotEmpty) {
+    GState.androidPort;
+    String ipAddress = await GState.ipAddress.whenReady();
+    int port = await GState.androidPort.whenReady();
+
+    return await Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'shell', 'dumpsys package $package']).then((result) {
       //cmd package dump
       var verMatch = RegExp(r'(\n|\s|^)versionCode=([0-9]*)[^\n]*(\n([^\s\n]*\s)*versionName=([^\n\s_$]*))?').firstMatch(result.stdout.toString());
       int? oldVersionCode = int.tryParse(verMatch?.group(2) ?? "");
-      if (result.exitCode != 0) exec(() => GState.apkInstallType.update((_) => InstallType.UNKNOWN));
+      if (result.exitCode != 0) GState.apkInstallType.update((_) => InstallType.UNKNOWN);
       else if (oldVersionCode != null) {
-        exec(() => GState.apkInstallType.update((_) => (oldVersionCode < versionCode) ? InstallType.UPDATE : 
-            (oldVersionCode > versionCode) ? InstallType.DOWNGRADE : InstallType.REINSTALL));
+        GState.apkInstallType.update((_) => (oldVersionCode < versionCode) ? InstallType.UPDATE : 
+            (oldVersionCode > versionCode) ? InstallType.DOWNGRADE : InstallType.REINSTALL);
         String oldVersion = verMatch!.group(5) ?? "???";
-        exec(() => GState.oldVersion.update((_) => oldVersion));
+        GState.oldVersion.update((_) => oldVersion);
       }
-      else exec(() => GState.apkInstallType.update((_) => InstallType.INSTALL));
-    }).onError((_, __) => exec(() => GState.apkInstallType.update((_) => InstallType.UNKNOWN)));
-  } else return Future.value();}
+      else GState.apkInstallType.update((_) => InstallType.INSTALL);
+    }).onError((_, __) {GState.apkInstallType.update((_) => InstallType.UNKNOWN);});
+  } else return null;}
 
   //Retrieves APK information (Make sync?)
   static void _init(ProcessData pData) async {
@@ -296,7 +299,6 @@ class ApkReader {
     initArchive();
 
     Future? iconUpdThread;
-    Future? installedPackage;
     Future<ProcessResult>? inner;
     var process = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'badging', TEST_FILE])..then((value) {
       if (value.exitCode == 0) {
@@ -308,8 +310,7 @@ class ApkReader {
 
         String package = info?.find(r"(^|\n|\s)name=\s*'([^'\n\s$]*)", 2) ?? "";
         if (package.isNotEmpty) {
-          data.execute(() => GState.package.update((_) => info?.find(r"(^|\n|\s)name=\s*'([^'\n\s$]*)", 2) ?? ""));
-          installedPackage = loadInstallType(package, versionCode, true);
+          data.execute(() {GState.package.update((_) => package); loadInstallType(package, versionCode);});
         }
         //else data.execute(() => GState.apkInstallType.update((_) => InstallType.INSTALL));
 
@@ -364,7 +365,6 @@ class ApkReader {
       GState.apkBackgroundIcon.update((p0) => (ScalableImageWidget(si: background)));
       GState.apkForegroundIcon.update((p0) => (ScalableImageWidget(si: foreground)));
     }});
-    if (installedPackage != null) await installedPackage;
     //data.pipe.send("WOOOOOOOO2: ${coso.stdout.toString()}");
   }
 
