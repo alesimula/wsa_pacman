@@ -40,6 +40,13 @@ class LateUpdater<E> {
     timer?.cancel();
     timer = Timer(SETTINGS_UPDATE_TIMER, (){if (initialValue == newValue) callback(initialValue);});
   }
+
+  cancel() => timer?.cancel();
+
+  instant(E newValue) {
+    timer?.cancel();
+    callback(newValue);
+  }
 }
 
 class Settings extends StatefulWidget {
@@ -127,7 +134,11 @@ class SettingsState extends State<Settings> {
               onChanged: (value)=>androidPortUpdater.update(value.isEmpty ? 58526 : int.parse(value)),
               enableSuggestions: false,
               keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
-              prefix: const Padding(padding: EdgeInsets.only(left: 10), child: Text("127.0.0.1 :"))
+              prefix: const Padding(padding: EdgeInsets.only(left: 10), child: Text("127.0.0.1 :")),
+              suffix: IconButton(
+                icon: const Icon(FluentIcons.reset),
+                onPressed: () {GState.androidPortPending.update((_) => 58526.toString()); androidPortUpdater.instant(58526); setState((){});},
+              )
             ),
           ),
           biggerSpacer,
