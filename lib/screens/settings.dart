@@ -8,6 +8,7 @@ import 'package:wsa_pacman/proto/options.pb.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
+import '/utils/string_utils.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
@@ -26,11 +27,6 @@ const List<String> accentColorNames = [
   'Teal',
   'Green',
 ];
-
-extension on String {
-  bool isNumeric() => contains(RegExp(r'^[0-9]*$'));
-  bool isSignedNumeric() => contains(RegExp(r'^[+-]?[0-9]*$'));
-}
 
 class LateUpdater<E> {
   static const SETTINGS_UPDATE_TIMER = Duration(seconds:3);

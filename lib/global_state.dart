@@ -9,7 +9,8 @@ import 'package:shared_value/shared_value.dart';
 import 'package:synchronized/synchronized.dart';
 
 import 'proto/options.pb.dart';
-
+import 'utils/string_utils.dart';
+import 'utils/int_utils.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 class GState {
@@ -45,14 +46,6 @@ extension Options_Theme_Mode on Options_Theme? {
       default: return ThemeMode.system;
     }
   }
-}
-
-extension on String {
-  int get ipv4AsInt => InternetAddress.tryParse(this)?.rawAddress.buffer.asByteData().getInt32(0) ?? 2130706433;
-}
-
-extension on int {
-  String get asIpv4 => InternetAddress.fromRawAddress(Uint8List(4)..buffer.asByteData().setInt32(0, this)).address;
 }
 
 class AppOptions {
