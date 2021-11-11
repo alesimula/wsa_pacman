@@ -85,7 +85,7 @@ class Env {
   static final String SYSTEM_ROOT = Platform.environment["SystemRoot"] ?? "";
   static final String USER_PROFILE = Platform.environment["UserProfile"] ?? "";
   static final String EXEC_DIR = Platform.resolvedExecutable.replaceFirst(RegExp(r'[/\\][^/\\]*$'), r'\');
-  static final String TOOLS_DIR = "${EXEC_DIR}embedded-adb\\";
+  static final String TOOLS_DIR = "${EXEC_DIR}embedded-tools\\";
 }
 
 class WSAPeriodicConnector {

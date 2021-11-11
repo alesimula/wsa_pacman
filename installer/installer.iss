@@ -1,7 +1,7 @@
 ; -- installer.iss --
 ; Generates an installer with Inno Setup.
 
-#define tools_dir_name "embedded-adb"
+#define tools_dir_name "embedded-tools"
 #define releasedir "..\build\windows\runner\Release\"
 #define instbuilddir "..\build\installer"
 #define toolsdir "..\"+tools_dir_name
@@ -20,7 +20,7 @@
 #define path_assoc_default ".DEFAULT\"+path_assoc_user 
 
 [Setup]
-AppVersion=0.4.3
+AppVersion=0.4.4
 PrivilegesRequired=admin
 AppName=WSA PacMan
 ArchitecturesInstallIn64BitMode=x64
