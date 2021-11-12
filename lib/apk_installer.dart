@@ -70,7 +70,7 @@ extension on InstallType {
     case InstallType.INSTALL: return "Install";
     case InstallType.REINSTALL: return "Reinstall";
     case InstallType.UPDATE: return "Update";
-    case InstallType.DOWNGRADE: return "Downgrade (clear data)";
+    case InstallType.DOWNGRADE: return "Downgrade (unsafe)";
   }}
 }
 ResType getResType(String typeId) {switch (typeId) {
@@ -372,9 +372,9 @@ class ProcessData {
 class ApkInstaller extends StatefulWidget {
   const ApkInstaller({Key? key}) : super(key: key);
 
-  static void installApk(String apkFile, String ipAddress, int port) async {
+  static void installApk(String apkFile, String ipAddress, int port, [bool downgrade = false]) async {
     log("INSTALLING \"$apkFile\" on on $ipAddress:$port...");
-    var installation = Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'install', apkFile])
+    var installation = Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'install', if (downgrade) '-r', if (downgrade) '-d', apkFile])
       .timeout(const Duration(seconds: 30)).onError((error, stackTrace) => ProcessResult(-1, -1, null, null));
     GState.apkInstallState.update((_) => InstallState.INSTALLING);
     var result = await installation;
@@ -400,6 +400,7 @@ class ApkInstaller extends StatefulWidget {
 
 class _ApkInstallerState extends State<ApkInstaller> {
   int index = 0;
+  ToggleButtonThemeData? warningButtonTheme;
   
   @override
   Widget build(BuildContext context) {
@@ -413,6 +414,8 @@ class _ApkInstallerState extends State<ApkInstaller> {
     InstallType? installType = GState.apkInstallType.of(context);
     bool canInstall = isConnected && installType != null && installType != InstallType.UNKNOWN;
     InstallState installState = GState.apkInstallState.of(context);
+
+    if (installType == InstallType.DOWNGRADE && warningButtonTheme == null) warningButtonTheme = ToggleButtonThemeData.standard(FluentTheme.of(context).copyWith(accentColor: Colors.orange));
 
     String package = GState.package.of(context);
     String version = GState.version.of(context);
@@ -496,9 +499,10 @@ class _ApkInstallerState extends State<ApkInstaller> {
               )),
               const SizedBox(width: 15),
               noMoveWindow(ToggleButton(
-                child: Text(installType != InstallType.DOWNGRADE ? installType?.buttonText ?? "Loading..." : "Downgrade unsupported"),
+                child: Text(installType?.buttonText ?? "Loading..."),
                 checked: true,
-                onChanged: !canInstall ? null : (_){ApkInstaller.installApk(ApkReader.TEST_FILE, ipAddress, port) ;},
+                style: installType == InstallType.DOWNGRADE ? warningButtonTheme : null,
+                onChanged: !canInstall ? null : (_){ApkInstaller.installApk(ApkReader.TEST_FILE, ipAddress, port, installType == InstallType.DOWNGRADE);},
               )),
               /*const SizedBox(width: 15),noMoveWindow(ToggleButton(
                 child: const Text('TEST-ICON'),
