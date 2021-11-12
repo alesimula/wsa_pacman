@@ -26,3 +26,20 @@ class Options_Theme extends $pb.ProtobufEnum {
   const Options_Theme._($core.int v, $core.String n) : super(v, n);
 }
 
+class Options_IconShape extends $pb.ProtobufEnum {
+  static const Options_IconShape SQUIRCLE = Options_IconShape._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'SQUIRCLE');
+  static const Options_IconShape CIRCLE = Options_IconShape._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'CIRCLE');
+  static const Options_IconShape ROUNDED_SQUARE = Options_IconShape._(2, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'ROUNDED_SQUARE');
+
+  static const $core.List<Options_IconShape> values = <Options_IconShape> [
+    SQUIRCLE,
+    CIRCLE,
+    ROUNDED_SQUARE,
+  ];
+
+  static final $core.Map<$core.int, Options_IconShape> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static Options_IconShape? valueOf($core.int value) => _byValue[value];
+
+  const Options_IconShape._($core.int v, $core.String n) : super(v, n);
+}
+

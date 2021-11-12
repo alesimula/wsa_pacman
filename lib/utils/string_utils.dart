@@ -8,6 +8,9 @@ extension StringUtils on String {
 
   int? get ipv4AsInt => InternetAddress.tryParse(this)?.rawAddress.buffer.asByteData().getInt32(0);
 
+  String get capitalized => '${this[0].toUpperCase()}${substring(1)}';
+  String get normalized => '${this[0].toUpperCase()}${replaceAll('_', ' ').substring(1).toLowerCase()}';
+
   bool isNumeric() => contains(RegExp(r'^[0-9]*$'));
   bool isSignedNumeric() => contains(RegExp(r'^[+-]?[0-9]*$'));
 

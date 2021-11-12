@@ -3,10 +3,12 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:jovial_svg/jovial_svg.dart';
 import 'package:wsa_pacman/global_state.dart';
 import 'package:wsa_pacman/proto/options.pb.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:wsa_pacman/widget/adaptive_icon.dart';
 
 import '/utils/string_utils.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -64,8 +66,25 @@ late final androidPortUpdater = LateUpdater<int>(GState.androidPort.$, (value){
 
 class SettingsState extends State<Settings> {
   static const SETTINGS_UPDATE_TIMER = Duration(seconds:3);
-  SettingsState({this.controller});
+  SettingsState({this.controller}) {
+    loadExampleIcon();
+  }
   final ScrollController? controller;
+
+  //late final exBackground = ScalableImage.fromAvdAsset(rootBundle, "assets/icons/missing_icon_background.xml");
+  //late final exForeground = ScalableImage.fromAvdAsset(rootBundle, "assets/icons/missing_icon_foreground.xml");
+  ScalableImageWidget? _exBackground;
+  ScalableImageWidget? _exForeground;
+
+  void loadExampleIcon() async {
+    var exBg = ScalableImage.fromAvdAsset(rootBundle, "assets/icons/missing_icon_background.xml");
+    var exFg = ScalableImage.fromAvdAsset(rootBundle, "assets/icons/missing_icon_foreground.xml");
+    var exBackground = await exBg; var exForeground = await exFg;
+    setState(() {
+      _exBackground = ScalableImageWidget(si: exBackground);
+      _exForeground = ScalableImageWidget(si: exForeground);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,10 +116,14 @@ class SettingsState extends State<Settings> {
       }
     }());
 
+    const hSpacer = SizedBox(width: 10.0);
     const spacer = SizedBox(height: 10.0);
     const biggerSpacer = SizedBox(height: 40.0);
 
     var theme = GState.theme.of(context).mode;
+    var iconShape = GState.iconShape.of(context);
+
+    var exampleIcon = AdaptiveIcon(background: _exBackground, foreground: _exForeground, radius: iconShape.radius);
 
     return ScaffoldPage(
       header: const PageHeader(title: Text('Settings')),
@@ -158,11 +181,34 @@ class SettingsState extends State<Settings> {
                     theme = mode;
                   }
                 },
-                content: Text('$mode'.replaceAll('ThemeMode.', '')),
+                content: Text('$mode'.replaceAll('ThemeMode.', '').capitalized),
               ),
             );
           }),
           biggerSpacer,
+          Row(children: [
+            Flexible(child: SizedBox(width: 30.00, height: 30.00, child: exampleIcon)),
+            hSpacer,
+            Text('Adaptive icons Shape',
+              style: FluentTheme.of(context).typography.subtitle),
+          ]),
+          spacer,
+          ...List.generate(Options_IconShape.values.length, (index) {
+            final shape = Options_IconShape.values[index];
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: RadioButton(
+                checked: iconShape == shape,
+                onChanged: (value) {
+                  if (value) {
+                    GState.iconShape..update((p0) => shape)..persist();
+                    iconShape = shape;
+                  }
+                },
+                content: Text('$shape'.normalized),
+              ),
+            );
+          }),
         ],
       ),
     );

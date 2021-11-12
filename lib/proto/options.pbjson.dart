@@ -17,8 +17,9 @@ const Options$json = const {
     const {'1': 'theme', '3': 3, '4': 1, '5': 14, '6': '.proto.Options.Theme', '10': 'theme'},
     const {'1': 'noAdaptive', '3': 4, '4': 1, '5': 8, '10': 'noAdaptive'},
     const {'1': 'systemAccent', '3': 5, '4': 1, '5': 8, '10': 'systemAccent'},
+    const {'1': 'iconShape', '3': 6, '4': 1, '5': 14, '6': '.proto.Options.IconShape', '10': 'iconShape'},
   ],
-  '4': const [Options_Theme$json],
+  '4': const [Options_Theme$json, Options_IconShape$json],
 };
 
 @$core.Deprecated('Use optionsDescriptor instead')
@@ -31,5 +32,15 @@ const Options_Theme$json = const {
   ],
 };
 
+@$core.Deprecated('Use optionsDescriptor instead')
+const Options_IconShape$json = const {
+  '1': 'IconShape',
+  '2': const [
+    const {'1': 'SQUIRCLE', '2': 0},
+    const {'1': 'CIRCLE', '2': 1},
+    const {'1': 'ROUNDED_SQUARE', '2': 2},
+  ],
+};
+
 /// Descriptor for `Options`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List optionsDescriptor = $convert.base64Decode('CgdPcHRpb25zEigKCWlwQWRkcmVzcxgBIAEoDToKMjEzMDcwNjQzM1IJaXBBZGRyZXNzEhkKBHBvcnQYAiABKA06BTU4NTI2UgRwb3J0EioKBXRoZW1lGAMgASgOMhQucHJvdG8uT3B0aW9ucy5UaGVtZVIFdGhlbWUSHgoKbm9BZGFwdGl2ZRgEIAEoCFIKbm9BZGFwdGl2ZRIiCgxzeXN0ZW1BY2NlbnQYBSABKAhSDHN5c3RlbUFjY2VudCIoCgVUaGVtZRIKCgZTWVNURU0QABIJCgVMSUdIVBABEggKBERBUksQAg==');
+final $typed_data.Uint8List optionsDescriptor = $convert.base64Decode('CgdPcHRpb25zEigKCWlwQWRkcmVzcxgBIAEoDToKMjEzMDcwNjQzM1IJaXBBZGRyZXNzEhkKBHBvcnQYAiABKA06BTU4NTI2UgRwb3J0EioKBXRoZW1lGAMgASgOMhQucHJvdG8uT3B0aW9ucy5UaGVtZVIFdGhlbWUSHgoKbm9BZGFwdGl2ZRgEIAEoCFIKbm9BZGFwdGl2ZRIiCgxzeXN0ZW1BY2NlbnQYBSABKAhSDHN5c3RlbUFjY2VudBI2CglpY29uU2hhcGUYBiABKA4yGC5wcm90by5PcHRpb25zLkljb25TaGFwZVIJaWNvblNoYXBlIigKBVRoZW1lEgoKBlNZU1RFTRAAEgkKBUxJR0hUEAESCAoEREFSSxACIjkKCUljb25TaGFwZRIMCghTUVVJUkNMRRAAEgoKBkNJUkNMRRABEhIKDlJPVU5ERURfU1FVQVJFEAI=');

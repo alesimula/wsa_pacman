@@ -427,7 +427,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
     String ipAddress = GState.ipAddress.of(context);
     int port = GState.androidPort.of(context);
 
-    if (aForeground != null) icon = AdaptiveIcon(backColor: GState.apkBackgroundColor.of(context), background: GState.apkBackgroundIcon.of(context), foreground: aForeground);
+    if (aForeground != null) icon = AdaptiveIcon(backColor: GState.apkBackgroundColor.of(context), background: GState.apkBackgroundIcon.of(context), foreground: aForeground, radius: GState.iconShape.of(context).radius);
     else if (lIcon != null) icon = lIcon;
     else icon = const ProgressRing();
 

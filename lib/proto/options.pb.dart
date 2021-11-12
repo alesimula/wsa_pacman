@@ -20,6 +20,7 @@ class Options extends $pb.GeneratedMessage {
     ..e<Options_Theme>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'theme', $pb.PbFieldType.OE, defaultOrMaker: Options_Theme.SYSTEM, valueOf: Options_Theme.valueOf, enumValues: Options_Theme.values)
     ..aOB(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'noAdaptive', protoName: 'noAdaptive')
     ..aOB(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'systemAccent', protoName: 'systemAccent')
+    ..e<Options_IconShape>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'iconShape', $pb.PbFieldType.OE, protoName: 'iconShape', defaultOrMaker: Options_IconShape.SQUIRCLE, valueOf: Options_IconShape.valueOf, enumValues: Options_IconShape.values)
     ..hasRequiredFields = false
   ;
 
@@ -30,6 +31,7 @@ class Options extends $pb.GeneratedMessage {
     Options_Theme? theme,
     $core.bool? noAdaptive,
     $core.bool? systemAccent,
+    Options_IconShape? iconShape,
   }) {
     final _result = create();
     if (ipAddress != null) {
@@ -46,6 +48,9 @@ class Options extends $pb.GeneratedMessage {
     }
     if (systemAccent != null) {
       _result.systemAccent = systemAccent;
+    }
+    if (iconShape != null) {
+      _result.iconShape = iconShape;
     }
     return _result;
   }
@@ -114,5 +119,14 @@ class Options extends $pb.GeneratedMessage {
   $core.bool hasSystemAccent() => $_has(4);
   @$pb.TagNumber(5)
   void clearSystemAccent() => clearField(5);
+
+  @$pb.TagNumber(6)
+  Options_IconShape get iconShape => $_getN(5);
+  @$pb.TagNumber(6)
+  set iconShape(Options_IconShape v) { setField(6, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasIconShape() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearIconShape() => clearField(6);
 }
 

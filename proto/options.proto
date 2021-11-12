@@ -10,10 +10,17 @@ message Options {
     optional Theme theme = 3;
     optional bool noAdaptive = 4;
     optional bool systemAccent = 5;
+    optional IconShape iconShape = 6;
 
     enum Theme {
         SYSTEM = 0;
         LIGHT = 1;
         DARK = 2;
+    }
+
+    enum IconShape {
+        SQUIRCLE = 0;
+        CIRCLE = 1;
+        ROUNDED_SQUARE = 2;
     }
 }
