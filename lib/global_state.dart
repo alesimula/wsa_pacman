@@ -1,3 +1,6 @@
+// ignore_for_file: non_constant_identifier_names, constant_identifier_names, curly_braces_in_flow_control_structures
+
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
@@ -61,15 +64,36 @@ extension Options_Theme_Mode on Options_Theme? {
 }
 
 class AppOptions {
+  static const PERIODIC_FILE_CHECK_TIMER = Duration(seconds: 2);
   static final _fileLock = Lock();
   static final _protoLock = Lock();
   static Options? _options;
   static File? _optionsFile;
-  static final Future<Options> _optionsFuture = () async {
+  static late Future<DateTime> _lastModified;
+  static Future<Options> _optionsFuture = () async {
     final directory = Directory("${Env.USER_PROFILE}${RegExp(r'.*[/\\]$').hasMatch(Env.USER_PROFILE) ? '' : r'\'}.wsamanager\\")..createSync();
     _optionsFile = File("${directory.path}\\options.bin")..createSync()..openSync();
+    _lastModified = _optionsFile!.lastModified();
+    Timer.periodic(PERIODIC_FILE_CHECK_TIMER, (Timer t) => _checkSettingsFileChange());
     return (_options = Options.fromBuffer(_optionsFile!.readAsBytesSync()));
   }();
+
+  static void _checkSettingsFileChange() async {
+    late final bool shouldUpdate;
+    await AppOptions._fileLock.synchronized(() async {
+      final newLastModified = await _optionsFile!.lastModified();
+      shouldUpdate = (newLastModified.isAfter(await _lastModified));
+      if (shouldUpdate) _lastModified = Future.value(newLastModified);
+    });
+    if (shouldUpdate) {
+      _options = null;
+      _optionsFuture = () async {
+        final options = (_options = Options.fromBuffer(_optionsFile!.readAsBytesSync()));
+        PersistableValue.reinitializeAll();
+        return options;
+      }();
+    }
+  }
 
   //Call to initialize reading options as soon as possible
   static void init() {}
@@ -83,10 +107,14 @@ class PersistableValue<T> extends SharedValue<T> {
 
   final Function(Options options, T value) _setter;
   Future? _initializer;
+  static final List<Function(Options options)> _reinitializers = [];
+  static void reinitializeAll() => AppOptions.withOptions((options) {for (final reinitializer in _reinitializers) reinitializer(options);});
 
   PersistableValue({String? key, required T value, required T Function(Options options) loader, required Function(Options options, T value) setter, bool autosave = false})
       : _setter = setter, super(key: key, value: value, autosave: autosave){
-    _initializer = AppOptions.withOptions((options) {super.$ = loader(options); _initializer = null;});
+    reinitializer(Options options) {super.$ = loader(options); _initializer = null;}
+    _initializer = AppOptions.withOptions(reinitializer);
+    _reinitializers.add(reinitializer);
   }
 
   static Future persistOptions() {return AppOptions._fileLock.synchronized(() async {
@@ -100,6 +128,7 @@ class PersistableValue<T> extends SharedValue<T> {
     Uint8List? optionBytes;
     await AppOptions.withOptions((options) => optionBytes = options.writeToBuffer());
     optionsFile.writeAsBytesSync(optionBytes!);
+    AppOptions._lastModified = Future.value(DateTime.now());
   });}
 
   Future persist() => persistOptions();
@@ -107,7 +136,8 @@ class PersistableValue<T> extends SharedValue<T> {
   void _saveOptions() => AppOptions.withOptions((options) => _setter(options, $));
 
   Future<T> whenReady([BuildContext? context]) async {
-    if (_initializer != null) await _initializer;
+    final initializer = _initializer;
+    if (initializer != null) await initializer;
     return context == null ? $ : of(context);
   }
 
