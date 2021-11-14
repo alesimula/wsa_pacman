@@ -13,6 +13,7 @@ import 'package:shared_value/shared_value.dart';
 import 'package:wsa_pacman/android/permissions.dart';
 import 'package:wsa_pacman/global_state.dart';
 import 'package:wsa_pacman/main.dart';
+import 'package:wsa_pacman/windows/win_io.dart';
 import 'package:wsa_pacman/widget/adaptive_icon.dart';
 import 'package:wsa_pacman/widget/flexible_info_bar.dart';
 import 'package:wsa_pacman/widget/move_window_nomax.dart';
@@ -24,6 +25,7 @@ import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:wsa_pacman/windows/win_path.dart';
 
 import 'dart:developer';
 import 'theme.dart';
@@ -372,6 +374,14 @@ class ProcessData {
 class ApkInstaller extends StatefulWidget {
   const ApkInstaller({Key? key}) : super(key: key);
 
+  static void createLaunchIcon(String package, String appName) {
+    WinIO.createShortcut(
+      r"%LOCALAPPDATA%\Microsoft\WindowsApps\MicrosoftCorporationII.WindowsSubsystemForAndroid_8wekyb3d8bbwe\WsaClient.exe", 
+      "${WinPath.desktop}\\$appName", 
+      args: "/launch wsa://$package",
+      icon: '%LOCALAPPDATA%\\Packages\\MicrosoftCorporationII.WindowsSubsystemForAndroid_8wekyb3d8bbwe\\LocalState\\$package.ico');
+  }
+
   static void installApk(String apkFile, String ipAddress, int port, [bool downgrade = false]) async {
     log("INSTALLING \"$apkFile\" on on $ipAddress:$port...");
     var installation = Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'install', if (downgrade) '-r', if (downgrade) '-d', apkFile])
@@ -401,6 +411,7 @@ class ApkInstaller extends StatefulWidget {
 class _ApkInstallerState extends State<ApkInstaller> {
   int index = 0;
   ToggleButtonThemeData? warningButtonTheme;
+  bool createShortcut = false;
   
   @override
   Widget build(BuildContext context) {
@@ -523,6 +534,12 @@ class _ApkInstallerState extends State<ApkInstaller> {
           titleWidget,
           const SizedBox(height: 10),
           Text("The application $appTitle was successifully installed"),
+          if (installType == InstallType.INSTALL) const SizedBox(height: 10),
+          if (installType == InstallType.INSTALL) Checkbox(
+            checked: createShortcut,
+            content: const Text("Create desktop shortcut"),
+            onChanged: (value) => setState(() => createShortcut = value!),
+          ),
           const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -530,13 +547,13 @@ class _ApkInstallerState extends State<ApkInstaller> {
             children: [
               noMoveWindow(Button(
                 child: const Text('Dismiss'),
-                onPressed: (){appWindow.close();},
+                onPressed: (){if (createShortcut) ApkInstaller.createLaunchIcon(package, appTitle); appWindow.close();},
               )),
               (){return isLaunchable ? const SizedBox(width: 15) : SizedBox.shrink();}(),
               (){return isLaunchable ? noMoveWindow(ToggleButton(
                 child: const Text('Open app'),
                 checked: true,
-                onChanged: (_){log('am start -n ${GState.package.of(context)}/${GState.activity.of(context)}'); Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'shell', 'am start -n ${GState.package.of(context)}/${GState.activity.of(context)}']);},
+                onChanged: (_){if (createShortcut) ApkInstaller.createLaunchIcon(package, appTitle); Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'shell', 'am start -n ${GState.package.of(context)}/${GState.activity.of(context)}']); appWindow.close();},
               )) : const SizedBox.shrink();}()
             ]
           )
