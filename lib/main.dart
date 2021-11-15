@@ -267,10 +267,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     // TODO: implement initState
-    flutter_acrylic.Acrylic.setEffect(
+    /*flutter_acrylic.Acrylic.setEffect(
      effect: flutter_acrylic.AcrylicEffect.acrylic,
      gradientColor: Colors.black.withOpacity(0.2)
-    );
+    );*/
   }
 
   @override
