@@ -21,33 +21,18 @@ class AdaptiveIcon extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, BoxConstraints constraints) {
             final borderRadius = min(constraints.maxWidth, constraints.maxHeight) * radius/2;
-            return Stack(
-              fit: StackFit.expand,
-              children: [
-                Center(
-                  child: AspectRatio (
-                    aspectRatio: 1,
-                    child:  ClipRRect(
-                      borderRadius: BorderRadius.circular(borderRadius),
-                      child: (background != null) ?
-                        FractionallySizedBox(heightFactor: _scale, widthFactor: _scale, child: background) :
-                        DecoratedBox(decoration: BoxDecoration(color: backColor ?? Colors.white)),
-                    ),
-                  )
+            return Center(
+              child: AspectRatio (
+                aspectRatio: 1,
+                child:  ClipRRect(
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  borderRadius: BorderRadius.circular(borderRadius),
+                  child: Transform.scale(scale: _scale, child: Stack(fit: StackFit.expand, children: [
+                    background ?? DecoratedBox(decoration: BoxDecoration(color: backColor ?? Colors.white)),
+                    foreground ?? const SizedBox(width: 0)
+                  ],))
                 ),
-                Center(
-                  child: AspectRatio (
-                    aspectRatio: 1,
-                    child:  ClipRRect(
-                      borderRadius: BorderRadius.circular(borderRadius),
-                      child: FractionallySizedBox(heightFactor: _scale, widthFactor: _scale, child: foreground),
-                    ),
-                  )
-                )
-                /*child: Transform.scale(
-                    alignment: Alignment.center,
-                    scale: 1.5,*/
-              ],
+              )
             );
           }
         ),
