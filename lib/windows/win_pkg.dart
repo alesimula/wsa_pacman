@@ -22,7 +22,7 @@ class WinPkg {
   }
 
   static String? getPackageFamilyName(String fullName) {
-    final lpName = ("MicrosoftCorporationII.WindowsSubsystemForAndroid_1.8.32822.0_x64__8wekyb3d8bbwe").toNativeUtf16();
+    final lpName = fullName.toNativeUtf16();
     var lpFamilyName = malloc<WCHAR>(_INITIAL_OUTPUT_BUFFER_CHARS).cast<Utf16>();
     final lpBufferLenght = malloc<DWORD>()..value = _INITIAL_OUTPUT_BUFFER_CHARS;
     
