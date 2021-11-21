@@ -3,14 +3,14 @@
 
 
 import 'package:flutter/material.dart' as material;
-import 'package:flutter/services.dart';
 import 'package:mdi/mdi.dart';
 import 'package:wsa_pacman/apk_installer.dart';
-import 'package:wsa_pacman/widget/move_window_nomax.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 //import 'package:flutter/material.dart' hide showDialog;
 import 'package:shared_value/shared_value.dart';
+import 'package:wsa_pacman/windows/win_pkg.dart';
+import 'package:wsa_pacman/windows/win_reg.dart';
 import 'global_state.dart';
 
 import 'package:provider/provider.dart';
@@ -20,15 +20,12 @@ import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 import 'package:url_strategy/url_strategy.dart';
 
 import 'screens/forms.dart';
-import 'screens/others.dart';
 import 'screens/settings.dart';
-import 'proto/options.pb.dart';
+import 'utils/string_utils.dart';
 
 import 'dart:io';
 import 'dart:developer';
 import 'dart:async';
-
-import 'package:synchronized/synchronized.dart';
 
 import 'theme.dart';
 
@@ -86,6 +83,12 @@ class Env {
   static final String USER_PROFILE = Platform.environment["UserProfile"] ?? "";
   static final String EXEC_DIR = Platform.resolvedExecutable.replaceFirst(RegExp(r'[/\\][^/\\]*$'), r'\');
   static final String TOOLS_DIR = "${EXEC_DIR}embedded-tools\\";
+  static late final String POWERSHELL = WinReg.getString(RegHKey.HKEY_LOCAL_MACHINE, r'SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell', 'Path')?.value ?? '$SYSTEM_ROOT\\System32\\WindowsPowerShell\v1.0\\powershell.exe';
+  static late final String WSA_SYSTEM_PATH = RegExp(r'^(.*)[\\/]+[^\\/]*[\\/]+[^\\/]*$').firstMatch(
+      WinReg.getString(RegHKey.HKEY_LOCAL_MACHINE, r'SYSTEM\CurrentControlSet\Services\WsaService', 'ImagePath')?.value.unquoted ??
+      WinReg.getString(RegHKey.HKEY_CURRENT_USER, r'Software\Microsoft\Windows\CurrentVersion\App Paths\WsaClient.exe', null)?.value ?? ''
+    )?.group(1) ?? '';
+  static late final WSA_INFO = WinPkgInfo.fromSystemPath(WSA_SYSTEM_PATH);
 }
 
 class WSAPeriodicConnector {

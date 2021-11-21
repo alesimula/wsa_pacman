@@ -29,6 +29,8 @@ dependencies:
   #path_provider: ^2.0.6
   mdi: ^5.0.0-nullsafety.0
   win32: ^2.3.0
+  base32: ^2.1.1
+  charset: ^0.1.1
   
 
 dev_dependencies:

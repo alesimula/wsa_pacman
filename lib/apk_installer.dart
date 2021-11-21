@@ -376,10 +376,10 @@ class ApkInstaller extends StatefulWidget {
 
   static void createLaunchIcon(String package, String appName) {
     WinIO.createShortcut(
-      r"%LOCALAPPDATA%\Microsoft\WindowsApps\MicrosoftCorporationII.WindowsSubsystemForAndroid_8wekyb3d8bbwe\WsaClient.exe", 
+      "%LOCALAPPDATA%\\Microsoft\\WindowsApps\\${Env.WSA_INFO.familyName}\\WsaClient.exe", 
       "${WinPath.desktop}\\$appName", 
       args: "/launch wsa://$package",
-      icon: '%LOCALAPPDATA%\\Packages\\MicrosoftCorporationII.WindowsSubsystemForAndroid_8wekyb3d8bbwe\\LocalState\\$package.ico');
+      icon: '%LOCALAPPDATA%\\Packages\\${Env.WSA_INFO.familyName}\\LocalState\\$package.ico');
   }
 
   static void installApk(String apkFile, String ipAddress, int port, [bool downgrade = false]) async {
