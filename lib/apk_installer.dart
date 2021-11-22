@@ -86,11 +86,19 @@ Map<String, String> fillType = {
   "2": "inverseWinding",
   "3": "inverseEvenOdd",
 };
+Map<String, String> gradientType = {
+  "0": "linear",
+  "1": "radial",
+  "2": "sweep"
+};
 class Resource {
   ResType type;
   Iterable<String> values;
   Resource(this.values, [this.type = ResType.FILE]);
 }
+
+const String XML_NOCLOSE = '[^\'">]*("[^"]*"[^">]*|\'[^\']*\'[^\'">]*)*';
+const String XML_QUOTED = "[\"][^\"]*[\"]|['][^']*[']";
 
 class ApkReader {
   //I just put '&& true' there so I could conveniently switch it off
@@ -126,13 +134,43 @@ class ApkReader {
     return builder.takeBytes();
   }
 
+  static Future<String> getGradient(String gradientId) async {
+    Resource? gradientRes = await getResources(gradientId);
+    if (gradientRes == null || !gradientRes.values.first.endsWith(".xml")) return "";
+    Archive apkFile = await apkArchive;
+    ArchiveFile? gradientFile = apkFile.findFile(gradientRes.values.first);
+    if (gradientFile == null) return "";
+    String gradient = RegExp("<gradient.*", multiLine: true, dotAll: true).firstMatch(await decodeXml(gradientFile.content, true))?.group(0) ?? "";
+    return '<aapt:attr name="android:fillColor">$gradient</aapt:attr>';
+  }
+
+  static String getGradientPlaceholder(Map<String, Future<String>> gradients, String gradientId) {
+    String placeholder = "@@FUTURE_GRADIENT_$gradientId@@";
+    if (gradients.containsKey(gradientId)) return placeholder;
+    else gradients[gradientId] = getGradient(gradientId);
+    return placeholder;
+  }
+
   //Returns xml string, clears errors and normalizes fields
-  static Future<String> decodeXml(Uint8List encoded) async {
+  static Future<String> decodeXml(Uint8List encoded, [bool isGradient = false]) async {
+    Map<String, Future<String>>? futureGradients = isGradient ? null : {};
     var xml = utf8.decode(await _decodeXml(encoded), allowMalformed: true);
-    return xml.replaceAllMapped(RegExp('([\\s\\n]android:pathData=[\'"])[^M]*(M[0-9])'), (m) => m.group(1)!+m.group(2)! )
-      //TODO gradients <aapt:attr name="android:fillColor"> <gradient ...
+    if (!isGradient) xml = xml.replaceAllMapped(RegExp('([\\s\\n]android:pathData=[\'"])[^M]*(M[0-9])'), (m) => m.group(1)!+m.group(2)! )
+      .replaceAllMapped(RegExp('<(([a-zA-Z0-9]*)\\s+$XML_NOCLOSE)(android:fillColor=[\'"])(type1/([0-9]*)[\'"])($XML_NOCLOSE)>', multiLine: true, dotAll: true), 
+        (m) => '<${m.group(1)!}${m.group(7)!.endsWith("/") ? m.group(7)!.substring(0, m.group(7)!.length-1) : m.group(7)!}>\n${getGradientPlaceholder(futureGradients!, "0x"+int.parse(m.group(6)!).toRadixString(16).padLeft(8, '0'))}${m.group(7)!.endsWith("/") ? "\n</${m.group(2)}>" : "\n"}')
       .replaceAllMapped(RegExp('([cC]olor=[\'"])(type([0-9])+/([0-9]*))'), (m) => m.group(1)!+'#'+(int.parse(m.group(4)!).toRadixString(16).padLeft(8, '0')) )
       .replaceAllMapped(RegExp('([\\s\\n]android:fillType=[\'"])([0-9]*)'), (m) => m.group(1)!+ (fillType[m.group(2)!] ?? "winding") );
+    else xml = xml.replaceAllMapped(RegExp('([cC]olor=[\'"])(type([0-9])+/([0-9]*))'), (m) => m.group(1)!+'#'+(int.parse(m.group(4)!).toRadixString(16).padLeft(8, '0')) )
+      .replaceAll(RegExp("(xmlns:[^=\\s]*|android:angle)\\s*=\\s*$XML_QUOTED"), "")
+      .replaceAllMapped(RegExp('(android:type\\s*=\\s*[\'"])([0-9]*)'), (m) => m.group(1)! + (gradientType[m.group(2)!] ?? "linear"));
+    
+    if (!isGradient) {
+      var gradientList = await Future.wait(futureGradients!.values);
+      Map<String, String> gradientMap = {}; int i = 0;
+      for (var gradient in futureGradients.keys) gradientMap[gradient] = gradientList[i++];
+      xml = xml.replaceAllMapped(RegExp("@@FUTURE_GRADIENT_([a-zA-Z0-9]*)@@"), (m) => gradientMap[m.group(1)] ?? "");
+    }
+    return xml;
   }
 
   static Future<Resource?> getResources(String resId) async {
