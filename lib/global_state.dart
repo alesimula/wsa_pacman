@@ -10,6 +10,7 @@ import 'package:wsa_pacman/apk_installer.dart';
 import 'package:wsa_pacman/main.dart';
 import 'package:shared_value/shared_value.dart';
 import 'package:synchronized/synchronized.dart';
+import 'package:wsa_pacman/windows/win_io.dart';
 
 import 'proto/options.pb.dart';
 import 'utils/string_utils.dart';
@@ -74,14 +75,17 @@ class AppOptions {
     final directory = Directory("${Env.USER_PROFILE}${RegExp(r'.*[/\\]$').hasMatch(Env.USER_PROFILE) ? '' : r'\'}.wsamanager\\")..createSync();
     _optionsFile = File("${directory.path}\\options.bin")..createSync()..openSync();
     _lastModified = _optionsFile!.lastModified();
-    Timer.periodic(PERIODIC_FILE_CHECK_TIMER, (Timer t) => _checkSettingsFileChange());
+    directory.watch().listen((event) {
+      if (event.path.endsWith('\\options.bin')) _checkSettingsFileChange();
+    });
+
     return (_options = Options.fromBuffer(_optionsFile!.readAsBytesSync()));
   }();
 
   static void _checkSettingsFileChange() async {
     late final bool shouldUpdate;
     await AppOptions._fileLock.synchronized(() async {
-      final newLastModified = await _optionsFile!.lastModified();
+      final newLastModified = _optionsFile!.lastModifiedAccurate() ?? await _optionsFile!.lastModified();
       shouldUpdate = (newLastModified.isAfter(await _lastModified));
       if (shouldUpdate) _lastModified = Future.value(newLastModified);
     });

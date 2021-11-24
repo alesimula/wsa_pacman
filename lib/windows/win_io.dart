@@ -1,6 +1,7 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures, constant_identifier_names
 
 import 'dart:ffi';
+import 'dart:io';
 import 'package:ffi/ffi.dart';
 import 'package:win32/win32.dart';
 
@@ -9,6 +10,43 @@ class RegistryKeyValuePair {
   final String value;
 
   const RegistryKeyValuePair(this.key, this.value);
+}
+
+extension WinFile on File {
+  static const int _EPOCH_NT_DELTA_MICROSECONDS = 11644473600100000;
+  
+  /// Converts Flutter file to native file handle;
+  /// Must call [CloseHandle] to release it
+  int? toNativeFile() {
+    final lpPath = absolute.path.toNativeUtf16();
+    try {
+      final handle = CreateFile(lpPath, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, 
+          nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+      return handle != INVALID_HANDLE_VALUE ? handle : null;
+    }
+    finally {
+      free(lpPath);
+    }
+  }
+
+  /// Returns a more accurate modified date (microseconds precision as opposed to seconds)
+  DateTime? lastModifiedAccurate() {
+    int? handle = toNativeFile();
+    if (handle != null) {
+      final info = malloc<BY_HANDLE_FILE_INFORMATION>();
+      try {
+        int code = GetFileInformationByHandle(handle, info);
+        if (code == 0) return null;
+        FILETIME lastWrite = info.ref.ftLastWriteTime;
+        int microseconds = (lastWrite.dwHighDateTime << 32 | lastWrite.dwLowDateTime) ~/ 10 - _EPOCH_NT_DELTA_MICROSECONDS;
+        return DateTime.fromMicrosecondsSinceEpoch(microseconds);
+      }
+      finally {
+        CloseHandle(handle);
+        free(info);
+      }
+    }
+  }
 }
 
 class WinIO {
