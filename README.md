@@ -21,16 +21,15 @@ The app additionally provides a button to open Android settings and one to open 
   - Circle
   - Rounded square
 
-<ruby><h2></ruby>
+<ruby><h7></ruby>
 <details>
-
-TEST
-test
-
   <summary>
   <ruby><p></ruby>
-More screenshots</h2>
-  </summary>
+
+More screenshots<ruby><p></ruby><h2>
+
+  
+  </summary></h7>
   
 
   ![Installing](README/screenshots/installing.png?raw=true "Installing")
