@@ -56,9 +56,6 @@ class _ScreenWSAState extends State<ScreenWSA> {
           right: PageHeader.horizontalPadding(context),
         ),
         children: [
-          const Text("This app is still in beta, report any bugs and share your suggestions on WSA-pacman Github page"),
-          const Text("To use the installer, associate the .apk extension to this app's .exe executable"),
-          const SizedBox(height: 5),
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
             child: InfoBar(
