@@ -21,11 +21,11 @@ The app additionally provides a button to open Android settings and one to open 
   - Circle
   - Rounded square
 
-<ruby><h2></ruby>
+<ruby><h2></h2>
 <details>
-  <summary><small><small>
-  <ruby><h2></ruby>
-More screenshots
+  <summary>
+  <ruby><p><h2></ruby>
+More screenshots</h2></ruby>
   </h2>
 
   
