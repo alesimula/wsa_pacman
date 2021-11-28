@@ -21,13 +21,17 @@ The app additionally provides a button to open Android settings and one to open 
   - Circle
   - Rounded square
 
+<ruby><h2></ruby>
 <details>
-  <summary>
-    <ruby><div></ruby>
 
-## More screenshots
-  </div>
+TEST
+test
+
+  <summary>
+  <ruby><p></ruby>
+More screenshots</h2>
   </summary>
+  
 
   ![Installing](README/screenshots/installing.png?raw=true "Installing")
   ![Installed](README/screenshots/installed.png?raw=true "Installed")
@@ -35,4 +39,3 @@ The app additionally provides a button to open Android settings and one to open 
   ![Main screen](README/screenshots/main_screen.png?raw=true "Main screen")
   ![Settings](README/screenshots/settings_screen.png?raw=true "Settings")
 </details>
-
