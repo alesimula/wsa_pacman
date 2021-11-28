@@ -22,11 +22,11 @@ The app additionally provides a button to open Android settings and one to open 
   - Rounded square
 
 <details>
-
   <summary>
-    <ruby><h2></ruby>
-    More screenshots
-    </h2>
+    <ruby><p></ruby>
+
+## More screenshots
+  </p>
   </summary>
 
   ![Installing](README/screenshots/installing.png?raw=true "Installing")
