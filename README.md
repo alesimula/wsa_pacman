@@ -21,15 +21,14 @@ The app additionally provides a button to open Android settings and one to open 
   - Circle
   - Rounded square
 
-<h2><details>
-  <summary>More screenshots</summary>
-  <small><small>
-  
+<details>
+  <summary><span style="font-size: 1.5em">More screenshots</span></summary>
+  <hr></hr>
+
   ![Installing](README/screenshots/installing.png?raw=true "Installing")
   ![Installed](README/screenshots/installed.png?raw=true "Installed")
   ![Downgrade](README/screenshots/downgrade.png?raw=true "Downgrade")
   ![Main screen](README/screenshots/main_screen.png?raw=true "Main screen")
   ![Settings](README/screenshots/settings_screen.png?raw=true "Settings")
-  </small></small>
-</details></h2>
+</details>
 
