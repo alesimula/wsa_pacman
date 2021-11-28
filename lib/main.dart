@@ -19,7 +19,7 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 import 'package:url_strategy/url_strategy.dart';
 
-import 'screens/forms.dart';
+import 'screens/wsa.dart';
 import 'screens/settings.dart';
 import 'utils/string_utils.dart';
 
@@ -388,9 +388,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       content: NavigationBody(index: index, children: [
-        const Forms(),
+        const ScreenWSA(),
         //const Others(),
-        Settings(controller: settingsController),
+        ScreenSettings(controller: settingsController),
       ]),
     );
   }

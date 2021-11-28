@@ -51,12 +51,12 @@ class LateUpdater<E> {
   }
 }
 
-class Settings extends StatefulWidget {
-  Settings({Key? key, this.controller}) : super(key: key);
+class ScreenSettings extends StatefulWidget {
+  ScreenSettings({Key? key, this.controller}) : super(key: key);
   final ScrollController? controller;
 
   @override
-  State<StatefulWidget> createState() => SettingsState(controller: this.controller);
+  State<StatefulWidget> createState() => ScreenSettingsState(controller: this.controller);
 }
 
 late final androidPortUpdater = LateUpdater<int>(GState.androidPort.$, (value){
@@ -64,9 +64,9 @@ late final androidPortUpdater = LateUpdater<int>(GState.androidPort.$, (value){
   log("AGGIORNATO: ${GState.androidPort.$}");
 });
 
-class SettingsState extends State<Settings> {
+class ScreenSettingsState extends State<ScreenSettings> {
   static const SETTINGS_UPDATE_TIMER = Duration(seconds:3);
-  SettingsState({this.controller}) {
+  ScreenSettingsState({this.controller}) {
     loadExampleIcon();
   }
   final ScrollController? controller;

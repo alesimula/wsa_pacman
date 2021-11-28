@@ -6,11 +6,11 @@ import 'package:fluent_ui/fluent_ui.dart';
 import '../main.dart';
 import '../global_state.dart';
 
-class Forms extends StatefulWidget {
-  const Forms({Key? key}) : super(key: key);
+class ScreenWSA extends StatefulWidget {
+  const ScreenWSA({Key? key}) : super(key: key);
 
   @override
-  _FormsState createState() => _FormsState();
+  _ScreenWSAState createState() => _ScreenWSAState();
 }
 
 class EmptyElement extends Element {
@@ -30,7 +30,7 @@ class Empty extends Widget {
 }
 Expanded EMPTY = Expanded(child: Column());
 
-class _FormsState extends State<Forms> {
+class _ScreenWSAState extends State<ScreenWSA> {
   //_FormsState(this.gsmap);
 
   //final GSMap<Object, dynamic> gsmap;
