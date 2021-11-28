@@ -22,8 +22,11 @@ The app additionally provides a button to open Android settings and one to open 
   - Rounded square
 
 <details>
-  <summary><font size="+2">More screenshots</font></summary>
-  <h2></h2>
+
+  <summary>
+
+## More screenshots
+  </summary>
 
   ![Installing](README/screenshots/installing.png?raw=true "Installing")
   ![Installed](README/screenshots/installed.png?raw=true "Installed")
