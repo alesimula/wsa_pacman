@@ -26,9 +26,7 @@ The app additionally provides a button to open Android settings and one to open 
   <ruby><p>
   
 ## More screenshots
-  </p></li><h2></h2></ruby>
-
-  
+  </p>
   </summary>
   
 
