@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:wsa_pacman/android/android_utils.dart';
 import 'package:wsa_pacman/android/permissions.dart';
 import 'package:wsa_pacman/apk_installer.dart';
 import 'package:wsa_pacman/main.dart';

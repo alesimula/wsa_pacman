@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart' as material;
 import 'package:mdi/mdi.dart';
+import 'package:wsa_pacman/android/reader_apk.dart';
 import 'package:wsa_pacman/apk_installer.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
@@ -165,7 +166,7 @@ void main(List<String> arguments) async {
   const app = MyApp();
   final wrappedApp = SharedValue.wrapApp(app);
   //arguments = [r'C:\Users\Alex\Downloads\com.google.android.googlequicksearchbox_12.41.16.23.x86_64-301172250_minAPI23(x86_64)(nodpi)_apkmirror.com.apk'];
-  if (arguments.isNotEmpty) ApkReader.init(arguments.first);
+  if (arguments.isNotEmpty) ApkReader.start(arguments.first);
   args = arguments;
 
   setPathUrlStrategy();
