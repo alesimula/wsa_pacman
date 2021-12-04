@@ -77,8 +77,10 @@ class _ApkInstallerState extends State<ApkInstaller> {
     InstallType? installType = GState.apkInstallType.of(context);
     bool canInstall = isConnected && installType != null && installType != InstallType.UNKNOWN;
     InstallState installState = GState.apkInstallState.of(context);
+    final mica = GState.mica.of(context);
+    final theme = FluentTheme.of(context);
 
-    if (installType == InstallType.DOWNGRADE && warningButtonTheme == null) warningButtonTheme = ToggleButtonThemeData.standard(FluentTheme.of(context).copyWith(accentColor: Colors.orange));
+    if (installType == InstallType.DOWNGRADE && warningButtonTheme == null) warningButtonTheme = ToggleButtonThemeData.standard(theme.copyWith(accentColor: Colors.orange));
 
     String package = GState.package.of(context);
     String version = GState.version.of(context);
@@ -97,7 +99,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
     Widget titleWidget = Row (
       crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Flexible(child: SizedBox(width: 30.00, height: 30.00, child: icon)), const Flexible(child: SizedBox(width: 20)), Text(appTitle, style: FluentTheme.of(context).typography.bodyLarge), 
+          Flexible(child: SizedBox(width: 30.00, height: 30.00, child: icon)), const Flexible(child: SizedBox(width: 20)), Text(appTitle, style: theme.typography.bodyLarge), 
                 //Spacer(), WindowButtons()
       ]
     );
@@ -114,8 +116,8 @@ class _ApkInstallerState extends State<ApkInstaller> {
               const SizedBox(height: 10),
               const Text("Do you want to install this application?"),
               const SizedBox(height: 10),
-              Text("Version:\u00A0${oldVersion.isNotEmpty ? '$oldVersion\u00A0=>\u00A0' : ''}${version.replaceAll(' ', '\u00A0')}", style: TextStyle(color: FluentTheme.of(context).disabledColor), overflow: TextOverflow.ellipsis, maxLines: 1),
-              Text("Package:\u00A0$package", style: TextStyle(color: FluentTheme.of(context).disabledColor), overflow: TextOverflow.ellipsis, maxLines: 1),
+              Text("Version:\u00A0${oldVersion.isNotEmpty ? '$oldVersion\u00A0=>\u00A0' : ''}${version.replaceAll(' ', '\u00A0')}", style: TextStyle(color: theme.disabledColor), overflow: TextOverflow.ellipsis, maxLines: 1),
+              Text("Package:\u00A0$package", style: TextStyle(color: theme.disabledColor), overflow: TextOverflow.ellipsis, maxLines: 1),
               /*ListView(
                 padding: EdgeInsets.only(
                   bottom: kPageDefaultVerticalPadding,
@@ -130,7 +132,8 @@ class _ApkInstallerState extends State<ApkInstaller> {
           const SizedBox(height: 10),
           Expanded(child: ClipRRect(borderRadius: BorderRadius.circular(10), child: Container(
             //decoration: ChipTheme.of(context).decoration?.resolve({ButtonStates.focused})?.lerpTo(SnackbarTheme.of(context).decoration, 0.07),
-            color: FluentTheme.of(context).inactiveBackgroundColor.lerpWith(FluentTheme.of(context).scaffoldBackgroundColor, 0.65),
+            color: mica.disabled || theme.brightness.isDark ? theme.inactiveBackgroundColor.lerpWith(theme.scaffoldBackgroundColor, 0.65)
+              : theme.scaffoldBackgroundColor.lerpWith(theme.inactiveBackgroundColor, 0.038),
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
             //color: Colors.red, 
             child: ListView(
