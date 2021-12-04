@@ -9,6 +9,7 @@ import 'package:wsa_pacman/proto/options.pb.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:wsa_pacman/widget/adaptive_icon.dart';
+import 'package:wsa_pacman/windows/win_info.dart';
 
 import '/utils/string_utils.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -122,6 +123,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
 
     var theme = GState.theme.of(context).mode;
     var iconShape = GState.iconShape.of(context);
+    var mica = GState.mica.of(context);
 
     var exampleIcon = AdaptiveIcon(background: _exBackground, foreground: _exForeground, radius: iconShape.radius);
 
@@ -136,7 +138,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
         controller: controller,
         children: [
           Text('WSA Port',
-              style: FluentTheme.of(context).typography.subtitle),
+              style: FluentTheme.of(context).typography.bodyLarge),
           spacer,
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
@@ -165,8 +167,8 @@ class ScreenSettingsState extends State<ScreenSettings> {
             ),
           ),
           biggerSpacer,
-          Text('Theme mode',
-              style: FluentTheme.of(context).typography.subtitle),
+          Text('Theme mode', 
+              style: FluentTheme.of(context).typography.bodyLarge),
           spacer,
           ...List.generate(Options_Theme.values.length, (index) {
             final modeOpt = Options_Theme.values[index];
@@ -185,12 +187,31 @@ class ScreenSettingsState extends State<ScreenSettings> {
               ),
             );
           }),
+          /*if (WinVer.isWindows11OrGreater) biggerSpacer,
+          if (WinVer.isWindows11OrGreater) Text('Window transparency', style: FluentTheme.of(context).typography.bodyLarge),
+          if (WinVer.isWindows11OrGreater) spacer,
+          if (WinVer.isWindows11OrGreater) ...List.generate(Options_Mica.values.length, (index) {
+            final micaSel = Options_Mica.values[index];
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: RadioButton(
+                checked: mica == micaSel,
+                onChanged: (value) {
+                  if (value) {
+                    GState.mica..update((p0) => micaSel)..persist();
+                    mica = micaSel;
+                  }
+                },
+                content: Text('$micaSel'.normalized),
+              ),
+            );
+          }),*/
           biggerSpacer,
           Row(children: [
             Flexible(child: SizedBox(width: 30.00, height: 30.00, child: exampleIcon)),
             hSpacer,
             Text('Adaptive icons Shape',
-              style: FluentTheme.of(context).typography.subtitle),
+              style: FluentTheme.of(context).typography.bodyLarge),
           ]),
           spacer,
           ...List.generate(Options_IconShape.values.length, (index) {

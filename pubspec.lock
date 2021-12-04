@@ -153,10 +153,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: bffb2ca216f2d1906d7d87db7377f4281153e0ab
+      resolved-ref: ccad6bd19d855643bc6d53f06d91994a002b38d8
       url: "https://github.com/bdlukaa/fluent_ui.git"
     source: git
-    version: "3.4.0"
+    version: "3.4.1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -165,10 +165,12 @@ packages:
   flutter_acrylic:
     dependency: "direct main"
     description:
-      name: flutter_acrylic
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.3"
+      path: "."
+      ref: HEAD
+      resolved-ref: "3dc6fa95c7cf3b266c8eae3221b1cbaf8a4e90f9"
+      url: "https://github.com/alexmercerind/flutter_acrylic.git"
+    source: git
+    version: "0.1.0"
   flutter_lints:
     dependency: "direct dev"
     description:

@@ -43,3 +43,20 @@ class Options_IconShape extends $pb.ProtobufEnum {
   const Options_IconShape._($core.int v, $core.String n) : super(v, n);
 }
 
+class Options_Mica extends $pb.ProtobufEnum {
+  static const Options_Mica FULL = Options_Mica._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'FULL');
+  static const Options_Mica PARTIAL = Options_Mica._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'PARTIAL');
+  static const Options_Mica DISABLED = Options_Mica._(2, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'DISABLED');
+
+  static const $core.List<Options_Mica> values = <Options_Mica> [
+    FULL,
+    PARTIAL,
+    DISABLED,
+  ];
+
+  static final $core.Map<$core.int, Options_Mica> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static Options_Mica? valueOf($core.int value) => _byValue[value];
+
+  const Options_Mica._($core.int v, $core.String n) : super(v, n);
+}
+

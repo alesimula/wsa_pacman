@@ -97,7 +97,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
     Widget titleWidget = Row (
       crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Flexible(child: SizedBox(width: 30.00, height: 30.00, child: icon)), const Flexible(child: SizedBox(width: 20)), Text(appTitle, style: FluentTheme.of(context).typography.subtitle), 
+          Flexible(child: SizedBox(width: 30.00, height: 30.00, child: icon)), const Flexible(child: SizedBox(width: 20)), Text(appTitle, style: FluentTheme.of(context).typography.bodyLarge), 
                 //Spacer(), WindowButtons()
       ]
     );

@@ -2,6 +2,8 @@
 
 
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart' as material;
 import 'package:mdi/mdi.dart';
 import 'package:wsa_pacman/android/reader_apk.dart';
@@ -10,8 +12,10 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 //import 'package:flutter/material.dart' hide showDialog;
 import 'package:shared_value/shared_value.dart';
+import 'package:wsa_pacman/windows/win_info.dart';
 import 'package:wsa_pacman/windows/win_pkg.dart';
 import 'package:wsa_pacman/windows/win_reg.dart';
+import 'package:wsa_pacman/windows/win_wmi.dart';
 import 'global_state.dart';
 
 import 'package:provider/provider.dart';
@@ -156,8 +160,12 @@ bool get isDesktop {
 }
 
 late final List<String> args;
+late final bool installMode;
 
 void main(List<String> arguments) async {
+  //arguments = [r'C:\Users\Alex\Downloads\com.google.android.googlequicksearchbox_12.41.16.23.x86_64-301172250_minAPI23(x86_64)(nodpi)_apkmirror.com.apk'];
+  
+  installMode = arguments.isNotEmpty;
   AppOptions.init();
   WidgetsFlutterBinding.ensureInitialized();
   //TODO args = arguments;
@@ -165,8 +173,7 @@ void main(List<String> arguments) async {
   //args = [];
   const app = MyApp();
   final wrappedApp = SharedValue.wrapApp(app);
-  //arguments = [r'C:\Users\Alex\Downloads\com.google.android.googlequicksearchbox_12.41.16.23.x86_64-301172250_minAPI23(x86_64)(nodpi)_apkmirror.com.apk'];
-  if (arguments.isNotEmpty) ApkReader.start(arguments.first);
+  if (installMode) ApkReader.start(arguments.first);
   args = arguments;
 
   setPathUrlStrategy();
@@ -186,12 +193,15 @@ void main(List<String> arguments) async {
   if (!kIsWeb &&
       [TargetPlatform.windows, TargetPlatform.linux]
           .contains(defaultTargetPlatform)) {
-    await flutter_acrylic.Acrylic.initialize();
+    await flutter_acrylic.Window.initialize();
   }
 
   WSAPeriodicConnector._checkConnectionStatus();
   Timer.periodic(WSAPeriodicConnector.PERIODIC_CHECK_TIMER, (Timer t) => WSAPeriodicConnector._checkConnectionStatus());
   runApp(wrappedApp);
+
+  flutter_acrylic.Window.hideWindowControls();
+  //flutter_acrylic.Window.setEffect(effect: flutter_acrylic.WindowEffect.mica);
 
   if (isDesktop) {
     doWhenWindowReady(() {
@@ -213,9 +223,23 @@ void main(List<String> arguments) async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  void setMicaEffect(bool micaEnabled, [bool dark = true]) {
+    if (WinVer.isWindows11OrGreater)
+      flutter_acrylic.Window.setEffect(effect: micaEnabled ? flutter_acrylic.WindowEffect.mica : flutter_acrylic.WindowEffect.disabled, dark: dark);
+  }
+
   @override
   Widget build(BuildContext context) {
     var theme = GState.theme.of(context).mode;
+    var mica = GState.mica.of(context);
+    setMicaEffect(mica.enabled, theme == material.ThemeMode.system ? darkMode : theme == material.ThemeMode.dark);
+    final brightness = theme == ThemeMode.system ? darkMode ? Brightness.dark : Brightness.light
+        : theme == ThemeMode.dark ? Brightness.dark : Brightness.light;
+
+    bool isLight = brightness == Brightness.light;
+    bool isMicaInstall = installMode && mica.enabled;
+    bool IsFullMicaOrInstall = mica.full || isMicaInstall;
+    
     return ChangeNotifierProvider(
       create: (_) => AppTheme(),
       builder: (context, _) {
@@ -227,14 +251,10 @@ class MyApp extends StatelessWidget {
           initialRoute: '/',
           routes: {'/': (_) => args.isEmpty ? const MyHomePage() : const ApkInstaller()},
           theme: ThemeData(
+            scaffoldBackgroundColor: IsFullMicaOrInstall ? Colors.transparent : isLight ? const Color(0xFFf9f9f9) : const Color(0xFF272727),
+            micaBackgroundColor: mica.enabled ? Colors.transparent : isLight ? const Color(0xFFf3f3f3) : const Color(0xFF202020),
             accentColor: appTheme.color,
-            brightness: theme == ThemeMode.system
-                ? darkMode
-                    ? Brightness.dark
-                    : Brightness.light
-                : theme == ThemeMode.dark
-                    ? Brightness.dark
-                    : Brightness.light,
+            brightness: brightness,
             visualDensity: VisualDensity.standard,
             focusTheme: FocusThemeData(
               glowFactor: is10footScreen() ? 2.0 : 0.0,
@@ -281,6 +301,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final appTheme = context.watch<AppTheme>();
     return NavigationView(
+      contentShape: RoundedRectangleBorder(
+        side: BorderSide(width: 0.3, color: FluentTheme.of(context).micaBackgroundColor.lerpWith(Colors.black, 0.25)),
+        borderRadius: const BorderRadius.only(),
+      ),
       appBar: NavigationAppBar(
         // height: !kIsWeb ? appWindow.titleBarHeight : 31.0,
         /*title: () {

@@ -18,7 +18,8 @@ dependencies:
   provider: ^6.0.0
   system_theme: ^1.0.1
   bitsdojo_window: ^0.1.1+1
-  flutter_acrylic: ^0.0.3
+  flutter_acrylic: #^0.1.0
+    git: https://github.com/alexmercerind/flutter_acrylic.git
   url_strategy: ^0.2.0
   yaml: ^3.1.0
   #transparent_pointer: ^1.0.0

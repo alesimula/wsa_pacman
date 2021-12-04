@@ -11,6 +11,7 @@ import 'package:wsa_pacman/apk_installer.dart';
 import 'package:wsa_pacman/main.dart';
 import 'package:shared_value/shared_value.dart';
 import 'package:synchronized/synchronized.dart';
+import 'package:wsa_pacman/windows/win_info.dart';
 import 'package:wsa_pacman/windows/win_io.dart';
 
 import 'proto/options.pb.dart';
@@ -24,7 +25,8 @@ class GState {
   static final ipAddress = PersistableValue(value: "127.0.0.1", loader: (o)=>o.ipAddress.asIpv4, setter:  (o,e)=>o.ipAddress = e.ipv4AsInt ?? IntUtils.LOCALHOST);
   static final androidPort = PersistableValue(value: 58526, loader: (o)=>o.port, setter: (o,e)=>o.port = e);
   static final androidPortPending = SharedValue(value: androidPort.$.toString());
-  static final iconShape = PersistableValue(value: Options_IconShape.SQUIRCLE, loader: (o)=>o.iconShape, setter: (o,e)=> o.iconShape = e); 
+  static final iconShape = PersistableValue(value: Options_IconShape.SQUIRCLE, loader: (o)=>o.iconShape, setter: (o,e)=> o.iconShape = e);
+  static final mica = PersistableValue(value: Options_Mica.FULL, loader: (o)=>o.mica, setter: (o,e)=> o.mica = e); 
   //APK Info
   static final apkTitle = SharedValue<String>(value: "");
   static final package = SharedValue<String>(value: "");
@@ -41,6 +43,15 @@ class GState {
   //Installation info
   static final errorCode = SharedValue<String>(value: "");
   static final errorDesc = SharedValue<String>(value: "");
+}
+
+extension Options_Micas_Ext on Options_Mica {
+  static late final bool isSupported = WinVer.isWindows11OrGreater;
+  bool get supported => isSupported;
+  bool get disabled => this == Options_Mica.DISABLED || !isSupported;
+  bool get enabled => this != Options_Mica.DISABLED && isSupported;
+  bool get full => this == Options_Mica.FULL && isSupported;
+  bool get partial => this == Options_Mica.PARTIAL && isSupported;
 }
 
 extension Options_IconShape_Radius on Options_IconShape? {

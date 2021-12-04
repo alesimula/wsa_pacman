@@ -21,6 +21,7 @@ class Options extends $pb.GeneratedMessage {
     ..aOB(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'noAdaptive', protoName: 'noAdaptive')
     ..aOB(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'systemAccent', protoName: 'systemAccent')
     ..e<Options_IconShape>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'iconShape', $pb.PbFieldType.OE, protoName: 'iconShape', defaultOrMaker: Options_IconShape.SQUIRCLE, valueOf: Options_IconShape.valueOf, enumValues: Options_IconShape.values)
+    ..e<Options_Mica>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mica', $pb.PbFieldType.OE, defaultOrMaker: Options_Mica.PARTIAL, valueOf: Options_Mica.valueOf, enumValues: Options_Mica.values)
     ..hasRequiredFields = false
   ;
 
@@ -32,6 +33,7 @@ class Options extends $pb.GeneratedMessage {
     $core.bool? noAdaptive,
     $core.bool? systemAccent,
     Options_IconShape? iconShape,
+    Options_Mica? mica,
   }) {
     final _result = create();
     if (ipAddress != null) {
@@ -51,6 +53,9 @@ class Options extends $pb.GeneratedMessage {
     }
     if (iconShape != null) {
       _result.iconShape = iconShape;
+    }
+    if (mica != null) {
+      _result.mica = mica;
     }
     return _result;
   }
@@ -128,5 +133,14 @@ class Options extends $pb.GeneratedMessage {
   $core.bool hasIconShape() => $_has(5);
   @$pb.TagNumber(6)
   void clearIconShape() => clearField(6);
+
+  @$pb.TagNumber(7)
+  Options_Mica get mica => $_getN(6);
+  @$pb.TagNumber(7)
+  set mica(Options_Mica v) { setField(7, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasMica() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearMica() => clearField(7);
 }
 

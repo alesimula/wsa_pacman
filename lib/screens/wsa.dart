@@ -69,7 +69,7 @@ class _ScreenWSAState extends State<ScreenWSA> {
             )
           ),
           const SizedBox(height: 20),
-          Text('Android Management', style: FluentTheme.of(context).typography.subtitle),
+          Text('Android Management', style: FluentTheme.of(context).typography.bodyLarge),
           const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.all(8.0),
