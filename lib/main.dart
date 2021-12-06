@@ -36,6 +36,7 @@ import 'dart:async';
 import 'theme.dart';
 
 const String appTitle = 'WSA Package Manager';
+const String appVersion = '1.0.0';
 
 late bool darkMode;
 
@@ -307,10 +308,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final appTheme = context.watch<AppTheme>();
     final mica = GState.mica.of(context);
+    final theme = FluentTheme.of(context);
 
     return NavigationView(
       contentShape: RoundedRectangleBorder(
-        side: BorderSide(width: 0.3, color: FluentTheme.of(context).micaBackgroundColor.lerpWith(Colors.black, 0.25)),
+        side: BorderSide(width: 0.3, color: theme.micaBackgroundColor.lerpWith(Colors.black, 0.25)),
         borderRadius: const BorderRadius.only(),
       ),
       appBar: NavigationAppBar(
@@ -328,7 +330,17 @@ class _MyHomePageState extends State<MyHomePage> {
             ? null
             : Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [Expanded(flex: 1,child: MoveWindow(child: Padding(padding: const EdgeInsets.only(top: 9, left: 13), child: Text(appTitle, style: FluentTheme.of(context).typography.caption)))), const WindowButtons()],
+                  children: [
+                    Expanded(flex: 1,child: MoveWindow(child: Padding(
+                      padding: const EdgeInsets.only(top: 9, left: 13), 
+                      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        Text(appTitle, style: theme.typography.caption),
+                        const SizedBox(width: 10),
+                        Text('v$appVersion', style: theme.typography.caption?.copyWith(color: theme.inactiveColor.withAlpha(theme.brightness.isLight ? 0x3F : 0x1B))),
+                      ])
+                    ))), 
+                    const WindowButtons()
+                  ],
                 )
             /*MoveWindow(
                 child: Row(
@@ -351,7 +363,7 @@ class _MyHomePageState extends State<MyHomePage> {
             decoration: const BoxDecoration (
               image: DecorationImage(image:  AssetImage("assets/images/logo.png"))
             ),
-          ), SizedBox(width: 10), Text("WSA PacMan", style: FluentTheme.of(context).typography.bodyLarge)]),
+          ), const SizedBox(width: 10), Text("WSA PacMan", style: theme.typography.bodyLarge)]),
         ),
         displayMode: appTheme.displayMode,
         indicatorBuilder: ({
