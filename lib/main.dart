@@ -448,20 +448,33 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class WindowButtons extends StatelessWidget {
   const WindowButtons({Key? key}) : super(key: key);
+  static Color windowButtonAlphaColor(ThemeData style, Set<ButtonStates> states) {
+    if (style.brightness == Brightness.light) {
+      if (states.isPressing) return Colors.black.withOpacity(0.075);
+      if (states.isHovering) return Colors.black.withOpacity(0.11);
+      return Colors.transparent;
+    } else {
+      if (states.isPressing) return Colors.white.withOpacity(0.03);
+      if (states.isHovering) return Colors.white.withOpacity(0.06);
+      return Colors.transparent;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasFluentTheme(context));
     assert(debugCheckHasFluentLocalizations(context));
     final ThemeData theme = FluentTheme.of(context);
+    final mica = GState.mica.of(context);
+
     final buttonColors = WindowButtonColors(
       iconNormal: theme.inactiveColor,
       iconMouseDown: theme.inactiveColor,
       iconMouseOver: theme.inactiveColor,
       //Fixed button colors
-      mouseOver: ButtonThemeData.buttonColor(
+      mouseOver: mica.enabled ? windowButtonAlphaColor(theme, {ButtonStates.hovering}) : ButtonThemeData.buttonColor(
           theme.brightness, {ButtonStates.hovering}).lerpWith(Colors.black, 0.12),
-      mouseDown: ButtonThemeData.buttonColor(
+      mouseDown: mica.enabled ? windowButtonAlphaColor(theme, {ButtonStates.pressing}) : ButtonThemeData.buttonColor(
           theme.brightness, {ButtonStates.pressing}).lerpWith(theme.shadowColor, 0.12).withAlpha(150),
     );
     final closeButtonColors = WindowButtonColors(
