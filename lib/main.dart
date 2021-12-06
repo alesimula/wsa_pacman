@@ -251,6 +251,11 @@ class MyApp extends StatelessWidget {
           initialRoute: '/',
           routes: {'/': (_) => args.isEmpty ? const MyHomePage() : const ApkInstaller()},
           theme: ThemeData(
+            /*buttonTheme: ButtonThemeData(
+              defaultButtonStyle: ButtonStyle(
+                backgroundColor: ButtonState.all(Colors.transparent.lerpWith(Colors.white, 0.2))
+              )
+            ),*/
             scaffoldBackgroundColor: IsFullMicaOrInstall ? Colors.transparent : isLight ? const Color(0xFFf9f9f9) : const Color(0xFF272727),
             micaBackgroundColor: mica.enabled ? Colors.transparent : isLight ? const Color(0xFFf3f3f3) : const Color(0xFF202020),
             accentColor: appTheme.color,

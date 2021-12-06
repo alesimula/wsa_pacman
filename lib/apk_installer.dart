@@ -8,6 +8,7 @@ import 'package:wsa_pacman/android/permissions.dart';
 import 'package:wsa_pacman/android/reader_apk.dart';
 import 'package:wsa_pacman/global_state.dart';
 import 'package:wsa_pacman/main.dart';
+import 'package:wsa_pacman/widget/themed_pane_item.dart';
 import 'package:wsa_pacman/windows/win_io.dart';
 import 'package:wsa_pacman/widget/adaptive_icon.dart';
 import 'package:wsa_pacman/widget/flexible_info_bar.dart';
@@ -141,7 +142,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
             children: [
               for (var permission in GState.permissions.of(context)) Container(
                 padding: EdgeInsets.only(right: 10),
-                child: PaneItem(
+                child: ThemablePaneItem(
                   title: Text(permission.description),
                   icon: permission.icon,
                 ).build(
@@ -149,6 +150,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
                   false,
                   (){1;},
                   displayMode: PaneDisplayMode.open,
+                  translucent: mica.enabled
                 )
               )
             ],
