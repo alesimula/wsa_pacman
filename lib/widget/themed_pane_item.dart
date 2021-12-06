@@ -3,21 +3,23 @@ import 'package:fluent_ui/fluent_ui.dart';
 
 const double _kCompactNavigationPanelWidth = 50.0;
 
-class ThemablePaneItem extends NavigationPaneItem {
+class ThemablePaneItem extends PaneItem {
+
+  final PaneDisplayMode? forceDisplayMode;
+  final bool translucent;
+  final bool topHoverEffect;
+
   /// Creates a pane item.
   ThemablePaneItem({
-    required this.icon,
-    this.title,
-    this.infoBadge,
-    this.focusNode,
-    this.autofocus = false,
-  });
-
-  final Widget? title;
-  final Widget icon;
-  final InfoBadge? infoBadge;
-  final FocusNode? focusNode;
-  final bool autofocus;
+    required Widget icon,
+    Widget? title,
+    InfoBadge? infoBadge,
+    FocusNode? focusNode,
+    this.forceDisplayMode,
+    bool autofocus = false,
+    this.topHoverEffect = true,
+    this.translucent = false
+  }) : super(icon: icon, title: title, infoBadge: infoBadge, focusNode: focusNode, autofocus: autofocus);
 
   static Color uncheckedInputAlphaColor(ThemeData style, Set<ButtonStates> states) {
     // The opacity is 0 because, when transitioning between [Colors.transparent]
@@ -35,16 +37,16 @@ class ThemablePaneItem extends NavigationPaneItem {
     }
   }
   
+  @override
   Widget build(
     BuildContext context,
     bool selected,
     VoidCallback? onPressed, {
-    bool translucent = false,
     PaneDisplayMode? displayMode,
     bool showTextOnTop = true,
     bool? autofocus,
   }) {
-    final PaneDisplayMode mode = displayMode ??
+    final PaneDisplayMode mode = forceDisplayMode ?? displayMode ??
         //_NavigationBody.maybeOf(context)?.displayMode ??
         PaneDisplayMode.minimal;
     assert(displayMode != PaneDisplayMode.auto);
@@ -146,13 +148,13 @@ class ThemablePaneItem extends NavigationPaneItem {
               color: () {
                 final ButtonState<Color?> tileColor = theme.tileColor ??
                     ButtonState.resolveWith((states) {
-                      if (isTop) return Colors.transparent;
+                      if (isTop && !topHoverEffect) return Colors.transparent;
                       return translucent ? uncheckedInputAlphaColor(FluentTheme.of(context), states) :
                         ButtonThemeData.uncheckedInputColor(FluentTheme.of(context), states);
                     });
                 final newStates = states.toSet()..remove(ButtonStates.disabled);
                 return tileColor.resolve(
-                  selected ? {ButtonStates.hovering} : newStates,
+                  (selected && !isTop) ? {ButtonStates.hovering} : newStates,
                 );
               }(),
               borderRadius: BorderRadius.circular(4.0),

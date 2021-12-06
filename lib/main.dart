@@ -12,6 +12,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 //import 'package:flutter/material.dart' hide showDialog;
 import 'package:shared_value/shared_value.dart';
+import 'package:wsa_pacman/widget/themed_pane_item.dart';
 import 'package:wsa_pacman/windows/win_info.dart';
 import 'package:wsa_pacman/windows/win_pkg.dart';
 import 'package:wsa_pacman/windows/win_reg.dart';
@@ -230,8 +231,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var theme = GState.theme.of(context).mode;
-    var mica = GState.mica.of(context);
+    final theme = GState.theme.of(context).mode;
+    final mica = GState.mica.of(context);
     setMicaEffect(mica.enabled, theme == material.ThemeMode.system ? darkMode : theme == material.ThemeMode.dark);
     final brightness = theme == ThemeMode.system ? darkMode ? Brightness.dark : Brightness.light
         : theme == ThemeMode.dark ? Brightness.dark : Brightness.light;
@@ -305,6 +306,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final appTheme = context.watch<AppTheme>();
+    final mica = GState.mica.of(context);
+
     return NavigationView(
       contentShape: RoundedRectangleBorder(
         side: BorderSide(width: 0.3, color: FluentTheme.of(context).micaBackgroundColor.lerpWith(Colors.black, 0.25)),
@@ -396,9 +399,11 @@ class _MyHomePageState extends State<MyHomePage> {
         items: [
           // It doesn't look good when resizing from compact to open
           // PaneItemHeader(header: Text('User Interaction')),
-          PaneItem(
+          ThemablePaneItem(
             icon: const Icon(Mdi.androidDebugBridge),
             title: const Text('WSA'),
+            translucent: mica.enabled,
+            forceDisplayMode: appTheme.displayMode
           ),
           PaneItemSeparator(),
           /*PaneItem(
@@ -412,9 +417,12 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         footerItems: [
           PaneItemSeparator(),
-          PaneItem(
-              icon: const Icon(FluentIcons.settings),
-              title: const Text('Settings')),
+          ThemablePaneItem(
+            icon: const Icon(FluentIcons.settings),
+            title: const Text('Settings'),
+            translucent: mica.enabled,
+            forceDisplayMode: appTheme.displayMode
+          ),
         ],
       ),
       content: NavigationBody(index: index, children: [

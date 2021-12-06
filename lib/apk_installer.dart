@@ -145,12 +145,12 @@ class _ApkInstallerState extends State<ApkInstaller> {
                 child: ThemablePaneItem(
                   title: Text(permission.description),
                   icon: permission.icon,
+                  translucent: mica.enabled
                 ).build(
                   context,
                   false,
                   (){1;},
                   displayMode: PaneDisplayMode.open,
-                  translucent: mica.enabled
                 )
               )
             ],
