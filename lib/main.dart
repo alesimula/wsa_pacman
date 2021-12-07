@@ -59,10 +59,14 @@ class WSAStatusAlert {
 }
 
 enum ConnectionStatus {
-  UNKNOWN, ARRESTED, OFFLINE, DISCONNECTED, CONNECTED
+  UNSUPPORTED, MISSING, UNKNOWN, ARRESTED, OFFLINE, DISCONNECTED, CONNECTED
 }
 extension on ConnectionStatus {
   static final Map<ConnectionStatus, WSAStatusAlert> _statusAlers = {
+    ConnectionStatus.UNSUPPORTED: WSAStatusAlert(InfoBarSeverity.error, "WSA not installed", 
+      "${WinVer.isWindows10OrGreater ? 'Windows 10' : 'Older Windows version'} detected and WSA not found; this application depends on WSA, which is only officially supported on Windows 11"),
+    ConnectionStatus.MISSING: WSAStatusAlert(InfoBarSeverity.error, "WSA not installed", 
+      "WSA not found; this application depends on WSA, please install Windows Subsystem for Android (or the Amazon Appstore) from the Microsoft Store"),
     ConnectionStatus.UNKNOWN: WSAStatusAlert(InfoBarSeverity.info, "Connecting", 
       "Waiting for a WSA connection to be enstablished..."),
     ConnectionStatus.ARRESTED: WSAStatusAlert(InfoBarSeverity.warning, "Arrested", 
@@ -95,6 +99,7 @@ class Env {
       WinReg.getString(RegHKey.HKEY_LOCAL_MACHINE, r'SYSTEM\CurrentControlSet\Services\WsaService', 'ImagePath')?.value.unquoted ??
       WinReg.getString(RegHKey.HKEY_CURRENT_USER, r'Software\Microsoft\Windows\CurrentVersion\App Paths\WsaClient.exe', null)?.value ?? ''
     )?.group(1) ?? '';
+  static late final bool WSA_INSTALLED = File('$WSA_SYSTEM_PATH\\AppxManifest.xml').existsSync();
   static late final WSA_INFO = WinPkgInfo.fromSystemPath(WSA_SYSTEM_PATH);
 }
 
@@ -146,7 +151,7 @@ class WSAPeriodicConnector {
     ProcessResult? process = await Process.run('${Env.TOOLS_DIR}\\adb.exe', ['connect', '127.0.0.1:${GState.androidPort.$}'])
       .timeout(const Duration(milliseconds:200), onTimeout: () => Future.value(ProcessResult(-1, -1, null, null)));
     if (process.stdout?.toString().contains(RegExp(r'(^|\n)(cannot|failed to) connect\s.*')) ?? true) 
-      status = ConnectionStatus.ARRESTED;
+      status = Env.WSA_INSTALLED ? ConnectionStatus.ARRESTED : WinVer.isWindows11OrGreater ? ConnectionStatus.MISSING : ConnectionStatus.UNSUPPORTED;
     else status = ConnectionStatus.CONNECTED;
   }
 }
