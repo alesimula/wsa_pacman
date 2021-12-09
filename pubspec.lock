@@ -153,7 +153,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: ccad6bd19d855643bc6d53f06d91994a002b38d8
+      resolved-ref: "03719a90e7e4afa722ebdb67d7f7508460657be2"
       url: "https://github.com/bdlukaa/fluent_ui.git"
     source: git
     version: "3.4.1"

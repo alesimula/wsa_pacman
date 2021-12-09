@@ -4,11 +4,14 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:jovial_svg/jovial_svg.dart';
+import 'package:mdi/mdi.dart';
+import 'package:protobuf/protobuf.dart';
 import 'package:wsa_pacman/global_state.dart';
 import 'package:wsa_pacman/proto/options.pb.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:wsa_pacman/widget/adaptive_icon.dart';
+import 'package:wsa_pacman/widget/fluent_expander.dart';
 import 'package:wsa_pacman/windows/win_info.dart';
 
 import '/utils/string_utils.dart';
@@ -87,9 +90,33 @@ class ScreenSettingsState extends State<ScreenSettings> {
     });
   }
 
+  static List<Widget> optionsListDeferred<E extends ProtobufEnum, V>(List<E> values, V Function(E e) getter, bool Function(V v) checked, Function(E e, V v) updater) => List.generate(values.length, (index) {
+    final modeOpt = values[index];
+    final mode = getter(modeOpt);
+    return Padding(
+      padding: index != values.length - 1 ? const EdgeInsets.only(bottom: 8.0) : EdgeInsets.zero,
+      child: RadioButton(
+        checked: checked(mode),
+        onChanged: (value) {
+          if (value) {
+            updater(modeOpt, mode);
+            //GState.theme..update((p0) => modeOpt)..persist();
+            //themeMode = mode;
+          }
+        },
+        content: Text(modeOpt.toString().normalized),
+      ),
+    );
+  });
+
+  static List<Widget> optionsList<E extends ProtobufEnum>(List<E> values, bool Function(E e) checked, Function(E e) updater) =>
+      optionsListDeferred<E, E>(values, (e) => e, checked, (e, v) => updater(e));
+
   @override
   Widget build(BuildContext context) {
     final appTheme = context.watch<AppTheme>();
+    final theme = FluentTheme.of(context);
+    //final 
     final tooltipThemeData = TooltipThemeData(decoration: () {
       const radius = BorderRadius.zero;
       final shadow = [
@@ -100,7 +127,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
         ),
       ];
       final border = Border.all(color: Colors.grey[100], width: 0.5);
-      if (FluentTheme.of(context).brightness == Brightness.light) {
+      if (theme.brightness == Brightness.light) {
         return BoxDecoration(
           color: Colors.white,
           borderRadius: radius,
@@ -118,10 +145,11 @@ class ScreenSettingsState extends State<ScreenSettings> {
     }());
 
     const hSpacer = SizedBox(width: 10.0);
+    const smallSpacer = SizedBox(height: 5.0);
     const spacer = SizedBox(height: 10.0);
     const biggerSpacer = SizedBox(height: 40.0);
 
-    var theme = GState.theme.of(context).mode;
+    var themeMode = GState.theme.of(context).mode;
     var iconShape = GState.iconShape.of(context);
     var mica = GState.mica.of(context);
 
@@ -138,7 +166,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
         controller: controller,
         children: [
           Text('WSA Port',
-              style: FluentTheme.of(context).typography.bodyLarge),
+              style: theme.typography.bodyLarge),
           spacer,
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
@@ -167,69 +195,38 @@ class ScreenSettingsState extends State<ScreenSettings> {
             ),
           ),
           biggerSpacer,
-          Text('Theme mode', 
-              style: FluentTheme.of(context).typography.bodyLarge),
-          spacer,
-          ...List.generate(Options_Theme.values.length, (index) {
-            final modeOpt = Options_Theme.values[index];
-            final mode = modeOpt.mode;
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: RadioButton(
-                checked: theme == mode,
-                onChanged: (value) {
-                  if (value) {
-                    GState.theme..update((p0) => modeOpt)..persist();
-                    theme = mode;
-                  }
-                },
-                content: Text('$mode'.replaceAll('ThemeMode.', '').capitalized),
-              ),
-            );
-          }),
-          /*if (WinVer.isWindows11OrGreater) biggerSpacer,
-          if (WinVer.isWindows11OrGreater) Text('Window transparency', style: FluentTheme.of(context).typography.bodyLarge),
-          if (WinVer.isWindows11OrGreater) spacer,
-          if (WinVer.isWindows11OrGreater) ...List.generate(Options_Mica.values.length, (index) {
-            final micaSel = Options_Mica.values[index];
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: RadioButton(
-                checked: mica == micaSel,
-                onChanged: (value) {
-                  if (value) {
-                    GState.mica..update((p0) => micaSel)..persist();
-                    mica = micaSel;
-                  }
-                },
-                content: Text('$micaSel'.normalized),
-              ),
-            );
-          }),*/
-          biggerSpacer,
-          Row(children: [
-            Flexible(child: SizedBox(width: 30.00, height: 30.00, child: exampleIcon)),
-            hSpacer,
-            Text('Adaptive icons Shape',
-              style: FluentTheme.of(context).typography.bodyLarge),
-          ]),
-          spacer,
-          ...List.generate(Options_IconShape.values.length, (index) {
-            final shape = Options_IconShape.values[index];
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: RadioButton(
-                checked: iconShape == shape,
-                onChanged: (value) {
-                  if (value) {
-                    GState.iconShape..update((p0) => shape)..persist();
-                    iconShape = shape;
-                  }
-                },
-                content: Text('$shape'.normalized),
-              ),
-            );
-          }),
+          ExpanderWin11(
+            leading: const Icon(Mdi.themeLightDark, size: 23,),
+            header: const Text('Theme mode'),
+            content: Column(crossAxisAlignment: CrossAxisAlignment.start, children: 
+                optionsListDeferred<Options_Theme, ThemeMode>(Options_Theme.values, (e) => e.mode, (v) => themeMode == v, (e, v) => GState.theme..update((p0) => e)..persist())
+            ),
+            //headerBackgroundColor: ThemablePaneItem.uncheckedInputAlphaColor(theme, states),
+            direction: ExpanderDirection.down, // (optional). Defaults to ExpanderDirection.down
+            initiallyExpanded: false, // (false). Defaults to false
+          ),
+          smallSpacer,
+          if (WinVer.isWindows11OrGreater) ExpanderWin11(
+            leading: const Icon(Mdi.blur, size: 23,),
+            header: const Text('Window transparency'),
+            content: Column(crossAxisAlignment: CrossAxisAlignment.start, children: 
+                optionsList<Options_Mica>(Options_Mica.values, (e) => mica == e, (e) => GState.mica..update((_) => e)..persist())
+            ),
+            //headerBackgroundColor: ThemablePaneItem.uncheckedInputAlphaColor(theme, states),
+            direction: ExpanderDirection.down, // (optional). Defaults to ExpanderDirection.down
+            initiallyExpanded: false, // (false). Defaults to false
+          ),
+          smallSpacer,
+          ExpanderWin11(
+            leading: SizedBox(width: 23.00, height: 23.00, child: exampleIcon),
+            header: const Text('Adaptive icons Shape'),
+            content: Column(crossAxisAlignment: CrossAxisAlignment.start, children: 
+                optionsList<Options_IconShape>(Options_IconShape.values, (e) => iconShape == e, (e) => GState.iconShape..update((_) => e)..persist())
+            ),
+            //headerBackgroundColor: ThemablePaneItem.uncheckedInputAlphaColor(theme, states),
+            direction: ExpanderDirection.down, // (optional). Defaults to ExpanderDirection.down
+            initiallyExpanded: false, // (false). Defaults to false
+          ),
         ],
       ),
     );
