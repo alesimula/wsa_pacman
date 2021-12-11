@@ -128,7 +128,7 @@ class PersistableValue<T> extends SharedValue<T> {
 
   PersistableValue({String? key, required T value, required T Function(Options options) loader, required Function(Options options, T value) setter, bool autosave = false})
       : _setter = setter, super(key: key, value: value, autosave: autosave){
-    reinitializer(Options options) {super.$ = loader(options); _initializer = null;}
+    reinitializer(Options options) {super.setIfChanged(loader(options)); _initializer = null;}
     _initializer = AppOptions.withOptions(reinitializer);
     _reinitializers.add(reinitializer);
   }

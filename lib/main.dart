@@ -241,10 +241,8 @@ class MyApp extends StatelessWidget {
     final theme = GState.theme.of(context).mode;
     final mica = GState.mica.of(context);
     setMicaEffect(mica.enabled, theme == material.ThemeMode.system ? darkMode : theme == material.ThemeMode.dark);
-    final brightness = theme == ThemeMode.system ? darkMode ? Brightness.dark : Brightness.light
-        : theme == ThemeMode.dark ? Brightness.dark : Brightness.light;
 
-    final bool isLight = brightness == Brightness.light;
+    final bool isLight = theme == ThemeMode.system ? !darkMode : theme == ThemeMode.light;
     final bool isMicaInstall = installMode && mica.enabled;
     final bool IsFullMicaOrInstall = mica.full || isMicaInstall;
     
@@ -293,7 +291,7 @@ class MyApp extends StatelessWidget {
             scaffoldBackgroundColor: IsFullMicaOrInstall ? Colors.transparent : isLight ? const Color(0xFFf9f9f9) : const Color(0xFF272727),
             micaBackgroundColor: mica.enabled ? Colors.transparent : isLight ? const Color(0xFFf3f3f3) : const Color(0xFF202020),
             accentColor: appTheme.color,
-            brightness: brightness,
+            brightness: isLight ? Brightness.light : Brightness.dark,
             visualDensity: VisualDensity.standard,
             focusTheme: FocusThemeData(
               glowFactor: is10footScreen() ? 2.0 : 0.0,
