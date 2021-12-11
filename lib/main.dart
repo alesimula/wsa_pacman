@@ -12,6 +12,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 //import 'package:flutter/material.dart' hide showDialog;
 import 'package:shared_value/shared_value.dart';
+import 'package:wsa_pacman/utils/misc_utils.dart';
 import 'package:wsa_pacman/widget/themed_pane_item.dart';
 import 'package:wsa_pacman/windows/win_info.dart';
 import 'package:wsa_pacman/windows/win_pkg.dart';
@@ -243,9 +244,9 @@ class MyApp extends StatelessWidget {
     final brightness = theme == ThemeMode.system ? darkMode ? Brightness.dark : Brightness.light
         : theme == ThemeMode.dark ? Brightness.dark : Brightness.light;
 
-    bool isLight = brightness == Brightness.light;
-    bool isMicaInstall = installMode && mica.enabled;
-    bool IsFullMicaOrInstall = mica.full || isMicaInstall;
+    final bool isLight = brightness == Brightness.light;
+    final bool isMicaInstall = installMode && mica.enabled;
+    final bool IsFullMicaOrInstall = mica.full || isMicaInstall;
     
     return ChangeNotifierProvider(
       create: (_) => AppTheme(),
@@ -261,18 +262,30 @@ class MyApp extends StatelessWidget {
             buttonTheme: ButtonThemeData(
               defaultButtonStyle: ButtonStyle(
                 shadowColor: ButtonState.all(Colors.transparent),
-                backgroundColor: ButtonState.resolveWith((states) {
+                border: ButtonState.resolveWith((states) {
                   if (isLight) {
-                    if (states.isDisabled) return const Color(0xFFf9f9f9).withOpacity(0.045);
-                    if (states.isPressing) return const Color(0xFFf0f0f0).withOpacity(0.4);
-                    if (states.isHovering) return const Color(0xFFf9f9f9).withOpacity(0.65);
-                    return Colors.white.withOpacity(0.8);
+                    if (states.isDisabled) return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0x212121, 0.12));
+                    if (states.isNone || (states.isHovering && !states.isDisabled && !states.isPressing)) return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0x212121, 0.22));
+                    else return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0x212121, 0.07));
                   }
                   else {
-                    if (states.isDisabled) return Colors.white.withOpacity(0.045);
-                    if (states.isPressing) return Colors.white.withOpacity(0.03);
-                    if (states.isHovering) return Colors.white.withOpacity(0.08);
-                    return Colors.white.withOpacity(0.055);
+                    if (states.isDisabled) return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0xf0f0f0, 0.05));
+                    if (states.isNone || (states.isHovering && !states.isPressing)) return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0xf0f0f0, 0.035));
+                    else return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0xf0f0f0, 0.07));
+                  }
+                }),
+                backgroundColor: ButtonState.resolveWith((states) {
+                  if (isLight) {
+                    if (states.isDisabled) return const ColorConst.withOpacity(0xf9f9f9, 0.045);
+                    if (states.isPressing) return const ColorConst.withOpacity(0xf0f0f0, 0.4);
+                    if (states.isHovering) return const ColorConst.withOpacity(0xf9f9f9, 0.65);
+                    return const ColorConst.withOpacity(0xFFFFFF, 0.8);
+                  }
+                  else {
+                    if (states.isDisabled) return const ColorConst.withOpacity(0xFFFFFF, 0.045);
+                    if (states.isPressing) return const ColorConst.withOpacity(0xFFFFFF, 0.03);
+                    if (states.isHovering) return const ColorConst.withOpacity(0xFFFFFF, 0.08);
+                    return const ColorConst.withOpacity(0xFFFFFF, 0.055);
                   }
                 })
               ) ,

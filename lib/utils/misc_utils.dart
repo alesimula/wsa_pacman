@@ -1,4 +1,10 @@
 import 'package:archive/archive.dart';
+import 'package:fluent_ui/fluent_ui.dart';
+
+class ColorConst extends Color {
+  const ColorConst.withOpacity(int value, double opacity) : super(
+    ( (((opacity * 0xff ~/ 1) & 0xff) << 24) | ((0x00ffffff & value)) ) & 0xFFFFFFFF);
+}
 
 extension MapUtils<K,V> on Map<K,V> {
   List<V> getAll(Iterable<K> keys) {
