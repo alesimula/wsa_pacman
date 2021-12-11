@@ -18,7 +18,7 @@ const Options$json = const {
     const {'1': 'noAdaptive', '3': 4, '4': 1, '5': 8, '10': 'noAdaptive'},
     const {'1': 'systemAccent', '3': 5, '4': 1, '5': 8, '10': 'systemAccent'},
     const {'1': 'iconShape', '3': 6, '4': 1, '5': 14, '6': '.proto.Options.IconShape', '10': 'iconShape'},
-    const {'1': 'mica', '3': 7, '4': 1, '5': 14, '6': '.proto.Options.Mica', '7': 'PARTIAL', '10': 'mica'},
+    const {'1': 'mica', '3': 7, '4': 1, '5': 14, '6': '.proto.Options.Mica', '7': 'FULL', '10': 'mica'},
   ],
   '4': const [Options_Theme$json, Options_IconShape$json, Options_Mica$json],
 };
@@ -54,4 +54,4 @@ const Options_Mica$json = const {
 };
 
 /// Descriptor for `Options`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List optionsDescriptor = $convert.base64Decode('CgdPcHRpb25zEigKCWlwQWRkcmVzcxgBIAEoDToKMjEzMDcwNjQzM1IJaXBBZGRyZXNzEhkKBHBvcnQYAiABKA06BTU4NTI2UgRwb3J0EioKBXRoZW1lGAMgASgOMhQucHJvdG8uT3B0aW9ucy5UaGVtZVIFdGhlbWUSHgoKbm9BZGFwdGl2ZRgEIAEoCFIKbm9BZGFwdGl2ZRIiCgxzeXN0ZW1BY2NlbnQYBSABKAhSDHN5c3RlbUFjY2VudBI2CglpY29uU2hhcGUYBiABKA4yGC5wcm90by5PcHRpb25zLkljb25TaGFwZVIJaWNvblNoYXBlEjAKBG1pY2EYByABKA4yEy5wcm90by5PcHRpb25zLk1pY2E6B1BBUlRJQUxSBG1pY2EiKAoFVGhlbWUSCgoGU1lTVEVNEAASCQoFTElHSFQQARIICgREQVJLEAIiOQoJSWNvblNoYXBlEgwKCFNRVUlSQ0xFEAASCgoGQ0lSQ0xFEAESEgoOUk9VTkRFRF9TUVVBUkUQAiIrCgRNaWNhEggKBEZVTEwQABILCgdQQVJUSUFMEAESDAoIRElTQUJMRUQQAg==');
+final $typed_data.Uint8List optionsDescriptor = $convert.base64Decode('CgdPcHRpb25zEigKCWlwQWRkcmVzcxgBIAEoDToKMjEzMDcwNjQzM1IJaXBBZGRyZXNzEhkKBHBvcnQYAiABKA06BTU4NTI2UgRwb3J0EioKBXRoZW1lGAMgASgOMhQucHJvdG8uT3B0aW9ucy5UaGVtZVIFdGhlbWUSHgoKbm9BZGFwdGl2ZRgEIAEoCFIKbm9BZGFwdGl2ZRIiCgxzeXN0ZW1BY2NlbnQYBSABKAhSDHN5c3RlbUFjY2VudBI2CglpY29uU2hhcGUYBiABKA4yGC5wcm90by5PcHRpb25zLkljb25TaGFwZVIJaWNvblNoYXBlEi0KBG1pY2EYByABKA4yEy5wcm90by5PcHRpb25zLk1pY2E6BEZVTExSBG1pY2EiKAoFVGhlbWUSCgoGU1lTVEVNEAASCQoFTElHSFQQARIICgREQVJLEAIiOQoJSWNvblNoYXBlEgwKCFNRVUlSQ0xFEAASCgoGQ0lSQ0xFEAESEgoOUk9VTkRFRF9TUVVBUkUQAiIrCgRNaWNhEggKBEZVTEwQABILCgdQQVJUSUFMEAESDAoIRElTQUJMRUQQAg==');

@@ -21,7 +21,7 @@ class Options extends $pb.GeneratedMessage {
     ..aOB(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'noAdaptive', protoName: 'noAdaptive')
     ..aOB(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'systemAccent', protoName: 'systemAccent')
     ..e<Options_IconShape>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'iconShape', $pb.PbFieldType.OE, protoName: 'iconShape', defaultOrMaker: Options_IconShape.SQUIRCLE, valueOf: Options_IconShape.valueOf, enumValues: Options_IconShape.values)
-    ..e<Options_Mica>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mica', $pb.PbFieldType.OE, defaultOrMaker: Options_Mica.PARTIAL, valueOf: Options_Mica.valueOf, enumValues: Options_Mica.values)
+    ..e<Options_Mica>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mica', $pb.PbFieldType.OE, defaultOrMaker: Options_Mica.FULL, valueOf: Options_Mica.valueOf, enumValues: Options_Mica.values)
     ..hasRequiredFields = false
   ;
 

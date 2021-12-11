@@ -11,7 +11,7 @@ message Options {
     optional bool noAdaptive = 4;
     optional bool systemAccent = 5;
     optional IconShape iconShape = 6;
-    optional Mica mica = 7 [default = PARTIAL];
+    optional Mica mica = 7 [default = FULL];
 
     enum Theme {
         SYSTEM = 0;
