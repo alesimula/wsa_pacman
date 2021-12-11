@@ -259,14 +259,14 @@ class MyApp extends StatelessWidget {
           routes: {'/': (_) => args.isEmpty ? const MyHomePage() : const ApkInstaller()},
           theme: ThemeData(
             buttonTheme: ButtonThemeData(
-              defaultButtonStyle: /*IsFullMicaOrInstall ?*/ ButtonStyle(
+              defaultButtonStyle: ButtonStyle(
                 shadowColor: ButtonState.all(Colors.transparent),
                 backgroundColor: ButtonState.resolveWith((states) {
                   if (isLight) {
                     if (states.isDisabled) return const Color(0xFFf9f9f9).withOpacity(0.045);
-                    if (states.isPressing) return const Color(0xFFf9f9f9).withOpacity(0.4);
+                    if (states.isPressing) return const Color(0xFFf0f0f0).withOpacity(0.4);
                     if (states.isHovering) return const Color(0xFFf9f9f9).withOpacity(0.65);
-                    return Colors.white.withOpacity(0.7);
+                    return Colors.white.withOpacity(0.8);
                   }
                   else {
                     if (states.isDisabled) return Colors.white.withOpacity(0.045);
@@ -275,7 +275,7 @@ class MyApp extends StatelessWidget {
                     return Colors.white.withOpacity(0.055);
                   }
                 })
-              ) /*: null*/,
+              ) ,
             ),
             scaffoldBackgroundColor: IsFullMicaOrInstall ? Colors.transparent : isLight ? const Color(0xFFf9f9f9) : const Color(0xFF272727),
             micaBackgroundColor: mica.enabled ? Colors.transparent : isLight ? const Color(0xFFf3f3f3) : const Color(0xFF202020),
