@@ -20,7 +20,7 @@
 #define path_assoc_default ".DEFAULT\"+path_assoc_user 
 
 [Setup]
-AppVersion=1.0.0
+AppVersion=1.0.1
 PrivilegesRequired=admin
 AppName=WSA PacMan
 ArchitecturesInstallIn64BitMode=x64
