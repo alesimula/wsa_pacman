@@ -149,11 +149,12 @@ class ScreenSettingsState extends State<ScreenSettings> {
     const spacer = SizedBox(height: 10.0);
     const biggerSpacer = SizedBox(height: 40.0);
 
-    var themeMode = GState.theme.of(context).mode;
-    var iconShape = GState.iconShape.of(context);
-    var mica = GState.mica.of(context);
+    final themeMode = GState.theme.of(context).mode;
+    final iconShape = GState.iconShape.of(context);
+    final mica = GState.mica.of(context);
+    final legacyIcons = GState.legacyIcons.of(context);
 
-    var exampleIcon = AdaptiveIcon(background: _exBackground, foreground: _exForeground, radius: iconShape.radius);
+    final exampleIcon = AdaptiveIcon(background: _exBackground, foreground: _exForeground, radius: iconShape.radius);
 
     return ScaffoldPage(
       header: const PageHeader(title: Text('Settings')),
@@ -223,6 +224,10 @@ class ScreenSettingsState extends State<ScreenSettings> {
             content: Column(crossAxisAlignment: CrossAxisAlignment.start, children: 
                 optionsList<Options_IconShape>(Options_IconShape.values, (e) => iconShape == e, (e) => GState.iconShape..update((_) => e)..persist())
             ),
+            trailing: Row(children: [SizedBox(width: 28.5, child: Text(legacyIcons ? 'Off' : 'On')), ToggleSwitch(
+              checked: !legacyIcons,
+              onChanged: (v) => GState.legacyIcons..$ = !v..persist()
+            )]),
             //headerBackgroundColor: ThemablePaneItem.uncheckedInputAlphaColor(theme, states),
             direction: ExpanderDirection.down, // (optional). Defaults to ExpanderDirection.down
             initiallyExpanded: false, // (false). Defaults to false

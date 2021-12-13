@@ -26,6 +26,7 @@ class GState {
   static final androidPort = PersistableValue(value: 58526, loader: (o)=>o.port, setter: (o,e)=>o.port = e);
   static final androidPortPending = SharedValue(value: androidPort.$.toString());
   static final iconShape = PersistableValue(value: Options_IconShape.SQUIRCLE, loader: (o)=>o.iconShape, setter: (o,e)=> o.iconShape = e);
+  static final legacyIcons = PersistableValue(value: false, loader: (o)=>o.legacyIcons, setter: (o,e)=> o.legacyIcons = e);
   static final mica = PersistableValue(value: Options_Mica.FULL, loader: (o)=>o.mica, setter: (o,e)=> o.mica = e); 
   //APK Info
   static final apkTitle = SharedValue<String>(value: "");

@@ -18,7 +18,7 @@ class Options extends $pb.GeneratedMessage {
     ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ipAddress', $pb.PbFieldType.OU3, protoName: 'ipAddress', defaultOrMaker: 2130706433)
     ..a<$core.int>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'port', $pb.PbFieldType.OU3, defaultOrMaker: 58526)
     ..e<Options_Theme>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'theme', $pb.PbFieldType.OE, defaultOrMaker: Options_Theme.SYSTEM, valueOf: Options_Theme.valueOf, enumValues: Options_Theme.values)
-    ..aOB(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'noAdaptive', protoName: 'noAdaptive')
+    ..aOB(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'legacyIcons', protoName: 'legacyIcons')
     ..aOB(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'systemAccent', protoName: 'systemAccent')
     ..e<Options_IconShape>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'iconShape', $pb.PbFieldType.OE, protoName: 'iconShape', defaultOrMaker: Options_IconShape.SQUIRCLE, valueOf: Options_IconShape.valueOf, enumValues: Options_IconShape.values)
     ..e<Options_Mica>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mica', $pb.PbFieldType.OE, defaultOrMaker: Options_Mica.FULL, valueOf: Options_Mica.valueOf, enumValues: Options_Mica.values)
@@ -30,7 +30,7 @@ class Options extends $pb.GeneratedMessage {
     $core.int? ipAddress,
     $core.int? port,
     Options_Theme? theme,
-    $core.bool? noAdaptive,
+    $core.bool? legacyIcons,
     $core.bool? systemAccent,
     Options_IconShape? iconShape,
     Options_Mica? mica,
@@ -45,8 +45,8 @@ class Options extends $pb.GeneratedMessage {
     if (theme != null) {
       _result.theme = theme;
     }
-    if (noAdaptive != null) {
-      _result.noAdaptive = noAdaptive;
+    if (legacyIcons != null) {
+      _result.legacyIcons = legacyIcons;
     }
     if (systemAccent != null) {
       _result.systemAccent = systemAccent;
@@ -108,13 +108,13 @@ class Options extends $pb.GeneratedMessage {
   void clearTheme() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.bool get noAdaptive => $_getBF(3);
+  $core.bool get legacyIcons => $_getBF(3);
   @$pb.TagNumber(4)
-  set noAdaptive($core.bool v) { $_setBool(3, v); }
+  set legacyIcons($core.bool v) { $_setBool(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasNoAdaptive() => $_has(3);
+  $core.bool hasLegacyIcons() => $_has(3);
   @$pb.TagNumber(4)
-  void clearNoAdaptive() => clearField(4);
+  void clearLegacyIcons() => clearField(4);
 
   @$pb.TagNumber(5)
   $core.bool get systemAccent => $_getBF(4);

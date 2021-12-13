@@ -8,7 +8,7 @@ message Options {
     optional uint32 port = 2 [default = 58526];
 
     optional Theme theme = 3;
-    optional bool noAdaptive = 4;
+    optional bool legacyIcons = 4;
     optional bool systemAccent = 5;
     optional IconShape iconShape = 6;
     optional Mica mica = 7 [default = FULL];

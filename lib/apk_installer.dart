@@ -94,7 +94,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
     int port = GState.androidPort.of(context);
 
     if (aForeground != null) icon = AdaptiveIcon(backColor: GState.apkBackgroundColor.of(context), background: GState.apkBackgroundIcon.of(context), foreground: aForeground, radius: GState.iconShape.of(context).radius);
-    else if (lIcon != null) icon = lIcon;
+    else if (lIcon != null) icon = FittedBox(child: lIcon);
     else icon = const ProgressRing();
 
     Widget titleWidget = Row (

@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures
+// ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures, constant_identifier_names
 
 import 'dart:isolate';
 import 'dart:async';
@@ -25,11 +25,16 @@ import '../utils/misc_utils.dart';
 class IsolateData {
   final String fileName;
   final SendPort pipe;
+  final bool legacyIcon;
   //Listener has to execute this in the main thread
   execute(VoidCallback callback) {
     pipe.send(callback);
   }
-  IsolateData(this.fileName, this.pipe);
+  IsolateData(this.fileName, this.legacyIcon, this.pipe);
+}
+
+extension on int {
+  String get asResId => "0x"+toRadixString(16).padLeft(8, '0');
 }
 
 /// Reads apk file data on a different process and updates global state
@@ -44,6 +49,7 @@ class ApkReader {
   static int _versionCode = 0;
 
   static late final IsolateData data;
+  static const String REGEX_QUOTED_TYPE = r'["'']type[0-9]+/([0-9]*)["'']';
 
   static Future<Archive> _initArchiveFile(File file) async {
     return ZipDecoder().decodeBytes(file.readAsBytesSync());
@@ -55,7 +61,7 @@ class ApkReader {
   }
 
   /// Decodes a binary xml
-  static Future<Uint8List> _decodeXml(Uint8List encoded) async {
+  static Future<Uint8List> _decodeXml(List<int> encoded) async {
     var axmldec = await Process.start('${Env.TOOLS_DIR}\\axmldec.exe', []);
     axmldec.stdin.add(encoded);
     //For some reason i need this
@@ -209,9 +215,22 @@ class ApkReader {
     );
     _initArchive();
 
+    Future<bool> legacyIconFound = (data.legacyIcon) ? Process.run('${Env.TOOLS_DIR}\\axmldec.exe', ['-i', APK_FILE], stdoutEncoding: null).then((value) async {
+      String manifest = utf8.decode(await _decodeXml(value.stdout), allowMalformed: true);
+      String? icon = RegExp('<application\\s+${REGEX_XML_NOCLOSE}android:icon\\s*=\\s*$REGEX_QUOTED_TYPE', multiLine: true, dotAll: true).firstMatch(manifest)?.group(2);
+
+      Resource? resource = icon != null ? await getResources(int.parse(icon).asResId) : null;
+      // first: smaller - last: bigger ? (taking the second one)
+      Iterator<String>? legacyIconFiles = resource?.values.where((e) => !e.endsWith('.xml')).iterator;
+      String? iconFile = (legacyIconFiles?.moveNext() ?? false) ? legacyIconFiles!.current : null;
+      if (legacyIconFiles?.moveNext() ?? false) iconFile = legacyIconFiles!.current;
+      if (iconFile != null) await _getIconFile(iconFile);
+      return iconFile != null;
+    }).onError((_,__) => false) : Future.value(false);
+
     Future? iconUpdThread;
     Future<ProcessResult>? inner;
-    var process = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'badging', APK_FILE])..then((value) {
+    var process = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'badging', APK_FILE]).then((value) async {
       if (value.exitCode == 0) {
         String dump = value.stdout.toString();
         String? info = dump.find(r'(^|\n)package:.*');
@@ -238,7 +257,8 @@ class ApkReader {
         if (permissions.isEmpty) permissions.add(AndroidPermission.NONE);
         data.execute(() => GState.permissions.update((_) => permissions));
         
-        if (icon?.endsWith(".xml") ?? false) inner = Process.run('${Env.TOOLS_DIR}\\aapt2.exe', ['dump', 'xmltree', '--file', icon!, APK_FILE])..then((value) {
+        if (data.legacyIcon && await legacyIconFound) return;
+        else if (icon?.endsWith(".xml") ?? false) inner = Process.run('${Env.TOOLS_DIR}\\aapt2.exe', ['dump', 'xmltree', '--file', icon!, APK_FILE])..then((value) {
           if (value.exitCode != 0) {log("XML ICON ERROR"); return;}
           String iconData = value.stdout.toString();
           String? background = iconData.find(r'(^|\n|\s)*E:[\s]?background\s[^\n]*\n\s*A:.*=@([^\s\n]*)', 2);
@@ -285,12 +305,13 @@ class ApkReader {
   /// Starts a process to read apk data
   static void start(String fileName) async {
     APK_FILE = fileName;
+    Future<bool> legacyIcon = GState.legacyIcons.whenReady();
     ReceivePort port = ReceivePort();
     port.listen((message) {
       if (message is VoidCallback) {message();}
     });
     //Recheck installation type when connected
-    compute(_loadApkData, IsolateData(fileName, port.sendPort));
+    compute(_loadApkData, IsolateData(fileName, await legacyIcon, port.sendPort));
     StreamSubscription? sub;
     sub = GState.connectionStatus.stream.listen((event) async {
       String package = GState.package.$;
