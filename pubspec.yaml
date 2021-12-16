@@ -45,6 +45,7 @@ flutter:
   assets:
     - assets/icons/missing_icon_background.xml
     - assets/icons/missing_icon_foreground.xml
+    - assets/icons/missing_icon_legacy.svg
     - assets/images/logo.png
 
 flutter_native_splash:

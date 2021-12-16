@@ -70,24 +70,16 @@ late final androidPortUpdater = LateUpdater<int>(GState.androidPort.$, (value){
 
 class ScreenSettingsState extends State<ScreenSettings> {
   static const SETTINGS_UPDATE_TIMER = Duration(seconds:3);
-  ScreenSettingsState({this.controller}) {
-    loadExampleIcon();
-  }
+  ScreenSettingsState({this.controller});
   final ScrollController? controller;
 
-  //late final exBackground = ScalableImage.fromAvdAsset(rootBundle, "assets/icons/missing_icon_background.xml");
-  //late final exForeground = ScalableImage.fromAvdAsset(rootBundle, "assets/icons/missing_icon_foreground.xml");
-  ScalableImageWidget? _exBackground;
-  ScalableImageWidget? _exForeground;
+  static late final _exBackground = _loadIcon("assets/icons/missing_icon_background.xml", true);
+  static late final _exForeground = _loadIcon("assets/icons/missing_icon_foreground.xml", true);
+  static late final _exLegacyIcon = _loadIcon("assets/icons/missing_icon_legacy.svg");
 
-  void loadExampleIcon() async {
-    var exBg = ScalableImage.fromAvdAsset(rootBundle, "assets/icons/missing_icon_background.xml");
-    var exFg = ScalableImage.fromAvdAsset(rootBundle, "assets/icons/missing_icon_foreground.xml");
-    var exBackground = await exBg; var exForeground = await exFg;
-    setState(() {
-      _exBackground = ScalableImageWidget(si: exBackground);
-      _exForeground = ScalableImageWidget(si: exForeground);
-    });
+  static Future<ScalableImageWidget> _loadIcon(String asset, [bool isAvd = false]) async {
+    var scalable = isAvd ? ScalableImage.fromAvdAsset(rootBundle, asset) : ScalableImage.fromSvgAsset(rootBundle, asset);
+    return ScalableImageWidget(si: await scalable);
   }
 
   static List<Widget> optionsListDeferred<E extends ProtobufEnum, V>(List<E> values, V Function(E e) getter, bool Function(V v) checked, Function(E e, V v) updater) => List.generate(values.length, (index) {
@@ -144,6 +136,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
       }
     }());
 
+    const empty = SizedBox.shrink();
     const hSpacer = SizedBox(width: 10.0);
     const smallSpacer = SizedBox(height: 5.0);
     const spacer = SizedBox(height: 10.0);
@@ -154,7 +147,10 @@ class ScreenSettingsState extends State<ScreenSettings> {
     final mica = GState.mica.of(context);
     final legacyIcons = GState.legacyIcons.of(context);
 
-    final exampleIcon = AdaptiveIcon(background: _exBackground, foreground: _exForeground, radius: iconShape.radius);
+    final exampleIcon = FutureBuilder(
+      future: legacyIcons ? _exLegacyIcon : (() async =>AdaptiveIcon(background: await _exBackground, foreground: await _exForeground, radius: iconShape.radius))(), 
+      builder: (context, AsyncSnapshot<Widget> snapshot) => snapshot.data ?? empty
+    );
 
     return ScaffoldPage(
       header: const PageHeader(title: Text('Settings')),
