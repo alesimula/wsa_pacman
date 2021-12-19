@@ -5,9 +5,9 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:protobuf/protobuf.dart';
 import 'package:wsa_pacman/android/android_utils.dart';
 import 'package:wsa_pacman/android/permissions.dart';
-import 'package:wsa_pacman/apk_installer.dart';
 import 'package:wsa_pacman/main.dart';
 import 'package:shared_value/shared_value.dart';
 import 'package:synchronized/synchronized.dart';
@@ -91,8 +91,8 @@ class AppOptions {
     directory.watch().listen((event) {
       if (event.path.endsWith('\\options.bin')) _checkSettingsFileChange();
     });
-
-    return (_options = Options.fromBuffer(_optionsFile!.readAsBytesSync()));
+    try {return (_options = Options.fromBuffer(_optionsFile!.readAsBytesSync()));}
+    on InvalidProtocolBufferException catch(_) {return Options();}
   }();
 
   static void _checkSettingsFileChange() async {
@@ -105,7 +105,9 @@ class AppOptions {
     if (shouldUpdate) {
       _options = null;
       _optionsFuture = () async {
-        final options = (_options = Options.fromBuffer(_optionsFile!.readAsBytesSync()));
+        Options options;
+        try {options = (_options = Options.fromBuffer(_optionsFile!.readAsBytesSync()));}
+        on InvalidProtocolBufferException catch(_) {options = (_options = Options());}
         PersistableValue.reinitializeAll();
         return options;
       }();
