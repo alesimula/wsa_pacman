@@ -11,6 +11,7 @@ import 'package:wsa_pacman/proto/options.pb.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:wsa_pacman/widget/adaptive_icon.dart';
+import 'package:wsa_pacman/widget/fluent_card.dart';
 import 'package:wsa_pacman/widget/fluent_expander.dart';
 import 'package:wsa_pacman/windows/win_info.dart';
 
@@ -146,6 +147,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
     final iconShape = GState.iconShape.of(context);
     final mica = GState.mica.of(context);
     final legacyIcons = GState.legacyIcons.of(context);
+    final autostartWSA = GState.autostartWSA.of(context);
 
     final exampleIcon = FutureBuilder(
       future: legacyIcons ? _exLegacyIcon : (() async =>AdaptiveIcon(background: await _exBackground, foreground: await _exForeground, radius: iconShape.radius))(), 
@@ -192,8 +194,23 @@ class ScreenSettingsState extends State<ScreenSettings> {
             ),
           ),
           biggerSpacer,
+          FluentCard(
+            leading: const Icon(Mdi.powerStandby , size: 23),
+            content: const Text('Autostart WSA before installation'),
+            /*content: Column(crossAxisAlignment: CrossAxisAlignment.start, children: 
+                optionsList<Options_IconShape>(Options_IconShape.values, (e) => iconShape == e, (e) => GState.iconShape..update((_) => e)..persist())
+            ),*/
+            trailing: Row(children: [SizedBox(width: 28.5, child: Text(autostartWSA ? 'On' : 'Off')), ToggleSwitch(
+              checked: autostartWSA,
+              onChanged: (v) => GState.autostartWSA..$ = v..persist()
+            )]),
+            //headerBackgroundColor: ThemablePaneItem.uncheckedInputAlphaColor(theme, states),
+            direction: ExpanderDirection.down, // (optional). Defaults to ExpanderDirection.down
+            initiallyExpanded: false, // (false). Defaults to false
+          ),
+          smallSpacer,
           ExpanderWin11(
-            leading: const Icon(Mdi.themeLightDark, size: 23,),
+            leading: const Icon(Mdi.themeLightDark, size: 23),
             header: const Text('Theme mode'),
             content: Column(crossAxisAlignment: CrossAxisAlignment.start, children: 
                 optionsListDeferred<Options_Theme, ThemeMode>(Options_Theme.values, (e) => e.mode, (v) => themeMode == v, (e, v) => GState.theme..update((p0) => e)..persist())
@@ -204,7 +221,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
           ),
           smallSpacer,
           if (WinVer.isWindows11OrGreater) ExpanderWin11(
-            leading: const Icon(Mdi.blur, size: 23,),
+            leading: const Icon(Mdi.blur, size: 23),
             header: const Text('Window transparency'),
             content: Column(crossAxisAlignment: CrossAxisAlignment.start, children: 
                 optionsList<Options_Mica>(Options_Mica.values, (e) => mica == e, (e) => GState.mica..update((_) => e)..persist())
@@ -227,7 +244,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
             //headerBackgroundColor: ThemablePaneItem.uncheckedInputAlphaColor(theme, states),
             direction: ExpanderDirection.down, // (optional). Defaults to ExpanderDirection.down
             initiallyExpanded: false, // (false). Defaults to false
-          ),
+          )
         ],
       ),
     );

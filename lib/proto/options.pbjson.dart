@@ -14,6 +14,7 @@ const Options$json = const {
   '2': const [
     const {'1': 'ipAddress', '3': 1, '4': 1, '5': 13, '7': '2130706433', '10': 'ipAddress'},
     const {'1': 'port', '3': 2, '4': 1, '5': 13, '7': '58526', '10': 'port'},
+    const {'1': 'autostart', '3': 8, '4': 1, '5': 8, '10': 'autostart'},
     const {'1': 'theme', '3': 3, '4': 1, '5': 14, '6': '.proto.Options.Theme', '10': 'theme'},
     const {'1': 'legacyIcons', '3': 4, '4': 1, '5': 8, '10': 'legacyIcons'},
     const {'1': 'systemAccent', '3': 5, '4': 1, '5': 8, '10': 'systemAccent'},
@@ -54,4 +55,4 @@ const Options_Mica$json = const {
 };
 
 /// Descriptor for `Options`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List optionsDescriptor = $convert.base64Decode('CgdPcHRpb25zEigKCWlwQWRkcmVzcxgBIAEoDToKMjEzMDcwNjQzM1IJaXBBZGRyZXNzEhkKBHBvcnQYAiABKA06BTU4NTI2UgRwb3J0EioKBXRoZW1lGAMgASgOMhQucHJvdG8uT3B0aW9ucy5UaGVtZVIFdGhlbWUSIAoLbGVnYWN5SWNvbnMYBCABKAhSC2xlZ2FjeUljb25zEiIKDHN5c3RlbUFjY2VudBgFIAEoCFIMc3lzdGVtQWNjZW50EjYKCWljb25TaGFwZRgGIAEoDjIYLnByb3RvLk9wdGlvbnMuSWNvblNoYXBlUglpY29uU2hhcGUSLQoEbWljYRgHIAEoDjITLnByb3RvLk9wdGlvbnMuTWljYToERlVMTFIEbWljYSIoCgVUaGVtZRIKCgZTWVNURU0QABIJCgVMSUdIVBABEggKBERBUksQAiI5CglJY29uU2hhcGUSDAoIU1FVSVJDTEUQABIKCgZDSVJDTEUQARISCg5ST1VOREVEX1NRVUFSRRACIisKBE1pY2ESCAoERlVMTBAAEgsKB1BBUlRJQUwQARIMCghESVNBQkxFRBAC');
+final $typed_data.Uint8List optionsDescriptor = $convert.base64Decode('CgdPcHRpb25zEigKCWlwQWRkcmVzcxgBIAEoDToKMjEzMDcwNjQzM1IJaXBBZGRyZXNzEhkKBHBvcnQYAiABKA06BTU4NTI2UgRwb3J0EhwKCWF1dG9zdGFydBgIIAEoCFIJYXV0b3N0YXJ0EioKBXRoZW1lGAMgASgOMhQucHJvdG8uT3B0aW9ucy5UaGVtZVIFdGhlbWUSIAoLbGVnYWN5SWNvbnMYBCABKAhSC2xlZ2FjeUljb25zEiIKDHN5c3RlbUFjY2VudBgFIAEoCFIMc3lzdGVtQWNjZW50EjYKCWljb25TaGFwZRgGIAEoDjIYLnByb3RvLk9wdGlvbnMuSWNvblNoYXBlUglpY29uU2hhcGUSLQoEbWljYRgHIAEoDjITLnByb3RvLk9wdGlvbnMuTWljYToERlVMTFIEbWljYSIoCgVUaGVtZRIKCgZTWVNURU0QABIJCgVMSUdIVBABEggKBERBUksQAiI5CglJY29uU2hhcGUSDAoIU1FVSVJDTEUQABIKCgZDSVJDTEUQARISCg5ST1VOREVEX1NRVUFSRRACIisKBE1pY2ESCAoERlVMTBAAEgsKB1BBUlRJQUwQARIMCghESVNBQkxFRBAC');

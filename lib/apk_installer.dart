@@ -65,6 +65,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
   int index = 0;
   ToggleButtonThemeData? warningButtonTheme;
   bool createShortcut = false;
+  bool startingWSA = false;
   
   @override
   Widget build(BuildContext context) {
@@ -80,6 +81,16 @@ class _ApkInstallerState extends State<ApkInstaller> {
     InstallState installState = GState.apkInstallState.of(context);
     final mica = GState.mica.of(context);
     final theme = FluentTheme.of(context);
+    if (startingWSA && isConnected) startingWSA = false;
+    final autostartWSA = !startingWSA && !isConnected && GState.autostartWSA.of(context);
+
+    if (autostartWSA) {
+      startingWSA = true;
+      Process.run(Env.WSA_EXECUTABLE, []).onError((_, __){
+        setState(() {startingWSA = false;});
+        return ProcessResult(-1, -1, null, null);
+      });
+    }
 
     if (installType == InstallType.DOWNGRADE && warningButtonTheme == null) warningButtonTheme = ToggleButtonThemeData.standard(theme.copyWith(accentColor: Colors.orange));
 
@@ -167,7 +178,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
               )),
               const SizedBox(width: 15),
               noMoveWindow(ToggleButton(
-                child: Text(installType?.buttonText ?? "Loading..."),
+                child: Text(startingWSA ? "Starting..." : installType?.buttonText ?? "Loading..."),
                 checked: true,
                 style: installType == InstallType.DOWNGRADE ? warningButtonTheme : null,
                 onChanged: !canInstall ? null : (_){ApkInstaller.installApk(ApkReader.APK_FILE, ipAddress, port, installType == InstallType.DOWNGRADE);},

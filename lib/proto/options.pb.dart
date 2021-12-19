@@ -22,6 +22,7 @@ class Options extends $pb.GeneratedMessage {
     ..aOB(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'systemAccent', protoName: 'systemAccent')
     ..e<Options_IconShape>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'iconShape', $pb.PbFieldType.OE, protoName: 'iconShape', defaultOrMaker: Options_IconShape.SQUIRCLE, valueOf: Options_IconShape.valueOf, enumValues: Options_IconShape.values)
     ..e<Options_Mica>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mica', $pb.PbFieldType.OE, defaultOrMaker: Options_Mica.FULL, valueOf: Options_Mica.valueOf, enumValues: Options_Mica.values)
+    ..aOB(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'autostart')
     ..hasRequiredFields = false
   ;
 
@@ -34,6 +35,7 @@ class Options extends $pb.GeneratedMessage {
     $core.bool? systemAccent,
     Options_IconShape? iconShape,
     Options_Mica? mica,
+    $core.bool? autostart,
   }) {
     final _result = create();
     if (ipAddress != null) {
@@ -56,6 +58,9 @@ class Options extends $pb.GeneratedMessage {
     }
     if (mica != null) {
       _result.mica = mica;
+    }
+    if (autostart != null) {
+      _result.autostart = autostart;
     }
     return _result;
   }
@@ -142,5 +147,14 @@ class Options extends $pb.GeneratedMessage {
   $core.bool hasMica() => $_has(6);
   @$pb.TagNumber(7)
   void clearMica() => clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.bool get autostart => $_getBF(7);
+  @$pb.TagNumber(8)
+  set autostart($core.bool v) { $_setBool(7, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasAutostart() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearAutostart() => clearField(8);
 }
 

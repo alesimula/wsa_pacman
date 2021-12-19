@@ -1,13 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:wsa_pacman/widget/fluent_card.dart';
-import 'package:wsa_pacman/widget/themed_pane_item.dart';
 
-class ExpanderWin11 extends StatefulWidget {
+class FluentCard extends StatefulWidget {
   /// Creates an expander
-  const ExpanderWin11({
+  const FluentCard({
     Key? key,
     this.leading,
-    required this.header,
     required this.content,
     this.icon,
     this.trailing,
@@ -15,11 +12,37 @@ class ExpanderWin11 extends StatefulWidget {
     this.animationDuration,
     this.direction = ExpanderDirection.down,
     this.initiallyExpanded = false,
+    this.onPressed,
     this.onStateChanged,
     this.headerHeight = 68.5,
     this.headerBackgroundColor,
     this.contentBackgroundColor,
   }) : super(key: key);
+
+  static Color backgroundColor(ThemeData style, Set<ButtonStates> states, [bool isClickable = true]) {
+    if (style.brightness == Brightness.light) {
+      if (states.isDisabled) return style.disabledColor;
+      if (isClickable && states.isPressing) return const Color(0xFFf9f9f9).withOpacity(0.2);
+      if (isClickable && states.isHovering) return const Color(0xFFf9f9f9).withOpacity(0.4);
+      return Colors.white.withOpacity(0.7);
+    } else {
+      if (states.isDisabled) return style.disabledColor;
+      if (isClickable && states.isPressing) return Colors.white.withOpacity(0.03);
+      if (isClickable && states.isHovering) return Colors.white.withOpacity(0.082);
+      return Colors.white.withOpacity(0.05);
+    }
+  }
+
+  static Color borderColor(ThemeData style, Set<ButtonStates> states, [bool isClickable = true]) {
+    if (style.brightness == Brightness.light) {
+      if (isClickable && states.isHovering && !states.isPressing) return const Color(0xFF212121).withOpacity(0.22);
+      return const Color(0xFF212121).withOpacity(0.17);
+    } else {
+      if (isClickable && states.isPressing) return Colors.white.withOpacity(0.062);
+      if (isClickable && states.isHovering) return Colors.white.withOpacity(0.02);
+      return Colors.black.withOpacity(0.52);
+    }
+  }
 
   /// The leading widget.
   ///
@@ -30,30 +53,25 @@ class ExpanderWin11 extends StatefulWidget {
   ///  * [Checkbox]
   final Widget? leading;
 
-  /// The expander header
+  /// The card content
   ///
   /// Usually a [Text]
-  final Widget header;
-
-  /// The expander content
-  ///
-  /// You can use complex, interactive UI as the content of the
-  /// Expander, including nested Expander controls in the content
-  /// of a parent Expander as shown here.
-  ///
-  /// ![Expander Nested Content](https://docs.microsoft.com/en-us/windows/apps/design/controls/images/expander-nested.png)
   final Widget content;
 
   /// The icon of the toggle button.
   final Widget? icon;
 
-  /// The trailing widget. It's positioned at the right of [header]
+  /// The trailing widget. It's positioned at the right of [content]
   /// and at the left of [icon].
   ///
   /// See also:
   ///
   ///  * [ToggleSwitch]
   final Widget? trailing;
+
+  /// Makes the card clickable
+  /// is null by default
+  final VoidCallback? onPressed;
 
   /// The expand-collapse animation duration. If null, defaults to
   /// [FluentTheme.fastAnimationDuration]
@@ -66,7 +84,7 @@ class ExpanderWin11 extends StatefulWidget {
   /// The expand direction. Defaults to [ExpanderDirection.down]
   final ExpanderDirection direction;
 
-  /// Whether the [ExpanderWin11] is initially expanded. Defaults to `false`
+  /// Whether the [FluentCard] is initially expanded. Defaults to `false`
   final bool initiallyExpanded;
 
   /// A callback called when the current state is changed. `true` when
@@ -87,10 +105,10 @@ class ExpanderWin11 extends StatefulWidget {
   final Color? contentBackgroundColor;
 
   @override
-  ExpanderWin11State createState() => ExpanderWin11State();
+  FluentCardState createState() => FluentCardState();
 }
 
-class ExpanderWin11State extends State<ExpanderWin11>
+class FluentCardState extends State<FluentCard>
     with SingleTickerProviderStateMixin {
   late ThemeData theme;
 
@@ -153,10 +171,10 @@ class ExpanderWin11State extends State<ExpanderWin11>
             duration: expanderAnimationDuration,
             height: widget.headerHeight,
             decoration: BoxDecoration(
-              color: FluentCard.backgroundColor(theme, states, true),
+              color: FluentCard.backgroundColor(theme, states, widget.onPressed != null),
               border: Border.all(
                 width: borderSize,
-                color: FluentCard.borderColor(theme, states, true),
+                color: FluentCard.borderColor(theme, states, widget.onPressed != null),
               ),
               borderRadius: BorderRadius.vertical(
                 top: const Radius.circular(4.0),
@@ -166,62 +184,19 @@ class ExpanderWin11State extends State<ExpanderWin11>
             padding: const EdgeInsets.only(left: 16.0),
             alignment: Alignment.centerLeft,
             child: Row(mainAxisSize: MainAxisSize.min, children: [
-              if (widget.leading != null)
-                Padding(
-                  padding: const EdgeInsets.only(right: 17.0),
-                  child: widget.leading!,
-                ),
-              Expanded(child: widget.header),
-              if (widget.trailing != null)
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: widget.trailing!,
-                ),
-              Container(
-                margin: EdgeInsets.only(
-                  left: widget.trailing != null ? 8.0 : 20.0,
-                  right: 8.0,
-                  top: 8.0,
-                  bottom: 8.0,
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                /*decoration: BoxDecoration(
-                  color: ButtonThemeData.uncheckedInputColor(theme, states),
-                  borderRadius: BorderRadius.circular(4.0),
-                ),*/
-                alignment: Alignment.center,
-                child: widget.icon ??
-                    RotationTransition(
-                      turns: Tween<double>(begin: 0, end: 0.5)
-                          .animate(_controller),
-                      child: Icon(
-                        _isDown
-                            ? isDark ? FluentIcons.chevron_down : FluentIcons.chevron_down_med
-                            : isDark ? FluentIcons.chevron_up : FluentIcons.chevron_up_med,
-                        size: 11,
-                      ),
-                    ),
+              if (widget.leading != null) Padding(
+                padding: const EdgeInsets.only(right: 17.0),
+                child: widget.leading!,
               ),
+              Expanded(child: widget.content),
+              if (widget.trailing != null) Padding(
+                padding: const EdgeInsets.only(left: 20.0, right: 13.5),
+                child: widget.trailing!,
+              )
             ]),
           );
         },
-      ),
-      SizeTransition(
-        sizeFactor: _controller,
-        // Eliminates double border
-        // this is not possible by only setting left, right and bottom borders if borderRadius is enabled
-        // see issue https://github.com/flutter/flutter/issues/12583
-        child: Transform.translate(offset: const Offset(0, -borderSize), child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16.0),
-          decoration: BoxDecoration(
-            border: Border.all(width: borderSize, color: FluentCard.borderColor(theme, {ButtonStates.none}, false)),
-            color: FluentCard.backgroundColor(theme, {ButtonStates.none}, false),
-            borderRadius: const BorderRadius.vertical(bottom: Radius.circular(4.0)),
-          ),
-          child: widget.content,
-        )),
-      ),
+      )
     ];
     return Column(
       mainAxisSize: MainAxisSize.min,
