@@ -1,9 +1,24 @@
 // ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures, constant_identifier_names
 
+import 'dart:developer';
 import 'dart:ffi';
 import 'dart:io';
 import 'package:ffi/ffi.dart';
 import 'package:win32/win32.dart';
+
+final _kernel32 = DynamicLibrary.open('kernel32.dll');
+final _CreateMutex = _kernel32.lookupFunction<
+      IntPtr Function(Pointer<SECURITY_ATTRIBUTES> lpMutexAttributes, Pointer<Utf16> lpName, Uint32 dwFlags, Uint32 dwDesiredAccess),
+      int Function(Pointer<SECURITY_ATTRIBUTES> lpMutexAttributes, Pointer<Utf16> lpName, int dwFlags, int dwDesiredAccess)>('CreateMutexExW');
+final _OpenMutex = _kernel32.lookupFunction<
+      IntPtr Function(Uint32 dwDesiredAccess, Int32 bInheritHandle, Pointer<Utf16> lpName),
+      int Function(int dwDesiredAccess, int bInheritHandle, Pointer<Utf16> lpName)>('OpenMutexW');
+final _WaitForSingleObjectEx = _kernel32.lookupFunction<
+      Uint32 Function(Uint32 hHandle, Uint32 dwMilliseconds, Int32 bAlertable),
+      int Function(int hHandle, int dwMilliseconds, int bAlertable)>('WaitForSingleObjectEx');
+final _ReleaseMutex = _kernel32.lookupFunction<
+      Int32 Function(Uint32 hHandle),
+      int Function(int hHandle)>('ReleaseMutex');
 
 class RegistryKeyValuePair {
   final String key;
@@ -50,6 +65,19 @@ extension WinFile on File {
 }
 
 class WinIO {
+  static bool findMutexWstr(LPWSTR lpMutexName) {
+    int mutexHandle = _OpenMutex(0x00100000, 0, lpMutexName);
+    if (mutexHandle != 0) {CloseHandle(mutexHandle); return true;}
+    else return false;
+  }
+
+  static bool findMutex(String mutexName) {
+    final lpMutexName = TEXT(mutexName);
+    //int mutexHandle = _CreateMutex(nullptr, TEXT(r"{42CEB0DF-325A-4FBE-BBB6-C259A6C3F0BB}"), 0, 0x001F0001);
+    try {return findMutexWstr(lpMutexName);}
+    finally {free(lpMutexName);}
+  }
+
   /// Creates a Windows shortcut (.lnk);
   static void createShortcut(String filePath, String linkPath, {String? description, String? args, String? icon}) {
     final shellLink = ShellLink.createInstance();

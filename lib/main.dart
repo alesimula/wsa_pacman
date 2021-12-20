@@ -17,7 +17,7 @@ import 'package:wsa_pacman/widget/themed_pane_item.dart';
 import 'package:wsa_pacman/windows/win_info.dart';
 import 'package:wsa_pacman/windows/win_pkg.dart';
 import 'package:wsa_pacman/windows/win_reg.dart';
-import 'package:wsa_pacman/windows/win_wmi.dart';
+import 'package:wsa_pacman/windows/wsa_status.dart';
 import 'global_state.dart';
 
 import 'package:provider/provider.dart';
@@ -120,6 +120,14 @@ class WSAPeriodicConnector {
         }
       });
     }
+
+    final bool isBooted = WSAStatus.isBooted;
+    if (!isBooted) {
+      //if (PERIODIC_CHECK_TIMER.inMilliseconds != 500) PERIODIC_CHECK_TIMER.setDuration(milliseconds: 500);
+      if (status != ConnectionStatus.ARRESTED) GState.connectionStatus.$ = ConnectionStatus.ARRESTED.statusAlert;
+      return;
+    }
+    //else if (PERIODIC_CHECK_TIMER.inSeconds != 5) PERIODIC_CHECK_TIMER.setDuration(seconds: 5);
 
     var prevStatus = status;
     var process = await Process.run('${Env.TOOLS_DIR}\\adb.exe', ['devices']);
