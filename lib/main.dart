@@ -60,7 +60,7 @@ class WSAStatusAlert {
 }
 
 enum ConnectionStatus {
-  UNSUPPORTED, MISSING, UNKNOWN, ARRESTED, OFFLINE, DISCONNECTED, CONNECTED
+  UNSUPPORTED, MISSING, UNKNOWN, ARRESTED, STARTING, OFFLINE, DISCONNECTED, CONNECTED
 }
 extension on ConnectionStatus {
   static final Map<ConnectionStatus, WSAStatusAlert> _statusAlers = {
@@ -70,10 +70,12 @@ extension on ConnectionStatus {
       "WSA not found; this application depends on WSA, please install Windows Subsystem for Android (or the Amazon Appstore) from the Microsoft Store"),
     ConnectionStatus.UNKNOWN: WSAStatusAlert(InfoBarSeverity.info, "Connecting", 
       "Waiting for a WSA connection to be enstablished..."),
+    ConnectionStatus.STARTING: WSAStatusAlert(InfoBarSeverity.info, "Starting", 
+      "WSA is turning on, patience you must have..."),
     ConnectionStatus.ARRESTED: WSAStatusAlert(InfoBarSeverity.warning, "Arrested", 
-      "Could not enstablish a connection with WSA: either developer mode and USB debugging are disabled, WSA is powered-off or a wrong port is specified"),
-    ConnectionStatus.OFFLINE: WSAStatusAlert(InfoBarSeverity.warning, "Arrested", 
-      "Could not enstablish a connection with WSA: either developer mode and USB debugging are disabled, WSA is powered-off or a wrong port is specified"),
+      "WSA is turned off"),
+    ConnectionStatus.OFFLINE: WSAStatusAlert(InfoBarSeverity.warning, "Offline", 
+      "Could not enstablish a connection with WSA: either developer mode and USB debugging are disabled or a wrong port is specified"),
     ConnectionStatus.DISCONNECTED: WSAStatusAlert(InfoBarSeverity.error, "Disconnected", 
       "A WSA connection could not be enstablished for unknown reasons"),
     ConnectionStatus.CONNECTED: WSAStatusAlert(InfoBarSeverity.success, "Connected", 
@@ -106,7 +108,11 @@ class Env {
 }
 
 class WSAPeriodicConnector {
-  static const PERIODIC_CHECK_TIMER = Duration(seconds:5);
+  static const PERIODIC_CHECK_BOOT_DURATION = Duration(milliseconds: 500);
+  static const PERIODIC_CHECK_CONNECT_DURATION = Duration(seconds: 5);
+  static int lastStart = 0;
+  static bool get shouldWaitStart => DateTime.now().millisecondsSinceEpoch - lastStart < 15000;
+  static final DynamicTimer timer = DynamicTimer((Timer t) => WSAPeriodicConnector._checkConnectionStatus());
   static ConnectionStatus status = ConnectionStatus.UNKNOWN;
   static WSAStatusAlert alertStatus = ConnectionStatus.UNKNOWN.statusAlert;
   static bool _statusInitialized = false;
@@ -121,20 +127,25 @@ class WSAPeriodicConnector {
       });
     }
 
-    final bool isBooted = WSAStatus.isBooted;
-    if (!isBooted) {
-      //if (PERIODIC_CHECK_TIMER.inMilliseconds != 500) PERIODIC_CHECK_TIMER.setDuration(milliseconds: 500);
-      if (status != ConnectionStatus.ARRESTED) GState.connectionStatus.$ = ConnectionStatus.ARRESTED.statusAlert;
+    if (!WSAStatus.isBooted) {
+      timer.setDuration(PERIODIC_CHECK_BOOT_DURATION);
+      ConnectionStatus newStatus = Env.WSA_INSTALLED ? ConnectionStatus.ARRESTED : WinVer.isWindows11OrGreater ? ConnectionStatus.MISSING : ConnectionStatus.UNSUPPORTED;
+      if (status != newStatus) GState.connectionStatus.$ = (status = newStatus).statusAlert;
       return;
     }
-    //else if (PERIODIC_CHECK_TIMER.inSeconds != 5) PERIODIC_CHECK_TIMER.setDuration(seconds: 5);
+    else {
+      timer.setDuration(PERIODIC_CHECK_CONNECT_DURATION);
+      if (status == ConnectionStatus.ARRESTED || status == ConnectionStatus.MISSING || status == ConnectionStatus.UNSUPPORTED)
+          lastStart = DateTime.now().millisecondsSinceEpoch;
+    }
 
-    var prevStatus = status;
-    var process = await Process.run('${Env.TOOLS_DIR}\\adb.exe', ['devices']);
-    var output = process.stdout.toString();
+    final prevStatus = status;
+    final process = await Process.run('${Env.TOOLS_DIR}\\adb.exe', ['devices']);
+    final output = process.stdout.toString();
     if (output.contains(RegExp('(^|\\n)(localhost|127.0.0.1):${GState.androidPort.$}\\s+'))) {
       if (output.contains(RegExp('(^|\\n)(localhost|127.0.0.1):${GState.androidPort.$}\\s+offline(\$|\\n|\\s)')))
-        status = ConnectionStatus.OFFLINE;
+        status = (status == ConnectionStatus.ARRESTED || status == ConnectionStatus.STARTING) && shouldWaitStart ? 
+            ConnectionStatus.STARTING : ConnectionStatus.OFFLINE;
       else if (output.contains(RegExp('(^|\\n)(localhost|127.0.0.1):${GState.androidPort.$}\\s+host(\$|\\n|\\s)'))) {
         await Process.run('${Env.TOOLS_DIR}\\adb.exe', ['disconnect', '127.0.0.1:${GState.androidPort.$}']);
         _tryConnect();
@@ -161,7 +172,8 @@ class WSAPeriodicConnector {
     ProcessResult? process = await Process.run('${Env.TOOLS_DIR}\\adb.exe', ['connect', '127.0.0.1:${GState.androidPort.$}'])
       .timeout(const Duration(milliseconds:200), onTimeout: () => Future.value(ProcessResult(-1, -1, null, null)));
     if (process.stdout?.toString().contains(RegExp(r'(^|\n)(cannot|failed to) connect\s.*')) ?? true) 
-      status = Env.WSA_INSTALLED ? ConnectionStatus.ARRESTED : WinVer.isWindows11OrGreater ? ConnectionStatus.MISSING : ConnectionStatus.UNSUPPORTED;
+      status = Env.WSA_INSTALLED ? (status == ConnectionStatus.ARRESTED || status == ConnectionStatus.STARTING) && shouldWaitStart ? 
+          ConnectionStatus.STARTING : ConnectionStatus.OFFLINE : ConnectionStatus.DISCONNECTED;
     else status = ConnectionStatus.CONNECTED;
   }
 }
@@ -214,7 +226,6 @@ void main(List<String> arguments) async {
   }
 
   WSAPeriodicConnector._checkConnectionStatus();
-  Timer.periodic(WSAPeriodicConnector.PERIODIC_CHECK_TIMER, (Timer t) => WSAPeriodicConnector._checkConnectionStatus());
   runApp(wrappedApp);
 
   flutter_acrylic.Window.hideWindowControls();

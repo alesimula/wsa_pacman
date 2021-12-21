@@ -1,5 +1,29 @@
+import 'dart:async';
 import 'package:archive/archive.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+
+class DynamicTimer {
+  int _durationUs;
+  int _tick = 0;
+  final void Function(Timer timer) _callback;
+  Timer? _timer;
+
+  DynamicTimer(this._callback) : _durationUs = -1;
+  DynamicTimer.periodic(Duration _duration, this._callback) : _durationUs = _duration.inMicroseconds, _timer = Timer.periodic(_duration, _callback);
+
+  void cancel() => _timer?.cancel();
+  int get tick => _tick + (_timer?.tick ?? 0);
+  bool get isActive => _timer?.isActive ?? false;
+
+  /// Starts or restarts the timer with a new duration
+  void setDuration(Duration duration) {
+    if (duration.inMicroseconds == _durationUs) return;
+    _timer?.cancel();
+    _tick += _timer?.tick ?? 0;
+    _durationUs = duration.inMicroseconds;
+    _timer = Timer.periodic(duration, _callback);
+  }
+}
 
 class ColorConst extends Color {
   const ColorConst.withOpacity(int value, double opacity) : super(
