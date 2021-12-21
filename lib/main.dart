@@ -37,7 +37,7 @@ import 'dart:async';
 import 'theme.dart';
 
 const String appTitle = 'WSA Package Manager';
-const String appVersion = '1.0.1';
+const String appVersion = '1.1.0';
 
 late bool darkMode;
 
