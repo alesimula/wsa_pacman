@@ -83,7 +83,7 @@ extension on ConnectionStatus {
     ConnectionStatus.DISCONNECTED: WSAStatusAlert(ConnectionStatus.DISCONNECTED, InfoBarSeverity.error, "Disconnected", 
       "A WSA connection could not be enstablished for unknown reasons"),
     ConnectionStatus.CONNECTED: WSAStatusAlert(ConnectionStatus.CONNECTED, InfoBarSeverity.success, "Connected", 
-      "Successifully connected to WSA, all systems go"),
+      "Successfully connected to WSA, all systems go"),
   };
 
   WSAStatusAlert get statusAlert => _statusAlers[this] ?? WSAStatusAlert(this, InfoBarSeverity.error, "Unmapped status",
