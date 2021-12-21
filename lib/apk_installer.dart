@@ -75,7 +75,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
     Widget? aForeground = GState.apkForegroundIcon.of(context);
     Widget? lIcon = GState.apkIcon.of(context);
     WSAStatusAlert connectionStatus = GState.connectionStatus.of(context);
-    bool isConnected = connectionStatus.severity == InfoBarSeverity.success;
+    bool isConnected = connectionStatus.isConnected;
     InstallType? installType = GState.apkInstallType.of(context);
     bool canInstall = isConnected && installType != null && installType != InstallType.UNKNOWN;
     InstallState installState = GState.apkInstallState.of(context);

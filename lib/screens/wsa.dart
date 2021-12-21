@@ -79,7 +79,7 @@ class _ScreenWSAState extends State<ScreenWSA> {
             padding: const EdgeInsets.all(8.0),
             child: Row(children: [
             Expanded(
-              child: Button(child: const Text('Manage Applications'), onPressed: connectionStatus.severity != InfoBarSeverity.success ? 
+              child: Button(child: const Text('Manage Applications'), onPressed: connectionStatus.isDisconnected ? 
                 null : () => Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '${GState.ipAddress.of(context)}:${GState.androidPort.of(context)}', 
                   'shell', r'am start com.android.settings/.Settings\$ManageApplicationsActivity'])
               ),
@@ -90,7 +90,7 @@ class _ScreenWSAState extends State<ScreenWSA> {
             padding: const EdgeInsets.all(8.0),
             child: Row(children: [
             Expanded(
-              child: Button(child: const Text('Manage Settings'), onPressed: connectionStatus.severity != InfoBarSeverity.success ?
+              child: Button(child: const Text('Manage Settings'), onPressed: connectionStatus.isDisconnected ?
                 null : () => Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '${GState.ipAddress.of(context)}:${GState.androidPort.of(context)}', 
                   'shell', r'am start com.android.settings/.Settings']) ),
             )

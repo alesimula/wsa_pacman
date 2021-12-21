@@ -58,6 +58,9 @@ class WSAStatusAlert {
       // Do nothing for now
     }(),
   );
+
+  bool get isConnected => type == ConnectionStatus.CONNECTED;
+  bool get isDisconnected => type != ConnectionStatus.CONNECTED;
 }
 
 enum ConnectionStatus {
