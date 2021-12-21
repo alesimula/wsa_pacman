@@ -42,8 +42,9 @@ const String appVersion = '1.0.1';
 late bool darkMode;
 
 class WSAStatusAlert {
-  WSAStatusAlert(this.severity, this.title, this.desc);
+  WSAStatusAlert(this.type, this.severity, this.title, this.desc);
 
+  final ConnectionStatus type;
   final InfoBarSeverity severity;
   final String title;
   final String desc;
@@ -64,25 +65,25 @@ enum ConnectionStatus {
 }
 extension on ConnectionStatus {
   static final Map<ConnectionStatus, WSAStatusAlert> _statusAlers = {
-    ConnectionStatus.UNSUPPORTED: WSAStatusAlert(InfoBarSeverity.error, "WSA not installed", 
+    ConnectionStatus.UNSUPPORTED: WSAStatusAlert(ConnectionStatus.UNSUPPORTED, InfoBarSeverity.error, "WSA not installed", 
       "${WinVer.isWindows10OrGreater ? 'Windows 10' : 'Older Windows version'} detected and WSA not found; this application depends on WSA, which is only officially supported on Windows 11"),
-    ConnectionStatus.MISSING: WSAStatusAlert(InfoBarSeverity.error, "WSA not installed", 
+    ConnectionStatus.MISSING: WSAStatusAlert(ConnectionStatus.MISSING, InfoBarSeverity.error, "WSA not installed", 
       "WSA not found; this application depends on WSA, please install Windows Subsystem for Android (or the Amazon Appstore) from the Microsoft Store"),
-    ConnectionStatus.UNKNOWN: WSAStatusAlert(InfoBarSeverity.info, "Connecting", 
+    ConnectionStatus.UNKNOWN: WSAStatusAlert(ConnectionStatus.UNKNOWN, InfoBarSeverity.info, "Connecting", 
       "Waiting for a WSA connection to be enstablished..."),
-    ConnectionStatus.STARTING: WSAStatusAlert(InfoBarSeverity.info, "Starting", 
-      "WSA is turning on, patience you must have..."),
-    ConnectionStatus.ARRESTED: WSAStatusAlert(InfoBarSeverity.warning, "Arrested", 
+    ConnectionStatus.STARTING: WSAStatusAlert(ConnectionStatus.STARTING, InfoBarSeverity.info, "Starting", 
+      "WSA is starting, please stand by..."),
+    ConnectionStatus.ARRESTED: WSAStatusAlert(ConnectionStatus.ARRESTED, InfoBarSeverity.warning, "Arrested", 
       "WSA is turned off"),
-    ConnectionStatus.OFFLINE: WSAStatusAlert(InfoBarSeverity.warning, "Offline", 
+    ConnectionStatus.OFFLINE: WSAStatusAlert(ConnectionStatus.OFFLINE, InfoBarSeverity.warning, "Offline", 
       "Could not enstablish a connection with WSA: either developer mode and USB debugging are disabled or a wrong port is specified"),
-    ConnectionStatus.DISCONNECTED: WSAStatusAlert(InfoBarSeverity.error, "Disconnected", 
+    ConnectionStatus.DISCONNECTED: WSAStatusAlert(ConnectionStatus.DISCONNECTED, InfoBarSeverity.error, "Disconnected", 
       "A WSA connection could not be enstablished for unknown reasons"),
-    ConnectionStatus.CONNECTED: WSAStatusAlert(InfoBarSeverity.success, "Connected", 
+    ConnectionStatus.CONNECTED: WSAStatusAlert(ConnectionStatus.CONNECTED, InfoBarSeverity.success, "Connected", 
       "Successifully connected to WSA, all systems go"),
   };
 
-  WSAStatusAlert get statusAlert => _statusAlers[this] ?? WSAStatusAlert(InfoBarSeverity.error, "Unmapped status",
+  WSAStatusAlert get statusAlert => _statusAlers[this] ?? WSAStatusAlert(this, InfoBarSeverity.error, "Unmapped status",
     "Encountered WSA connection status $this, the status is missing an alert message");
 }
 

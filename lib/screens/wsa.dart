@@ -60,7 +60,11 @@ class _ScreenWSAState extends State<ScreenWSA> {
             padding: const EdgeInsets.only(bottom: 8.0),
             child: InfoBar(
               title: Text(connectionStatus.title),
-              content: Text(connectionStatus.desc),
+              content: Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
+                Text(connectionStatus.desc),
+                const SizedBox(width: 15.0),
+                if (connectionStatus.type == ConnectionStatus.ARRESTED) Button(child: const Text("Turn on"), onPressed: () => Process.run(Env.WSA_EXECUTABLE, []))
+              ]),
               isLong: true,
               severity: connectionStatus.severity,
               action: () {
