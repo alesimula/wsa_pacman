@@ -175,7 +175,7 @@ class FluentCardState extends State<FluentCard>
               ),
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               alignment: Alignment.center,
-              child: widget.icon ?? Icon(isDark ? FluentIcons.chevron_right : FluentIcons.chevron_right_med, size: 11, color: theme.disabledColor),
+              child: widget.icon ?? Icon(isDark ? FluentIcons.chevron_right : FluentIcons.chevron_right_med, size: 11),
             ),
           ]),
         );
