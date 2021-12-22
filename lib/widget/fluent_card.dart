@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:wsa_pacman/utils/misc_utils.dart';
 
 class FluentCard extends StatefulWidget {
   /// Creates an expander
@@ -10,10 +11,9 @@ class FluentCard extends StatefulWidget {
     this.trailing,
     this.animationCurve,
     this.animationDuration,
-    this.direction = ExpanderDirection.down,
-    this.initiallyExpanded = false,
     this.onPressed,
     this.onStateChanged,
+    this.isButton = false,
     this.headerHeight = 68.5,
     this.headerBackgroundColor,
     this.contentBackgroundColor,
@@ -21,15 +21,17 @@ class FluentCard extends StatefulWidget {
 
   static Color backgroundColor(ThemeData style, Set<ButtonStates> states, [bool isClickable = true]) {
     if (style.brightness == Brightness.light) {
-      if (states.isDisabled) return style.disabledColor;
-      if (isClickable && states.isPressing) return const Color(0xFFf9f9f9).withOpacity(0.2);
-      if (isClickable && states.isHovering) return const Color(0xFFf9f9f9).withOpacity(0.4);
-      return Colors.white.withOpacity(0.7);
+      if (!states.isDisabled && isClickable) {
+        if (states.isPressing) return const ColorConst.withOpacity(0xf9f9f9, 0.2);
+        if (states.isHovering) return const ColorConst.withOpacity(0xf9f9f9, 0.4);
+      }
+      return const ColorConst.withOpacity(0xFFFFFF, 0.7);
     } else {
-      if (states.isDisabled) return style.disabledColor;
-      if (isClickable && states.isPressing) return Colors.white.withOpacity(0.03);
-      if (isClickable && states.isHovering) return Colors.white.withOpacity(0.082);
-      return Colors.white.withOpacity(0.05);
+      if (!states.isDisabled && isClickable) {
+        if (states.isPressing) return const ColorConst.withOpacity(0xFFFFFF, 0.03);
+        if (states.isHovering) return const ColorConst.withOpacity(0xFFFFFF, 0.082);
+      }
+      return const ColorConst.withOpacity(0xFFFFFF, 0.05);
     }
   }
 
@@ -61,6 +63,9 @@ class FluentCard extends StatefulWidget {
   /// The icon of the toggle button.
   final Widget? icon;
 
+  /// Disable when onPressed is null, always show chevron icon in the right
+  final bool isButton;
+
   /// The trailing widget. It's positioned at the right of [content]
   /// and at the left of [icon].
   ///
@@ -80,12 +85,6 @@ class FluentCard extends StatefulWidget {
   /// The expand-collapse animation curve. If null, defaults to
   /// [FluentTheme.animationCurve]
   final Curve? animationCurve;
-
-  /// The expand direction. Defaults to [ExpanderDirection.down]
-  final ExpanderDirection direction;
-
-  /// Whether the [FluentCard] is initially expanded. Defaults to `false`
-  final bool initiallyExpanded;
 
   /// A callback called when the current state is changed. `true` when
   /// open and `false` when closed.
@@ -112,50 +111,28 @@ class FluentCardState extends State<FluentCard>
     with SingleTickerProviderStateMixin {
   late ThemeData theme;
 
-  late bool _open;
-  bool get open => _open;
-  set open(bool value) {
-    if (_open != value) _handlePressed();
-  }
-
   late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _open = widget.initiallyExpanded;
     _controller = AnimationController(
       vsync: this,
       duration: widget.animationDuration ?? const Duration(milliseconds: 150),
     );
   }
 
-  void _handlePressed() {
-    if (open) {
-      _controller.animateTo(
-        0.0,
-        duration: widget.animationDuration ?? theme.fastAnimationDuration,
-        curve: widget.animationCurve ?? theme.animationCurve,
-      );
-      _open = false;
-    } else {
-      _controller.animateTo(
-        1.0,
-        duration: widget.animationDuration ?? theme.fastAnimationDuration,
-        curve: widget.animationCurve ?? theme.animationCurve,
-      );
-      _open = true;
-    }
-    widget.onStateChanged?.call(open);
-    if (mounted) setState(() {});
-  }
-
-  bool get _isDown => widget.direction == ExpanderDirection.down;
-
+  static void emptyPressMethod() {}
   static const double borderSize = 0.5;
   static final Color darkBorderColor = Colors.black.withOpacity(0.8);
 
   static const Duration expanderAnimationDuration = Duration(milliseconds: 70);
+
+  /// If this widget acts as a button and is disabled, gray out all text and icons
+  Widget buttonStyled(Widget child) => !widget.isButton || widget.onPressed != null ? child : IconTheme.merge(
+    data: IconThemeData(color: theme.disabledColor), 
+    child: DefaultTextStyle.merge(style: TextStyle(color: theme.disabledColor), child: child)
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -163,44 +140,46 @@ class FluentCardState extends State<FluentCard>
     theme = FluentTheme.of(context);
     bool isDark = theme.brightness == Brightness.dark;
 
-    final children = [
-      HoverButton(
-        onPressed: _handlePressed,
-        builder: (context, states) {
-          return AnimatedContainer(
-            duration: expanderAnimationDuration,
-            height: widget.headerHeight,
-            decoration: BoxDecoration(
-              color: FluentCard.backgroundColor(theme, states, widget.onPressed != null),
-              border: Border.all(
-                width: borderSize,
-                color: FluentCard.borderColor(theme, states, widget.onPressed != null),
-              ),
-              borderRadius: BorderRadius.vertical(
-                top: const Radius.circular(4.0),
-                bottom: Radius.circular(open ? 0.0 : 4.0),
-              ),
+    return buttonStyled(HoverButton(
+      onPressed: widget.onPressed ?? (widget.isButton ? null : emptyPressMethod),
+      builder: (context, states) {
+        return AnimatedContainer(
+          duration: expanderAnimationDuration,
+          height: widget.headerHeight,
+          decoration: BoxDecoration(
+            color: FluentCard.backgroundColor(theme, states, widget.onPressed != null),
+            border: Border.all(
+              width: borderSize,
+              color: FluentCard.borderColor(theme, states, widget.onPressed != null),
             ),
-            padding: const EdgeInsets.only(left: 16.0),
-            alignment: Alignment.centerLeft,
-            child: Row(mainAxisSize: MainAxisSize.min, children: [
-              if (widget.leading != null) Padding(
-                padding: const EdgeInsets.only(right: 17.0),
-                child: widget.leading!,
+            borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+          ),
+          padding: const EdgeInsets.only(left: 16.0),
+          alignment: Alignment.centerLeft,
+          child: Row(mainAxisSize: MainAxisSize.min, children: [
+            if (widget.leading != null) Padding(
+              padding: const EdgeInsets.only(right: 17.0),
+              child: widget.leading!,
+            ),
+            Expanded(child: widget.content),
+            if (widget.trailing != null) Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 13.5),
+              child: widget.trailing!,
+            ),
+            if (widget.icon != null || widget.isButton) Container(
+              margin: EdgeInsets.only(
+                left: widget.trailing != null ? 8.0 : 20.0,
+                right: 8.0,
+                top: 8.0,
+                bottom: 8.0,
               ),
-              Expanded(child: widget.content),
-              if (widget.trailing != null) Padding(
-                padding: const EdgeInsets.only(left: 20.0, right: 13.5),
-                child: widget.trailing!,
-              )
-            ]),
-          );
-        },
-      )
-    ];
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: _isDown ? children : children.reversed.toList(),
-    );
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              alignment: Alignment.center,
+              child: widget.icon ?? Icon(isDark ? FluentIcons.chevron_right : FluentIcons.chevron_right_med, size: 11, color: theme.disabledColor),
+            ),
+          ]),
+        );
+      },
+    ));
   }
 }

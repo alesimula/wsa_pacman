@@ -197,16 +197,10 @@ class ScreenSettingsState extends State<ScreenSettings> {
           FluentCard(
             leading: const Icon(Mdi.powerStandby , size: 23),
             content: const Text('Autostart WSA before installation'),
-            /*content: Column(crossAxisAlignment: CrossAxisAlignment.start, children: 
-                optionsList<Options_IconShape>(Options_IconShape.values, (e) => iconShape == e, (e) => GState.iconShape..update((_) => e)..persist())
-            ),*/
             trailing: Row(children: [SizedBox(width: 28.5, child: Text(autostartWSA ? 'On' : 'Off')), ToggleSwitch(
               checked: autostartWSA,
               onChanged: (v) => GState.autostartWSA..$ = v..persist()
             )]),
-            //headerBackgroundColor: ThemablePaneItem.uncheckedInputAlphaColor(theme, states),
-            direction: ExpanderDirection.down, // (optional). Defaults to ExpanderDirection.down
-            initiallyExpanded: false, // (false). Defaults to false
           ),
           smallSpacer,
           ExpanderWin11(
