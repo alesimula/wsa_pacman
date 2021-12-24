@@ -230,9 +230,9 @@ class ApkReader {
 
     Future? iconUpdThread;
     Future<ProcessResult>? inner;
-    var process = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'badging', APK_FILE]).then((value) async {
+    var process = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'badging', APK_FILE], stdoutEncoding: utf8).then((value) async {
       if (value.exitCode == 0) {
-        String dump = value.stdout.toString();
+        String dump = value.stdout;
         String? info = dump.find(r'(^|\n)package:.*');
 
         int versionCode = int.parse(info?.find(r"(^|\n|\s)versionCode=\s*'([^'\n\s$]*)", 2) ?? "0");
