@@ -1,10 +1,10 @@
 // ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures, constant_identifier_names
 
-import 'dart:developer';
 import 'dart:ffi';
 import 'dart:io';
 import 'package:ffi/ffi.dart';
 import 'package:win32/win32.dart';
+import 'package:path/path.dart' as lib_path;
 
 final _kernel32 = DynamicLibrary.open('kernel32.dll');
 final _CreateMutex = _kernel32.lookupFunction<
@@ -19,6 +19,9 @@ final _WaitForSingleObjectEx = _kernel32.lookupFunction<
 final _ReleaseMutex = _kernel32.lookupFunction<
       Int32 Function(Uint32 hHandle),
       int Function(int hHandle)>('ReleaseMutex');
+final _GetShortPathName = _kernel32.lookupFunction<
+      Uint32 Function(Pointer<Utf16> lpszLongPath, Pointer<Utf16> lpszShortPath, Uint32 cchBuffer),
+      int Function(Pointer<Utf16> lpszLongPath, Pointer<Utf16> lpszShortPath, int cchBuffer)>('GetShortPathNameW');
 
 class RegistryKeyValuePair {
   final String key;
@@ -29,6 +32,30 @@ class RegistryKeyValuePair {
 
 extension WinFile on File {
   static const int _EPOCH_NT_DELTA_MICROSECONDS = 11644473600100000;
+
+  static String? getShortName(String path) {
+    final lpFilePath = TEXT(path);
+    LPWSTR? lpShortFilePath;
+    try {
+      int result = _GetShortPathName(lpFilePath, nullptr, 0);
+      if (result == 0) return null;
+      result = _GetShortPathName(lpFilePath, lpShortFilePath = malloc<WCHAR>(result).cast<Utf16>(), result);
+      if (result == 0) return null;
+      return lpShortFilePath.toDartString();
+    }
+    finally {
+      free(lpFilePath);
+      if (lpShortFilePath != null) free(lpShortFilePath);
+    }
+  }
+
+  static String? getShortBaseName(String path) {
+    String? shortName = getShortName(path);
+    return (shortName != null) ? lib_path.basename(shortName) : null;
+  }
+  
+  String? get shortName => getShortName(absolute.path);
+  String? get shortBaseName => getShortBaseName(absolute.path);
   
   /// Converts Flutter file to native file handle;
   /// Must call [CloseHandle] to release it

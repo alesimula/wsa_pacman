@@ -6,6 +6,8 @@ import 'dart:collection';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:wsa_pacman/windows/win_io.dart';
+
 import 'android_utils.dart';
 import 'permissions.dart';
 import 'package:wsa_pacman/global_state.dart';
@@ -203,14 +205,15 @@ class ApkReader {
   //Retrieves APK information
   static void _loadApkData(IsolateData pData) async {
     data = pData;
-    APK_FILE = data.fileName;
-    //resourceDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'resources', TEST_FILE]).then<String>((p) => p.stdout.toString());
-    _resourceDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'resources', APK_FILE]).then((p) => 
+    File _APK_FILE_F = File(APK_FILE = data.fileName);
+    String APK_DIRECORY = _APK_FILE_F.parent.path;
+    String APK_NAME = _APK_FILE_F.shortBaseName ?? _APK_FILE_F.basename;
+    _resourceDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'resources', APK_NAME], workingDirectory: APK_DIRECORY).then((p) => 
       p.stdout.toString().foldToMap(r'(^|\n)\s*resource\s+(0x[0-9a-zA-Z]*)[\s]+.*\st=0x0*([^\s\n]*).*\sd=0x0*([^\s\n]*)[\s|\n]', (m) => m.group(2)!, 
       (m,old) => Resource((old != null) ? ((old.values as ListQueue<String>)..addAll([m.group(4)!])) : ListQueue<String>.from([m.group(4)!]), old?.type ?? getResType(m.group(3)!)) )
     );
     //strings.findAll('(^|\\n|\\s)*String\\s+#(${resCodes.join("|")})\\s*:\\s*([^\\s\\n]*)', 3);
-    _stringDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'strings', APK_FILE]).then((p) => 
+    _stringDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'strings', APK_NAME], workingDirectory: APK_DIRECORY).then((p) => 
       p.stdout.toString().toMap(r'(^|\n)\s*String\s+#([0-9]*)\s*:\s*([^\s\n]*)', (m) => int.parse(m.group(2)!), (m) => m.group(3)!)
     );
     _initArchive();
@@ -230,7 +233,7 @@ class ApkReader {
 
     Future? iconUpdThread;
     Future<ProcessResult>? inner;
-    var process = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'badging', APK_FILE], stdoutEncoding: utf8).then((value) async {
+    var process = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'badging', APK_NAME], stdoutEncoding: utf8, workingDirectory: APK_DIRECORY).then((value) async {
       if (value.exitCode == 0) {
         String dump = value.stdout;
         String? info = dump.find(r'(^|\n)package:.*');

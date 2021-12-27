@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'package:path/path.dart' as lib_path;
 import 'package:archive/archive.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
@@ -28,6 +30,10 @@ class DynamicTimer {
 class ColorConst extends Color {
   const ColorConst.withOpacity(int value, double opacity) : super(
     ( (((opacity * 0xff ~/ 1) & 0xff) << 24) | ((0x00ffffff & value)) ) & 0xFFFFFFFF);
+}
+
+extension FileUtils<K,V> on File {
+  String get basename => lib_path.basename(path);
 }
 
 extension MapUtils<K,V> on Map<K,V> {
