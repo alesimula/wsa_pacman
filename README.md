@@ -10,16 +10,23 @@ The app additionally provides a button to open Android settings and one to open 
 
 ## Settings
 
+- Autostart WSA
+  - on/off
 - Android port
   - Default: 58526
-- theme mode 
+- Theme mode 
   - System
   - Dark
   - Light
+- Window transparency (mica)
+  - Full
+  - Partial
+  - Disabled
 - Adaptive icon shape
   - Squircle
   - Circle
   - Rounded square
+  - Disabled
 
 <details>
   <summary>
