@@ -67,7 +67,7 @@ class _ScreenWSAState extends State<ScreenWSA> {
               content: Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
                 Text(connectionStatus.desc),
                 const SizedBox(width: 15.0),
-                if (connectionStatus.type == ConnectionStatus.ARRESTED) Button(child: const Text("Turn on"), onPressed: () => Process.run(Env.WSA_EXECUTABLE, []))
+                if (connectionStatus.type == ConnectionStatus.ARRESTED) Button(child: const Text("Turn on"), onPressed: () => Process.run(Env.WSA_EXECUTABLE, [], workingDirectory: Env.WSA_SYSTEM_PATH))
               ]),
               isLong: true,
               severity: connectionStatus.severity,

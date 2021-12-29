@@ -86,7 +86,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
 
     if (autostartWSA) {
       startingWSA = true;
-      Process.run(Env.WSA_EXECUTABLE, []).onError((_, __){
+      Process.run(Env.WSA_EXECUTABLE, [], workingDirectory: Env.WSA_SYSTEM_PATH).onError((_, __){
         setState(() {startingWSA = false;});
         return ProcessResult(-1, -1, null, null);
       });
