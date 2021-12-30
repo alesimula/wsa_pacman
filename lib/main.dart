@@ -79,7 +79,7 @@ extension on ConnectionStatus {
     ConnectionStatus.ARRESTED: WSAStatusAlert(ConnectionStatus.ARRESTED, InfoBarSeverity.warning, "Arrested", 
       "WSA is turned off"),
     ConnectionStatus.OFFLINE: WSAStatusAlert(ConnectionStatus.OFFLINE, InfoBarSeverity.warning, "Offline", 
-      "Could not enstablish a connection with WSA: either developer mode and USB debugging are disabled or a wrong port is specified"),
+      "Could not establish a connection with WSA: either developer mode and USB debugging are disabled or a wrong port is specified"),
     ConnectionStatus.DISCONNECTED: WSAStatusAlert(ConnectionStatus.DISCONNECTED, InfoBarSeverity.error, "Disconnected", 
       "A WSA connection could not be enstablished for unknown reasons"),
     ConnectionStatus.CONNECTED: WSAStatusAlert(ConnectionStatus.CONNECTED, InfoBarSeverity.success, "Connected", 
