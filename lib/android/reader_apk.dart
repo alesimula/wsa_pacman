@@ -99,7 +99,7 @@ class ApkReader {
   static Future<String> decodeXml(Uint8List encoded, [bool isGradient = false]) async {
     Map<String, Future<String>>? futureGradients = isGradient ? null : {};
     var xml = utf8.decode(await _decodeXml(encoded), allowMalformed: true);
-    if (!isGradient) xml = xml.replaceAllMapped(RegExp('([\\s\\n]android:pathData=[\'"])[^M]*(M[0-9])'), (m) => m.group(1)!+m.group(2)! )
+    if (!isGradient) xml = xml.replaceAllMapped(RegExp('([\\s\\n]android:pathData=[\'"])[^M]*(M\\s*-?[0-9])'), (m) => m.group(1)!+m.group(2)! )
       .replaceAllMapped(RegExp('<(([a-zA-Z0-9]*)\\s+$REGEX_XML_NOCLOSE)(android:fillColor=[\'"])(type1/([0-9]*)[\'"])($REGEX_XML_NOCLOSE)>', multiLine: true, dotAll: true), 
         (m) => '<${m.group(1)!}${m.group(7)!.endsWith("/") ? m.group(7)!.substring(0, m.group(7)!.length-1) : m.group(7)!}>\n${_getGradientPlaceholder(futureGradients!, "0x"+int.parse(m.group(6)!).toRadixString(16).padLeft(8, '0'))}${m.group(7)!.endsWith("/") ? "\n</${m.group(2)}>" : "\n"}')
       .replaceAllMapped(RegExp('([cC]olor=[\'"])(type([0-9])+/([0-9]*))'), (m) => m.group(1)!+'#'+(int.parse(m.group(4)!).toRadixString(16).padLeft(8, '0')) )
@@ -162,7 +162,7 @@ class ApkReader {
     Uint8List foreImg = isForeXml ? foreFiles.first.content : foreFiles.last.content;
     Uint8List? backImg = (backFiles.isEmpty) ? null : isBackXml ? backFiles.first.content : backFiles.last.content;
     var foreXml = isForeXml ? decodeXml(foreImg) : null;
-    var backXml = isBackXml ? decodeXml(foreImg) : null;
+    var backXml = isBackXml && backImg != null ? decodeXml(backImg) : null;
     Widget? backWidget;
     Widget? foreWidget;
 
@@ -170,14 +170,14 @@ class ApkReader {
     if (!isForeXml) foreWidget = Image.memory(foreImg);
     if (!isBackXml) backWidget = isBackColor ? null : (backImg != null) ? Image.memory(backImg) : null;
 
-    String backXmlData = isBackXml ? await backXml! : "";
+    String backXmlData = isBackXml && backXml != null ? await backXml : "";
     String foreXmlData = isForeXml ? await foreXml! : "";
 
     if (isBackColor) {
       final color = Color(int.parse(background!.values.first, radix: 16));
       data.execute(() => GState.apkBackgroundColor.update((_)=>color));
     }
-    else if (backWidget != null) data.execute(() => GState.apkBackgroundIcon.update((_)=>!isBackXml ? backWidget : ScalableImageWidget(si: ScalableImage.fromAvdString(backXmlData))));
+    else if (backWidget != null || backXml != null) data.execute(() => GState.apkBackgroundIcon.update((_)=>!isBackXml ? backWidget : ScalableImageWidget(si: ScalableImage.fromAvdString(backXmlData))));
     data.execute(() => GState.apkForegroundIcon.update((_)=>!isForeXml ? foreWidget : ScalableImageWidget(si: ScalableImage.fromAvdString(foreXmlData)) ));
   }
 
