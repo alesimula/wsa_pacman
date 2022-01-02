@@ -5,6 +5,7 @@ const double _kCompactNavigationPanelWidth = 50.0;
 
 class ThemablePaneItem extends PaneItem {
 
+  final MouseCursor? mouseCursor;
   final PaneDisplayMode? forceDisplayMode;
   final bool translucent;
   final bool topHoverEffect;
@@ -17,6 +18,7 @@ class ThemablePaneItem extends PaneItem {
     FocusNode? focusNode,
     this.forceDisplayMode,
     bool autofocus = false,
+    this.mouseCursor,
     this.topHoverEffect = true,
     this.translucent = false
   }) : super(icon: icon, title: title, infoBadge: infoBadge, focusNode: focusNode, autofocus: autofocus);
@@ -69,7 +71,7 @@ class ThemablePaneItem extends PaneItem {
         autofocus: autofocus ?? this.autofocus,
         focusNode: focusNode,
         onPressed: onPressed,
-        cursor: theme.cursor,
+        cursor: mouseCursor,
         builder: (context, states) {
           final textStyle = selected
               ? theme.selectedTextStyle?.resolve(states)

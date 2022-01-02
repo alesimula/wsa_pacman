@@ -153,10 +153,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "03719a90e7e4afa722ebdb67d7f7508460657be2"
+      resolved-ref: "13bc913f99421f925c02454f2975aa6a1decbeb7"
       url: "https://github.com/bdlukaa/fluent_ui.git"
     source: git
-    version: "3.4.1"
+    version: "3.6.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -258,6 +258,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.11"
+  material_color_utilities:
+    dependency: transitive
+    description:
+      name: material_color_utilities
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
   mdi:
     dependency: "direct main"
     description:
@@ -370,6 +377,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
+  scroll_pos:
+    dependency: transitive
+    description:
+      name: scroll_pos
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0"
   shared_preferences:
     dependency: transitive
     description:
@@ -486,7 +500,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.3"
+    version: "0.4.8"
   typed_data:
     dependency: transitive
     description:
@@ -544,5 +558,5 @@ packages:
     source: hosted
     version: "3.1.0"
 sdks:
-  dart: ">=2.14.0 <3.0.0"
-  flutter: ">=2.5.0"
+  dart: ">=2.15.0 <3.0.0"
+  flutter: ">=2.8.0"
