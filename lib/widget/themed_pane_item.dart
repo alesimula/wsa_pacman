@@ -21,7 +21,7 @@ class ThemablePaneItem extends PaneItem {
     this.mouseCursor,
     this.topHoverEffect = true,
     this.translucent = false
-  }) : super(icon: icon, title: title, infoBadge: infoBadge, focusNode: focusNode, autofocus: autofocus);
+  }) : super(icon: icon, title: title, infoBadge: infoBadge, focusNode: focusNode, autofocus: autofocus, mouseCursor: mouseCursor);
 
   static Color uncheckedInputAlphaColor(ThemeData style, Set<ButtonStates> states) {
     // The opacity is 0 because, when transitioning between [Colors.transparent]
