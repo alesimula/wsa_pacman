@@ -64,7 +64,7 @@ extension AndroidPermissionList on AndroidPermission {
     case AndroidPermission.PHONE: return "Phone";
     case AndroidPermission.CALL_LOG: return "Call logs";
     case AndroidPermission.SMS: return "Messages";
-    case AndroidPermission.CONTACTS: return "Contacs";
+    case AndroidPermission.CONTACTS: return "Contacts";
     case AndroidPermission.CALENDAR: return "Calendar";
     case AndroidPermission.ACTIVITY_RECOGNITION: return "Physical activity";
     case AndroidPermission.X_SENSORS_BODY: return "Body sensors";
