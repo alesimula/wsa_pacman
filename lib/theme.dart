@@ -6,7 +6,7 @@ import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 enum NavigationIndicators { sticky, end }
 
 class AppTheme extends ChangeNotifier {
-  AccentColor _color = AccentColor('normal', const <String, Color>{
+  static final AccentColor alpineLandingDark = AccentColor('normal', const <String, Color>{
     'darkest': Color(0xff126568),
     'darker': Color(0xff146D70),
     'dark': Color(0xff157477),
@@ -14,17 +14,20 @@ class AppTheme extends ChangeNotifier {
     'light': Color(0xff188387),
     'lighter': Color(0xff198A8E),
     'lightest': Color(0xff1B9296),
-  }); //Alpine landing FTW
-  AccentColor get color => _color;
-  set color(AccentColor color) {
-    _color = color;
-    notifyListeners();
-  }
-
-  ThemeMode _mode = ThemeMode.system;
-  ThemeMode get mode => _mode;
-  set mode(ThemeMode mode) {
-    _mode = mode;
+  });
+  static final AccentColor alpineLandingLight = AccentColor('normal', const <String, Color>{
+    'darkest': Color(0xff167C80),
+    'darker': Color(0xff188387),
+    'dark': Color(0xff198A8E),
+    'normal': Color(0xff1C9EA0),
+    'light': Color(0xff1DA5A5),
+    'lighter': Color(0xff20B2B2),
+    'lightest': Color(0xff21B7B7),
+  });
+  AccentColor? _color; //Alpine landing FTW
+  AccentColor getColor(bool darkMode) => _color ?? (darkMode ? alpineLandingDark : alpineLandingLight);
+  void setColor(AccentColor color) {
+    _color = (identical(color, alpineLandingDark) || identical(color, alpineLandingLight)) ? null : color;
     notifyListeners();
   }
 

@@ -264,9 +264,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = GState.theme.of(context).mode;
     final mica = GState.mica.of(context);
-    setMicaEffect(mica.enabled, theme == material.ThemeMode.system ? darkMode : theme == material.ThemeMode.dark);
 
-    final bool isLight = theme == ThemeMode.system ? !darkMode : theme == ThemeMode.light;
+    final bool isDark = theme == ThemeMode.system ? darkMode : theme == ThemeMode.dark;
+    setMicaEffect(mica.enabled, isDark);
     final bool isMicaInstall = installMode && mica.enabled;
     final bool IsFullMicaOrInstall = mica.full || isMicaInstall;
     
@@ -285,37 +285,37 @@ class MyApp extends StatelessWidget {
               defaultButtonStyle: ButtonStyle(
                 shadowColor: ButtonState.all(Colors.transparent),
                 border: ButtonState.resolveWith((states) {
-                  if (isLight) {
-                    if (states.isDisabled) return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0x212121, 0.12));
-                    if (states.isNone || (states.isHovering && !states.isDisabled && !states.isPressing)) return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0x212121, 0.22));
-                    else return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0x212121, 0.07));
-                  }
-                  else {
+                  if (isDark) {
                     if (states.isDisabled) return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0xf0f0f0, 0.05));
                     if (states.isNone || (states.isHovering && !states.isPressing)) return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0xf0f0f0, 0.035));
                     else return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0xf0f0f0, 0.07));
                   }
+                  else {
+                    if (states.isDisabled) return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0x212121, 0.12));
+                    if (states.isNone || (states.isHovering && !states.isDisabled && !states.isPressing)) return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0x212121, 0.22));
+                    else return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0x212121, 0.07));
+                  }
                 }),
                 backgroundColor: ButtonState.resolveWith((states) {
-                  if (isLight) {
-                    if (states.isDisabled) return const ColorConst.withOpacity(0xf9f9f9, 0.045);
-                    if (states.isPressing) return const ColorConst.withOpacity(0xf0f0f0, 0.4);
-                    if (states.isHovering) return const ColorConst.withOpacity(0xf9f9f9, 0.65);
-                    return const ColorConst.withOpacity(0xFFFFFF, 0.8);
-                  }
-                  else {
+                  if (isDark) {
                     if (states.isDisabled) return const ColorConst.withOpacity(0xFFFFFF, 0.045);
                     if (states.isPressing) return const ColorConst.withOpacity(0xFFFFFF, 0.03);
                     if (states.isHovering) return const ColorConst.withOpacity(0xFFFFFF, 0.08);
                     return const ColorConst.withOpacity(0xFFFFFF, 0.055);
                   }
+                  else {
+                    if (states.isDisabled) return const ColorConst.withOpacity(0xf9f9f9, 0.045);
+                    if (states.isPressing) return const ColorConst.withOpacity(0xf0f0f0, 0.4);
+                    if (states.isHovering) return const ColorConst.withOpacity(0xf9f9f9, 0.65);
+                    return const ColorConst.withOpacity(0xFFFFFF, 0.8);
+                  }
                 })
               ) ,
             ),
-            scaffoldBackgroundColor: IsFullMicaOrInstall ? Colors.transparent : isLight ? const Color(0xFFf9f9f9) : const Color(0xFF272727),
-            micaBackgroundColor: mica.enabled ? Colors.transparent : isLight ? const Color(0xFFf3f3f3) : const Color(0xFF202020),
-            accentColor: appTheme.color,
-            brightness: isLight ? Brightness.light : Brightness.dark,
+            scaffoldBackgroundColor: IsFullMicaOrInstall ? Colors.transparent : isDark ? const Color(0xFF272727) : const Color(0xFFf9f9f9),
+            micaBackgroundColor: mica.enabled ? Colors.transparent : isDark ? const Color(0xFF202020) : const Color(0xFFf3f3f3),
+            accentColor: appTheme.getColor(isDark),
+            brightness: isDark ? Brightness.dark : Brightness.light,
             visualDensity: VisualDensity.standard,
             focusTheme: FocusThemeData(
               glowFactor: is10footScreen() ? 2.0 : 0.0,

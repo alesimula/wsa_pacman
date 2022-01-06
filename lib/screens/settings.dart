@@ -243,29 +243,5 @@ class ScreenSettingsState extends State<ScreenSettings> {
       ),
     );
   }
-
-  Widget _buildColorBlock(AppTheme appTheme, AccentColor color) {
-    return Padding(
-      padding: const EdgeInsets.all(2.0),
-      child: Button(
-        onPressed: () {
-          appTheme.color = color;
-        },
-        style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
-        child: Container(
-          height: 40,
-          width: 40,
-          color: color,
-          alignment: Alignment.center,
-          child: appTheme.color == color
-              ? Icon(
-                  FluentIcons.check_mark,
-                  color: color.basedOnLuminance(),
-                  size: 22.0,
-                )
-              : null,
-        ),
-      ),
-    );
-  }
+  
 }
