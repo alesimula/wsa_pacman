@@ -14,6 +14,8 @@ import 'package:wsa_pacman/android/permissions.dart';
 import 'package:wsa_pacman/main.dart';
 import 'package:shared_value/shared_value.dart';
 import 'package:synchronized/synchronized.dart';
+import 'package:wsa_pacman/utils/locale_utils.dart';
+import 'package:wsa_pacman/utils/misc_utils.dart';
 import 'package:wsa_pacman/windows/win_info.dart';
 import 'package:wsa_pacman/windows/win_io.dart';
 import 'package:fixnum/fixnum.dart' as $fixnum;
@@ -30,9 +32,7 @@ class GState {
   static final androidPort = PersistableValue(value: 58526, loader: (o)=>o.port, setter: (o,e)=>o.port = e);
   static final androidPortPending = SharedValue(value: androidPort.$.toString());
   // Interface options
-  static final locale = PersistableValue<Locale>(value: _SYSTEM_LOCALE, 
-    loader: (o){final int locale = o.locale.toInt(); return locale == 0 ? _SYSTEM_LOCALE : _LOCALE[locale] ?? _SYSTEM_LOCALE;},
-    setter: (o,e)=> o.locale = identical(e, _SYSTEM_LOCALE) ? $fixnum.Int64() : $fixnum.Int64(o.hashCode));
+  static final locale = PersistableValue<NamedLocale>(value: LocaleUtils.SYSTEM_LOCALE, loader: (o)=>LocaleUtils.fromHashOrDefault(o.locale.toInt()), setter: (o,e)=> o.locale = $fixnum.Int64(e.hashCode));
   // Theme options
   static final theme = PersistableValue(value: Options_Theme.SYSTEM, loader: (o)=>o.theme, setter: (o,e)=> o.theme = e); 
   static final iconShape = PersistableValue(value: Options_IconShape.SQUIRCLE, loader: (o)=>o.iconShape, setter: (o,e)=> o.iconShape = e);
@@ -55,14 +55,6 @@ class GState {
   // Installation info
   static final errorCode = SharedValue<String>(value: "");
   static final errorDesc = SharedValue<String>(value: "");
-
-
-  static const _DEFAULT_LOCALE = Locale("en");
-  static late final _LOCALE = {for (final l in AppLocalizations.supportedLocales) l.hashCode : l};
-  static final _SYSTEM_LOCALE = (() {
-    try {return (intl.Intl.systemLocale = intl.Intl.canonicalizedLocale(Platform.localeName)).asLocale ?? _DEFAULT_LOCALE;}
-    catch (e) {return intl.Intl.systemLocale.asLocale ?? _DEFAULT_LOCALE;}
-  })();
 }
 
 extension Options_Micas_Ext on Options_Mica {

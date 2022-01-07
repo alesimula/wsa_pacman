@@ -1,5 +1,6 @@
 {
     "@@locale": "es",
+    "locale_desc": "Spanish",
     
     "helloWorld": "Hello World!",
     "@helloWorld": {

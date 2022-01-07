@@ -1,5 +1,13 @@
 {
     "@@locale": "en",
+    "locale_desc": "English",
+    "locale_system": "System",
+    "@locale_desc": {
+      "description": "Full name of the locale in the corresponding language"
+    },
+    "@locale_system": {
+      "description": "Describes the system locale"
+    },
     
     "helloWorld": "Hello World!",
     "@helloWorld": {

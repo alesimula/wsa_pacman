@@ -2,8 +2,6 @@
 
 import 'dart:collection';
 import 'dart:ui';
-
-import 'int_utils.dart';
 import 'dart:io';
 
 extension StringUtils on String {

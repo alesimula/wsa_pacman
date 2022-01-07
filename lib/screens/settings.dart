@@ -8,8 +8,7 @@ import 'package:mdi/mdi.dart';
 import 'package:protobuf/protobuf.dart';
 import 'package:wsa_pacman/global_state.dart';
 import 'package:wsa_pacman/proto/options.pb.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+import 'package:wsa_pacman/utils/locale_utils.dart';
 import 'package:wsa_pacman/widget/adaptive_icon.dart';
 import 'package:wsa_pacman/widget/fluent_card.dart';
 import 'package:wsa_pacman/widget/fluent_expander.dart';
@@ -18,7 +17,6 @@ import 'package:wsa_pacman/windows/win_info.dart';
 import '/utils/string_utils.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 import 'package:provider/provider.dart';
 
 import '../theme.dart';
@@ -104,12 +102,15 @@ class ScreenSettingsState extends State<ScreenSettings> {
 
   static List<Widget> optionsList<E extends ProtobufEnum>(List<E> values, bool Function(E e) checked, Function(E e) updater) =>
       optionsListDeferred<E, E>(values, (e) => e, checked, (e, v) => updater(e));
+  
+  static late final _localeItems = LocaleUtils.supportedLocales.map((l)=>ComboboxItem(child: Text(l.name), value: l)).toList();
 
   @override
   Widget build(BuildContext context) {
     final appTheme = context.watch<AppTheme>();
     final theme = FluentTheme.of(context);
-    //final 
+    final locale_lang = GState.locale.of(context);
+    
     final tooltipThemeData = TooltipThemeData(decoration: () {
       const radius = BorderRadius.zero;
       final shadow = [
@@ -148,6 +149,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
     final mica = GState.mica.of(context);
     final legacyIcons = GState.legacyIcons.of(context);
     final autostartWSA = GState.autostartWSA.of(context);
+    final locale = AppLocalizations.of(context);
 
     final exampleIcon = FutureBuilder(
       future: legacyIcons ? _exLegacyIcon : (() async =>AdaptiveIcon(background: await _exBackground, foreground: await _exForeground, radius: iconShape.radius))(), 
@@ -206,11 +208,12 @@ class ScreenSettingsState extends State<ScreenSettings> {
           /*FluentCard(
             leading: const Icon(Mdi.powerStandby , size: 23),
             content: const Text('Language'),
-            trailing: SizedBox(width: 300, height: 30, child: DropDownButton(
-                controller: FlyoutController(),
-                contentWidth: 150,
-                title: const Text('Alignment'),
-                items: [DropDownButtonItem(onTap: (){}, title: Text("hello")), DropDownButtonItem(onTap: (){}, title: Text("world"))],
+            trailing: SizedBox(width: 300, height: 30, child: Combobox<NamedLocale>(
+              onTap: (){}, placeholder: Text(locale_lang.name), 
+              isExpanded: true,
+              value: locale_lang,
+              onChanged: (l){if (l != null) GState.locale..$=l..persist();},
+              items: _localeItems,
             )),
           ),
           smallSpacer,*/
