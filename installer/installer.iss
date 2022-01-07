@@ -23,6 +23,7 @@
 AppVersion=1.1.3
 PrivilegesRequired=admin
 AppName=WSA PacMan
+AppPublisher=alesimula
 ArchitecturesInstallIn64BitMode=x64
 WizardStyle=modern
 DefaultDirName={autopf}\WSA PacMan
