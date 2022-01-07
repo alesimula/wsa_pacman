@@ -1,11 +1,14 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
 import 'dart:collection';
+import 'dart:ui';
+
 import 'int_utils.dart';
 import 'dart:io';
 
 extension StringUtils on String {
 
+  Locale? get asLocale => findAnd<Locale?>("([^_]*)(_(.*))?", (m) => m.group(1)!.isNotEmpty ? Locale(m.group(1)!, m.group(3)!.isNotEmpty ? m.group(3)! : null) : null);
   int? get ipv4AsInt => InternetAddress.tryParse(this)?.rawAddress.buffer.asByteData().getInt32(0);
 
   String get capitalized => '${this[0].toUpperCase()}${substring(1)}';
@@ -47,7 +50,12 @@ extension StringUtils on String {
     return RegExp(regexp).allMatches(this).map((m) => m.group(group)!);
   }
 
-  Iterable<R> findAllAnd<R>(String regexp, R Function(Match) provider) {
+  Iterable<R> findAllAnd<R>(String regexp, R Function(RegExpMatch match) provider) {
     return RegExp(regexp).allMatches(this).map((m) => provider(m));
+  }
+
+  R? findAnd<R>(String regexp, R Function(RegExpMatch match) provider) {
+    final match = RegExp(regexp).firstMatch(this);
+    return match != null ? provider(match) : null;
   }
 }

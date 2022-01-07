@@ -11,6 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   fluent_ui:
     git: https://github.com/bdlukaa/fluent_ui.git
   shared_value: ^2.1.0
@@ -41,6 +43,7 @@ dev_dependencies:
   flutter_lints: ^1.0.4
 
 flutter:
+  generate: true
   uses-material-design: true
   assets:
     - assets/icons/missing_icon_background.xml

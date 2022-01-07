@@ -4,10 +4,13 @@ package proto;
 option optimize_for = SPEED;
 
 message Options {
+    // App options
     optional uint32 ipAddress = 1 [default = 2130706433];
     optional uint32 port = 2 [default = 58526];
     optional bool autostart = 8;
-
+    // Interface options
+    optional int64 locale = 9;
+    // Theme options
     optional Theme theme = 3;
     optional bool legacyIcons = 4;
     optional bool systemAccent = 5;

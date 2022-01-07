@@ -6,6 +6,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart' as material;
 import 'package:mdi/mdi.dart';
+import 'package:flutter_localizations/flutter_localizations.dart' as locale;
 import 'package:wsa_pacman/android/reader_apk.dart';
 import 'package:wsa_pacman/apk_installer.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -252,6 +253,15 @@ void main(List<String> arguments) async {
   }
 }
 
+class _FluentLocalizationsEnglish extends LocalizationsDelegate<FluentLocalizations> {
+  const _FluentLocalizationsEnglish();
+
+  @override bool isSupported(Locale locale) => true;
+  @override bool shouldReload(_FluentLocalizationsEnglish old) => false;
+  @override Future<FluentLocalizations> load(Locale locale) => DefaultFluentLocalizations.load(locale);
+  @override String toString() => 'DefaultFluentLocalizations.delegate(en_US)';
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -279,6 +289,15 @@ class MyApp extends StatelessWidget {
           themeMode: theme,
           debugShowCheckedModeBanner: false,
           initialRoute: '/',
+          locale: GState.locale.of(context),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            locale.GlobalMaterialLocalizations.delegate,
+            locale.GlobalWidgetsLocalizations.delegate,
+            //locale.GlobalCupertinoLocalizations.delegate,
+            _FluentLocalizationsEnglish(),
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
           routes: {'/': (_) => args.isEmpty ? const MyHomePage() : const ApkInstaller()},
           theme: ThemeData(
             buttonTheme: ButtonThemeData(

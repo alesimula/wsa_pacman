@@ -7,6 +7,7 @@
 
 import 'dart:core' as $core;
 
+import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'options.pbenum.dart';
@@ -23,6 +24,7 @@ class Options extends $pb.GeneratedMessage {
     ..e<Options_IconShape>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'iconShape', $pb.PbFieldType.OE, protoName: 'iconShape', defaultOrMaker: Options_IconShape.SQUIRCLE, valueOf: Options_IconShape.valueOf, enumValues: Options_IconShape.values)
     ..e<Options_Mica>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mica', $pb.PbFieldType.OE, defaultOrMaker: Options_Mica.FULL, valueOf: Options_Mica.valueOf, enumValues: Options_Mica.values)
     ..aOB(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'autostart')
+    ..aInt64(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'locale')
     ..hasRequiredFields = false
   ;
 
@@ -36,6 +38,7 @@ class Options extends $pb.GeneratedMessage {
     Options_IconShape? iconShape,
     Options_Mica? mica,
     $core.bool? autostart,
+    $fixnum.Int64? locale,
   }) {
     final _result = create();
     if (ipAddress != null) {
@@ -61,6 +64,9 @@ class Options extends $pb.GeneratedMessage {
     }
     if (autostart != null) {
       _result.autostart = autostart;
+    }
+    if (locale != null) {
+      _result.locale = locale;
     }
     return _result;
   }
@@ -156,5 +162,14 @@ class Options extends $pb.GeneratedMessage {
   $core.bool hasAutostart() => $_has(7);
   @$pb.TagNumber(8)
   void clearAutostart() => clearField(8);
+
+  @$pb.TagNumber(9)
+  $fixnum.Int64 get locale => $_getI64(8);
+  @$pb.TagNumber(9)
+  set locale($fixnum.Int64 v) { $_setInt64(8, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasLocale() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearLocale() => clearField(9);
 }
 

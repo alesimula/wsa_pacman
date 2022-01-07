@@ -5,6 +5,9 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+export 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:protobuf/protobuf.dart';
 import 'package:wsa_pacman/android/android_utils.dart';
 import 'package:wsa_pacman/android/permissions.dart';
@@ -13,6 +16,7 @@ import 'package:shared_value/shared_value.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:wsa_pacman/windows/win_info.dart';
 import 'package:wsa_pacman/windows/win_io.dart';
+import 'package:fixnum/fixnum.dart' as $fixnum;
 
 import 'proto/options.pb.dart';
 import 'utils/string_utils.dart';
@@ -20,16 +24,22 @@ import 'utils/int_utils.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 class GState {
+  // App options
   static final connectionStatus = SharedValue(value: WSAPeriodicConnector.alertStatus);
-  static final theme = PersistableValue(value: Options_Theme.SYSTEM, loader: (o)=>o.theme, setter: (o,e)=> o.theme = e); 
   static final ipAddress = PersistableValue(value: "127.0.0.1", loader: (o)=>o.ipAddress.asIpv4, setter:  (o,e)=>o.ipAddress = e.ipv4AsInt ?? IntUtils.LOCALHOST);
   static final androidPort = PersistableValue(value: 58526, loader: (o)=>o.port, setter: (o,e)=>o.port = e);
   static final androidPortPending = SharedValue(value: androidPort.$.toString());
+  // Interface options
+  static final locale = PersistableValue<Locale>(value: _SYSTEM_LOCALE, 
+    loader: (o){final int locale = o.locale.toInt(); return locale == 0 ? _SYSTEM_LOCALE : _LOCALE[locale] ?? _SYSTEM_LOCALE;},
+    setter: (o,e)=> o.locale = identical(e, _SYSTEM_LOCALE) ? $fixnum.Int64() : $fixnum.Int64(o.hashCode));
+  // Theme options
+  static final theme = PersistableValue(value: Options_Theme.SYSTEM, loader: (o)=>o.theme, setter: (o,e)=> o.theme = e); 
   static final iconShape = PersistableValue(value: Options_IconShape.SQUIRCLE, loader: (o)=>o.iconShape, setter: (o,e)=> o.iconShape = e);
   static final legacyIcons = PersistableValue(value: false, loader: (o)=>o.legacyIcons, setter: (o,e)=> o.legacyIcons = e);
   static final mica = PersistableValue(value: Options_Mica.FULL, loader: (o)=>o.mica, setter: (o,e)=> o.mica = e);
   static final autostartWSA = PersistableValue(value: false, loader: (o)=>o.autostart, setter: (o,e)=> o.autostart = e);
-  //APK Info
+  // APK Info
   static final apkTitle = SharedValue<String>(value: "");
   static final package = SharedValue<String>(value: "");
   static final activity = SharedValue<String>(value: "");
@@ -42,9 +52,17 @@ class GState {
   static final apkBackgroundIcon = SharedValue<Widget?>(value: null);
   static final apkForegroundIcon = SharedValue<Widget?>(value: null);
   static final apkBackgroundColor = SharedValue<Color?>(value: null);
-  //Installation info
+  // Installation info
   static final errorCode = SharedValue<String>(value: "");
   static final errorDesc = SharedValue<String>(value: "");
+
+
+  static const _DEFAULT_LOCALE = Locale("en");
+  static late final _LOCALE = {for (final l in AppLocalizations.supportedLocales) l.hashCode : l};
+  static final _SYSTEM_LOCALE = (() {
+    try {return (intl.Intl.systemLocale = intl.Intl.canonicalizedLocale(Platform.localeName)).asLocale ?? _DEFAULT_LOCALE;}
+    catch (e) {return intl.Intl.systemLocale.asLocale ?? _DEFAULT_LOCALE;}
+  })();
 }
 
 extension Options_Micas_Ext on Options_Mica {
