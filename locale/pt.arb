@@ -2,32 +2,12 @@
     "@@locale": "pt",
     "@locale_desc": {"description": "Português (Brasil) [pt_BR]"},
     "locale_desc": "Português (Brasil)",
-
     "locale_system": "Sistema",
 
 
     "btn_boot": "Ativar",
     "btn_switch_on": "Lig",
     "btn_switch_off": "Desl",
-
-
-    "option_thememode_dark": "Escuro",
-    "option_thememode_light": "Claro",
-
-    "option_icon_squircle": "Quadrado-círculo",
-    "option_icon_circle": "Círculo",
-    "option_icon_rounded_square": "Quadrado arredondado",
-
-    "option_transparency_full": "Cheia",
-    "transparency_partial": "Parcial",
-
-    "option_generic_system": "Sistema",
-    "option_generic_disabled": "Desativado",
-
-    
-    "option_apk_version": "Versão: {version}",
-    "option_apk_version_update": "Versão: {oldVersion} => {newVersion}",
-    "option_apk_package": "Pacote: {package}",
 
 
     "status_subtext_winver_10": "Windows 10",
@@ -65,14 +45,26 @@
     "settings_ip": "Endereço IP do WSA",
     "settings_autostart": "Iniciar WSA antes da instalação",
     "settings_language": "Idioma",
+    "settings_option_generic_system": "Sistema",
+    "settings_option_generic_disabled": "Desativado",
 
 
     "theme_mode": "Tema",
+    "theme_mode_dark": "Escuro",
+    "theme_mode_light": "Claro",
     "theme_mica": "Transparência da janela",
+    "theme_mica_full": "Cheia",
+    "theme_mica_partial": "Parcial",
     "theme_icon_adaptive": "Forma de ícones adaptáveis",
+    "theme_icon_adaptive_squircle": "Quadrado-círculo",
+    "theme_icon_adaptive_circle": "Círculo",
+    "theme_icon_adaptive_rounded_square": "Quadrado arredondado",
 
 
     "installer_message": "Deseja instalar este aplicativo?",
+    "installer_info_version": "Versão: {version}",
+    "installer_info_package": "Versão: {oldVersion} => {newVersion}",
+    "option_apk_package": "Pacote: {package}",
     "installer_installing": "Instalando aplicativo {appTitle}...",
     "installer_installed": "O aplicativo {appTitle} foi instalado com sucesso",
     "installer_fail": "O aplicativo {appTitle} não foi instalado",
