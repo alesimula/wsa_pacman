@@ -16,6 +16,24 @@
     "btn_switch_off": "Off",
 
 
+    "tempname_option_thememode_dark": "Dark",
+    "tempname_option_thememode_light": "Light",
+
+    "tempname_option_icon_squircle": "Squircle",
+    "tempname_option_icon_circle": "Circle",
+    "tempname_option_icon_rounded_square": "Rounded Square",
+
+    "tempname_option_transparency_full": "Full",
+    "tempname_option_transparency_partial": "Partial",
+
+    "tempname_option_generic_system": "System",
+    "tempname_option_generic_disabled": ""Disabled,
+
+    "tempname_option_apk_version": "Version: {version}",
+    "tempname_option_apk_version_update": "Version: {oldVersion} => {newVersion}",
+    "tempname_option_apk_package": "Package: {package}",
+
+
     "@status_subtext_winver_10": {"description": "Only used inside 'status_unsupported_desc', modify taking this in consideration"},
     "status_subtext_winver_10": "Windows 10",
     "@status_subtext_winver_older": {"description": "Only used inside 'status_unsupported_desc', modify taking this in consideration"},
