@@ -1,4 +1,4 @@
-    {
+{
     "@@locale": "ar",
     "@locale_desc": {"description": "Full name of the locale in the corresponding language"},
     "locale_desc": "العربية",
@@ -17,7 +17,6 @@
 
     "status_unsupported": "حزمة WSA غير مثبتة",
     "status_unsupported_desc": "تم العثور على إصدار {windowsVersion} و لم يثبت WSA ; و هذا التطبيق يعتمد على WSA, و التي تثبت على ويندوز 11 فقط",
-    "@status_unsupported_desc" : {"placeholders": {"windowsVersion": {"type": "String"}}},
     "status_missing": "حزمة WSA غير مثبتة",
     "status_missing_desc": "حزمة WSA غير موجودة; و هذا التطبيق يعتمد على WSA, برجاء تحميل نظام اندرويد لويندوز او متجر امازون من متجر مايكروسوفت",
     "status_unknown": "جاري الاتصال",
@@ -55,11 +54,8 @@
 
     "installer_message": "هل تريد تثبيت هذا التطبيق؟",
     "installer_installing": "جاري تثبيث {appTitle}...",
-    "@installer_installing" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_installed": "تم تثبيت {appTitle} بنجاح",
-    "@installer_installed" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_fail": "لم يتم تثبيت {appTitle}",
-    "@installer_fail" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_error_nomsg": "فشل التثبيت, لكن بلا أخطاء",
     "installer_btn_starting": "يتم التشغيل...",
     "installer_btn_loading": "تحميل...",
@@ -90,4 +86,4 @@
     "android_permission_sensors": "مستشعرات الجهاز",
     "android_permission_sensors_body": "مستشعرات البدن",
     "android_permission_nearby_devices": "تحديد الاجهزة القريبة"
-    }
+}
