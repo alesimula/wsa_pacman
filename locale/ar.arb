@@ -11,8 +11,8 @@
     "btn_switch_off": "مغلق",
 
 
-    "winver_10": "ويندوز 10",
-    "winver_older": "إصدار ويندوز أقدم",
+    "status_subtext_winver_10": "ويندوز 10",
+    "status_subtext_winver_older": "إصدار ويندوز أقدم",
 
 
     "status_unsupported": "حزمة WSA غير مثبتة",

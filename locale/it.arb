@@ -10,8 +10,8 @@
     "btn_switch_off": "Off",
 
 
-    "winver_10": "rilevato Windows 10",
-    "winver_older": "rilevata una vecchia versione di Windows",
+    "status_subtext_winver_10": "rilevato Windows 10",
+    "status_subtext_winver_older": "rilevata una vecchia versione di Windows",
 
 
     "status_unsupported": "WSA non installato",

@@ -11,8 +11,8 @@
     "btn_switch_off": "关闭",
 
 
-    "winver_10": "Windows 10",
-    "winver_older": "旧 Windows 版本",
+    "status_subtext_winver_10": "Windows 10",
+    "status_subtext_winver_older": "旧 Windows 版本",
 
 
     "status_unsupported": "WSA 未安装",

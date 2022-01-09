@@ -60,7 +60,7 @@ enum ConnectionStatus {
 extension on ConnectionStatus {
   static final Map<ConnectionStatus, WSAStatusAlert> _statusAlers = {
     ConnectionStatus.UNSUPPORTED: WSAStatusAlert(ConnectionStatus.UNSUPPORTED, InfoBarSeverity.error, (l)=>l.status_unsupported, 
-      (l)=>l.status_unsupported_desc(WinVer.isWindows10OrGreater ? l.winver_10 : l.winver_older)),
+      (l)=>l.status_unsupported_desc(WinVer.isWindows10OrGreater ? l.status_subtext_winver_10 : l.status_subtext_winver_older)),
     ConnectionStatus.MISSING: WSAStatusAlert(ConnectionStatus.MISSING, InfoBarSeverity.error, (l)=>l.status_missing, (l)=>l.status_missing_desc),
     ConnectionStatus.UNKNOWN: WSAStatusAlert(ConnectionStatus.UNKNOWN, InfoBarSeverity.info, (l)=>l.status_unknown, (l)=>l.status_unknown_desc),
     ConnectionStatus.STARTING: WSAStatusAlert(ConnectionStatus.STARTING, InfoBarSeverity.info, (l)=>l.status_starting, (l)=>l.status_starting_desc),
