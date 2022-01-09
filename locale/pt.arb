@@ -24,6 +24,7 @@
     "option_generic_system": "Sistema",
     "option_generic_disabled": "Desativado",
 
+    
     "option_apk_version": "Versão: {version}",
     "option_apk_version_update": "Versão: {oldVersion} => {newVersion}",
     "option_apk_package": "Pacote: {package}",

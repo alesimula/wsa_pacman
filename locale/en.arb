@@ -27,7 +27,7 @@
     "tempname_option_transparency_partial": "Partial",
 
     "tempname_option_generic_system": "System",
-    "tempname_option_generic_disabled": ""Disabled,
+    "tempname_option_generic_disabled": "Disabled",
 
     "tempname_option_apk_version": "Version: {version}",
     "tempname_option_apk_version_update": "Version: {oldVersion} => {newVersion}",

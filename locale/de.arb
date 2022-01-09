@@ -1,0 +1,88 @@
+{
+    "@@locale": "de",
+    "@locale_desc": {"description": "Deutsch"},
+    "locale_desc": "Deutsch",
+    "locale_system": "System",
+
+
+    "btn_boot": "Starten",
+    "btn_switch_on": "An",
+    "btn_switch_off": "Aus",
+
+
+    "status_subtext_winver_10": "Windows 10",
+    "status_subtext_winver_older": "Frühere Windows Version",
+
+
+    "status_unsupported": "WSA ist nicht installiert.",
+    "status_unsupported_desc": "{windowsVersion} wurde erkannt und WSA nicht gefunden; diese Anwendung benötigt WSA welche nur auf Windows 11 offiziell verfügbar ist.",
+    "status_missing": "WSA ist nicht installiert.",
+    "status_missing_desc": "WSA wurde nicht gefunden; diese Anwendung benötigt WSA, Windows Subsystem für Android (oder der Amazon AppStore) kann vom Microsoft Store bezogen werden.",
+    "status_unknown": "Verbinde",
+    "status_unknown_desc": "Warte auf die Verbindung zu WSA...",
+    "status_starting": "Starte",
+    "status_starting_desc": "WSA wird gestartet, bitte warten...",
+    "status_arrested": "Angehalten",
+    "status_arrested_desc": "WSA ist angehalten.",
+    "status_offline": "Offline",
+    "status_offline_desc": "Es konnte keine Verbindung zu WSA hergestellt werden: entweder ist der Entwicklermodus deaktiviert oder USB Debugging nicht aktiv bzw. ein falscher Port angegeben.",
+    "status_disconnected": "Getrennt",
+    "status_disconnected_desc": "Es konnte aus unbekannten Gründen keine Verbindung zu WSA hergestellt werden.",
+    "status_connected": "Verbunden",
+    "status_connected_desc": "Erfolgreich verbunden.",
+
+
+    "screen_wsa": "WSA Paketmanager",
+    "screen_settings": "Einstellungen",
+
+
+    "wsa_manage": "Android Einstellungen",
+    "wsa_manage_app": "Appeinstellungen",
+    "wsa_manage_settings": "Systemeinstellungen",
+
+    "settings_port": "WSA Debugging Port",
+    "settings_ip": "WSA IP Adresse",
+    "settings_autostart": "Starte WSA automatisch",
+    "settings_language": "Sprache",
+
+
+    "theme_mode": "Design",
+    "theme_mica": "Transparenz",
+    "theme_icon_adaptive": "Icons",
+
+
+    "installer_message": "Soll diese App installiert werden?",
+    "installer_installing": "Installiere {appTitle}...",
+    "installer_installed": "{appTitle} wurde erfolgreich installiert.",
+    "installer_fail": "{appTitle} wurde nicht installiert.",
+    "installer_error_nomsg": "Installation ohne Angabe von Gründen fehlgeschlagen.",
+    "installer_btn_starting": "Starte...",
+    "installer_btn_loading": "Lade...",
+    "installer_btn_cancel": "Abbrechen",
+    "installer_btn_install": "Installieren",
+    "installer_btn_reinstall": "Neu installieren",
+    "installer_btn_update": "Update",
+    "installer_btn_downgrade": "Downgrade (unsicher)",
+    "installer_btn_dismiss": "Abbrechen",
+    "installer_btn_open": "Öffnen",
+    "installer_btn_checkbox_shortcut": "Erstelle eine Desktop Verknüpfung",
+
+
+    "android_permission_none": "Keine Berechtigungen erforderlich",
+    "android_permission_admin": "Gerät als Administrator verwalten",
+    "android_permission_admin_brick": "Gerät aus der Ferne sperren oder zurücksetzen",
+    "android_permission_admin_lock": "Gerät aus der Ferne sperren",
+    "android_permission_storage": "Speicher",
+    "android_permission_microphone": "Mikrofon",
+    "android_permission_camera": "Kamera",
+    "android_permission_location": "Standort",
+    "android_permission_phone": "Telefon",
+    "android_permission_call_log": "Anrufliste",
+    "android_permission_sms": "Nachrichten",
+    "android_permission_contacts": "Kontakte",
+    "android_permission_calendar": "Kalender",
+    "android_permission_activity_recognition": "Aktivitätserkennung",
+    "android_permission_sensors": "Gerätesensoren",
+    "android_permission_sensors_body": "Körpersensoren",
+    "android_permission_nearby_devices": "Geräte in der Nähe"
+}
