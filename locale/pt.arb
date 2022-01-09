@@ -62,9 +62,9 @@
 
 
     "installer_message": "Deseja instalar este aplicativo?",
-    "installer_info_version": "Versão: {version}",
-    "installer_info_package": "Versão: {oldVersion} => {newVersion}",
-    "option_apk_package": "Pacote: {package}",
+    "installer_info_version": "Versão: {appVersion}",
+    "installer_info_version_change": "Versão: {appVersionOld} => {appVersionNew}",
+    "installer_info_package": "Pacote: {appPackage}",
     "installer_installing": "Instalando aplicativo {appTitle}...",
     "installer_installed": "O aplicativo {appTitle} foi instalado com sucesso",
     "installer_fail": "O aplicativo {appTitle} não foi instalado",
