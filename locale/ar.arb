@@ -1,6 +1,6 @@
 {
     "@@locale": "ar",
-    "@locale_desc": {"description": "Full name of the locale in the corresponding language"},
+    "@locale_desc": {"description": "Arabic [ar_EG]"},
     "locale_desc": "العربية",
     "@locale_system": {"description": "Describes the system locale"},
     "locale_system": "النظام",

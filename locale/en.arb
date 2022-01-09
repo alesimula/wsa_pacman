@@ -5,7 +5,7 @@
 
 
     "@@locale": "en",
-    "@locale_desc": {"description": "Full name of the locale in the corresponding language"},
+    "@locale_desc": {"description": "English (US) [en_US]"},
     "locale_desc": "English",
     "@locale_system": {"description": "Describes the system locale"},
     "locale_system": "System",

@@ -1,5 +1,6 @@
 {
     "@@locale": "it",
+    "@locale_desc": {"description": "Italiano (Italia) [it_IT]"},
     "locale_desc": "Italiano",
     "locale_system": "Sistema",
 
