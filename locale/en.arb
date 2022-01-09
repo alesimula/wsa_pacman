@@ -16,24 +16,6 @@
     "btn_switch_off": "Off",
 
 
-    "tempname_option_thememode_dark": "Dark",
-    "tempname_option_thememode_light": "Light",
-
-    "tempname_option_icon_squircle": "Squircle",
-    "tempname_option_icon_circle": "Circle",
-    "tempname_option_icon_rounded_square": "Rounded Square",
-
-    "tempname_option_transparency_full": "Full",
-    "tempname_option_transparency_partial": "Partial",
-
-    "tempname_option_generic_system": "System",
-    "tempname_option_generic_disabled": "Disabled",
-
-    "tempname_option_apk_version": "Version: {version}",
-    "tempname_option_apk_version_update": "Version: {oldVersion} => {newVersion}",
-    "tempname_option_apk_package": "Package: {package}",
-
-
     "@status_subtext_winver_10": {"description": "Only used inside 'status_unsupported_desc', modify taking this in consideration"},
     "status_subtext_winver_10": "Windows 10",
     "@status_subtext_winver_older": {"description": "Only used inside 'status_unsupported_desc', modify taking this in consideration"},
@@ -72,14 +54,29 @@
     "settings_ip": "WSA IP address",
     "settings_autostart": "Autostart WSA before installation",
     "settings_language": "Language",
+    "settings_option_generic_system": "System",
+    "settings_option_generic_disabled": "Disabled",
 
 
     "theme_mode": "Theme mode",
+    "theme_mode_dark": "Dark",
+    "theme_mode_light": "Light",
     "theme_mica": "Window transparency",
+    "theme_mica_full": "Full",
+    "theme_mica_partial": "Partial",
     "theme_icon_adaptive": "Adaptive icons Shape",
+    "theme_icon_adaptive_squircle": "Squircle",
+    "theme_icon_adaptive_circle": "Circle",
+    "theme_icon_adaptive_rounded_square": "Rounded Square",
 
 
     "installer_message": "Do you want to install this application?",
+    "installer_info_version": "Version: {appVersion}",
+    "@installer_info_version" : {"placeholders": {"appVersion": {"type": "String"}}},
+    "installer_info_version_change": "Version: {appVersionOld} => {appVersionNew}",
+    "@installer_info_version_change" : {"placeholders": {"appVersionOld": {"type": "String"}, "appVersionNew": {"type": "String"}}},
+    "installer_info_package": "Package: {appPackage}",
+    "@installer_info_package" : {"placeholders": {"appPackage": {"type": "String"}}},
     "installer_installing": "Installing application {appTitle}...",
     "@installer_installing" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_installed": "The application {appTitle} was successifully installed",

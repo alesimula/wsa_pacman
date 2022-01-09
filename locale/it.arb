@@ -45,14 +45,26 @@
     "settings_ip": "Indirizzo IP WSA",
     "settings_autostart": "Avvia WSA automaticamente prima di un'installazione",
     "settings_language": "Lingua",
+    "settings_option_generic_system": "Sistema",
+    "settings_option_generic_disabled": "Disabilitato",
 
 
     "theme_mode": "Modalità tema",
+    "theme_mode_dark": "Scuro",
+    "theme_mode_light": "Chiaro",
     "theme_mica": "Trasparenza finestra",
+    "theme_mica_full": "Completa",
+    "theme_mica_partial": "Parziale",
     "theme_icon_adaptive": "Forma icone adattive",
+    "theme_icon_adaptive_squircle": "Supercerchio",
+    "theme_icon_adaptive_circle": "Cerchio",
+    "theme_icon_adaptive_rounded_square": "Quadrato arrotondato",
 
 
     "installer_message": "Vuoi installare questa applicazione?",
+    "installer_info_version": "Versione: {appVersion}",
+    "installer_info_version_change": "Versione: {appVersionOld} => {appVersionNew}",
+    "installer_info_package": "Pacchetto: {appPackage}",
     "installer_installing": "Installazione di {appTitle} in corso...",
     "installer_installed": "Applicazione {appTitle} installata correttamente",
     "installer_fail": "L'applicazione {appTitle} non è stata installata",

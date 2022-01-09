@@ -81,7 +81,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
     return ScalableImageWidget(si: await scalable);
   }
 
-  static List<Widget> optionsListDeferred<E extends ProtobufEnum, V>(List<E> values, V Function(E e) getter, bool Function(V v) checked, Function(E e, V v) updater) => List.generate(values.length, (index) {
+  static List<Widget> optionsListDeferred<E extends ProtobufEnum, V>(List<E> values, String Function(E)? title, V Function(E e) getter, bool Function(V v) checked, Function(E e, V v) updater) => List.generate(values.length, (index) {
     final modeOpt = values[index];
     final mode = getter(modeOpt);
     return Padding(
@@ -95,13 +95,13 @@ class ScreenSettingsState extends State<ScreenSettings> {
             //themeMode = mode;
           }
         },
-        content: Text(modeOpt.toString().normalized),
+        content: Text(title != null ? title(modeOpt) : modeOpt.toString().normalized),
       ),
     );
   });
 
-  static List<Widget> optionsList<E extends ProtobufEnum>(List<E> values, bool Function(E e) checked, Function(E e) updater) =>
-      optionsListDeferred<E, E>(values, (e) => e, checked, (e, v) => updater(e));
+  static List<Widget> optionsList<E extends ProtobufEnum>(List<E> values, String Function(E)? title, bool Function(E e) checked, Function(E e) updater) =>
+      optionsListDeferred<E, E>(values, title, (e) => e, checked, (e, v) => updater(e));
   
   static late final _localeItems = LocaleUtils.supportedLocales.map((l)=>ComboboxItem(child: Text(l.name), value: l)).toList();
 
@@ -224,7 +224,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
             leading: const Icon(Mdi.themeLightDark, size: 23),
             header: Text(lang.theme_mode),
             content: Column(crossAxisAlignment: CrossAxisAlignment.start, children: 
-                optionsListDeferred<Options_Theme, ThemeMode>(Options_Theme.values, (e) => e.mode, (v) => themeMode == v, (e, v) => GState.theme..update((p0) => e)..persist())
+                optionsListDeferred<Options_Theme, ThemeMode>(Options_Theme.values, (e)=>e.description(lang), (e) => e.mode, (v) => themeMode == v, (e, v) => GState.theme..update((p0) => e)..persist())
             ),
             //headerBackgroundColor: ThemablePaneItem.uncheckedInputAlphaColor(theme, states),
             direction: ExpanderDirection.down, // (optional). Defaults to ExpanderDirection.down
@@ -235,7 +235,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
             leading: const Icon(Mdi.blur, size: 23),
             header: Text(lang.theme_mica),
             content: Column(crossAxisAlignment: CrossAxisAlignment.start, children: 
-                optionsList<Options_Mica>(Options_Mica.values, (e) => mica == e, (e) => GState.mica..update((_) => e)..persist())
+                optionsList<Options_Mica>(Options_Mica.values, (e)=>e.description(lang), (e) => mica == e, (e) => GState.mica..update((_) => e)..persist())
             ),
             //headerBackgroundColor: ThemablePaneItem.uncheckedInputAlphaColor(theme, states),
             direction: ExpanderDirection.down, // (optional). Defaults to ExpanderDirection.down
@@ -246,7 +246,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
             leading: SizedBox(width: 23.00, height: 23.00, child: exampleIcon),
             header: Text(lang.theme_icon_adaptive),
             content: Column(crossAxisAlignment: CrossAxisAlignment.start, children: 
-                optionsList<Options_IconShape>(Options_IconShape.values, (e) => iconShape == e, (e) => GState.iconShape..update((_) => e)..persist())
+                optionsList<Options_IconShape>(Options_IconShape.values, (e)=>e.description(lang), (e) => iconShape == e, (e) => GState.iconShape..update((_) => e)..persist())
             ),
             trailing: Row(children: [SizedBox(width: 28.5, child: Text(legacyIcons ? OFF : ON)), ToggleSwitch(
               checked: !legacyIcons,
