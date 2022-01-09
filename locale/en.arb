@@ -43,6 +43,7 @@
   "wsa_manage_settings": "Manage Settings",
 
   "settings_port": "WSA Port",
+  "settings_ip": "WSA IP address",
   "settings_autostart": "Autostart WSA before installation",
   "settings_language": "Language",
 
@@ -69,7 +70,7 @@
   "installer_btn_downgrade": "Downgrade (unsafe)",
   "installer_btn_dismiss": "Dismiss",
   "installer_btn_open": "Open app",
-  "installer_btn_shortcut": "Create desktop shortcut",
+  "installer_btn_checkbox_shortcut": "Create desktop shortcut",
 
 
   "android_permission_none": "No permissions required",

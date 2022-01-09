@@ -205,7 +205,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
           if (installType == InstallType.INSTALL) const SizedBox(height: 10),
           if (installType == InstallType.INSTALL) Checkbox(
             checked: createShortcut,
-            content: Text(lang.installer_btn_shortcut),
+            content: Text(lang.installer_btn_checkbox_shortcut),
             onChanged: (value) => setState(() => createShortcut = value!),
           ),
           const Spacer(),
