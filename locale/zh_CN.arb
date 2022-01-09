@@ -1,0 +1,93 @@
+{
+  "@@locale": "zh_CN",
+  "@locale_desc": {"description": "简体中文"},
+  "locale_desc": "Simplified Chinese",
+  "@locale_system": {"description": "描述系统区域设置"},
+  "locale_system": "系统",
+
+
+  "btn_boot": "启动",
+  "btn_switch_on": "打开",
+  "btn_switch_off": "关闭",
+
+
+  "winver_10": "Windows 10",
+  "winver_older": "旧 Windows 版本",
+
+
+  "status_unsupported": "WSA 未安装",
+  "status_unsupported_desc": "{windowsVersion} 检测到但未找到 WSA； 此应用程序依赖于 WSA，仅在 Windows 11 上正式支持",
+  "@status_unsupported_desc" : {"placeholders": {"windowsVersion": {"type": "String"}}},
+  "status_missing": "WSA 未安装,
+  "status_missing_desc": "未找到 WSA； 此应用程序取决于 WSA，请从 Microsoft Store 安装适用于 Android 的 Windows 子系统（或 Amazon Appstore）",
+  "status_unknown": "正在连接",
+  "status_unknown_desc": "正在等待建立 WASA 连接...",
+  "status_starting": "正在启动",
+  "status_starting_desc": "WSA 正在启动，请稍候...",
+  "status_arrested": "已停滞",
+  "status_arrested_desc": "WSA 已关闭",
+  "status_offline": "离线",
+  "status_offline_desc": "无法与 WSA 建立连接：开发者模式和 USB 调试被禁用或指定了错误的端口",
+  "status_disconnected": "已断开连接",
+  "status_disconnected_desc": "由于未知原因，无法建立 WSA 连接",
+  "status_connected": "已连接",
+  "status_connected_desc": "成功连接到 WSA，所有系统都运行",
+
+
+  "screen_wsa": "WSA 包管理器",
+  "screen_settings": "设置",
+
+
+  "wsa_manage": "Android 管理",
+  "wsa_manage_app": "管理应用程序",
+  "wsa_manage_settings": "管理设置",
+
+  "settings_port": "WSA 端口",
+  "settings_ip": "WSA IP 地址",
+  "settings_autostart": "在安装之前自动启动 WSA",
+  "settings_language": "语言",
+
+
+  "theme_mode": "主题模式",
+  "theme_mica": "窗口透明度",
+  "theme_icon_adaptive": "自适应图标形状",
+
+
+  "installer_message": "您要安装此应用程序吗？",
+  "installer_installing": "正在安装应用程序 {appTitle}...",
+  "@installer_installing" : {"placeholders": {"appTitle": {"type": "String"}}},
+  "installer_installed": "应用程序 {appTitle} 已成功安装",
+  "@installer_installed" : {"placeholders": {"appTitle": {"type": "String"}}},
+  "installer_fail": "应用程序 {appTitle} 未安装",
+  "@installer_fail" : {"placeholders": {"appTitle": {"type": "String"}}},
+  "installer_error_nomsg": "安装失败，但没有抛出错误",
+  "installer_btn_starting": "正在启动...",
+  "installer_btn_loading": "加载中...",
+  "installer_btn_cancel": "取消",
+  "installer_btn_install": "安装",
+  "installer_btn_reinstall": "重新安装",
+  "installer_btn_update": "更新",
+  "installer_btn_downgrade": "降级 (unsafe)",
+  "installer_btn_dismiss": "解除",
+  "installer_btn_open": "打开应用程序",
+  "installer_btn_checkbox_shortcut": "创建桌面快捷方式",
+
+
+  "android_permission_none": "不需要任何权限",
+  "android_permission_admin": "以管理员身份管理设备",
+  "android_permission_admin_brick": "远程禁用或重置设备",
+  "android_permission_admin_lock": "远程锁定设备",
+  "android_permission_storage": "文件和媒体",
+  "android_permission_microphone": "麦克风",
+  "android_permission_camera": "相机",
+  "android_permission_location": "位置",
+  "android_permission_phone": "手机",
+  "android_permission_call_log": "通话记录",
+  "android_permission_sms": "信息",
+  "android_permission_contacts": "联系人",
+  "android_permission_calendar": "日历",
+  "android_permission_activity_recognition": "体育活动",
+  "android_permission_sensors": "设备传感器",
+  "android_permission_sensors_body": "身体传感器",
+  "android_permission_nearby_devices": "查找附近的设备"
+}
