@@ -47,18 +47,8 @@ class WSAStatusAlert {
 
   final ConnectionStatus type;
   final InfoBarSeverity severity;
-  final String title;
-  final String desc;
-
-  late final InfoBar widget = InfoBar(
-    title: Text(title),
-    content: Text(desc),
-    isLong: true,
-    severity: severity,
-    action: () {
-      // Do nothing for now
-    }(),
-  );
+  final String Function(AppLocalizations lang) title;
+  final String Function(AppLocalizations lang) desc;
 
   bool get isConnected => type == ConnectionStatus.CONNECTED;
   bool get isDisconnected => type != ConnectionStatus.CONNECTED;
@@ -69,26 +59,19 @@ enum ConnectionStatus {
 }
 extension on ConnectionStatus {
   static final Map<ConnectionStatus, WSAStatusAlert> _statusAlers = {
-    ConnectionStatus.UNSUPPORTED: WSAStatusAlert(ConnectionStatus.UNSUPPORTED, InfoBarSeverity.error, "WSA not installed", 
-      "${WinVer.isWindows10OrGreater ? 'Windows 10' : 'Older Windows version'} detected and WSA not found; this application depends on WSA, which is only officially supported on Windows 11"),
-    ConnectionStatus.MISSING: WSAStatusAlert(ConnectionStatus.MISSING, InfoBarSeverity.error, "WSA not installed", 
-      "WSA not found; this application depends on WSA, please install Windows Subsystem for Android (or the Amazon Appstore) from the Microsoft Store"),
-    ConnectionStatus.UNKNOWN: WSAStatusAlert(ConnectionStatus.UNKNOWN, InfoBarSeverity.info, "Connecting", 
-      "Waiting for a WSA connection to be enstablished..."),
-    ConnectionStatus.STARTING: WSAStatusAlert(ConnectionStatus.STARTING, InfoBarSeverity.info, "Starting", 
-      "WSA is starting, please stand by..."),
-    ConnectionStatus.ARRESTED: WSAStatusAlert(ConnectionStatus.ARRESTED, InfoBarSeverity.warning, "Arrested", 
-      "WSA is turned off"),
-    ConnectionStatus.OFFLINE: WSAStatusAlert(ConnectionStatus.OFFLINE, InfoBarSeverity.warning, "Offline", 
-      "Could not establish a connection with WSA: either developer mode and USB debugging are disabled or a wrong port is specified"),
-    ConnectionStatus.DISCONNECTED: WSAStatusAlert(ConnectionStatus.DISCONNECTED, InfoBarSeverity.error, "Disconnected", 
-      "A WSA connection could not be enstablished for unknown reasons"),
-    ConnectionStatus.CONNECTED: WSAStatusAlert(ConnectionStatus.CONNECTED, InfoBarSeverity.success, "Connected", 
-      "Successfully connected to WSA, all systems go"),
+    ConnectionStatus.UNSUPPORTED: WSAStatusAlert(ConnectionStatus.UNSUPPORTED, InfoBarSeverity.error, (l)=>l.status_unsupported, 
+      (l)=>l.status_unsupported_desc(WinVer.isWindows10OrGreater ? l.winver_10 : l.winver_older)),
+    ConnectionStatus.MISSING: WSAStatusAlert(ConnectionStatus.MISSING, InfoBarSeverity.error, (l)=>l.status_missing, (l)=>l.status_missing_desc),
+    ConnectionStatus.UNKNOWN: WSAStatusAlert(ConnectionStatus.UNKNOWN, InfoBarSeverity.info, (l)=>l.status_unknown, (l)=>l.status_unknown_desc),
+    ConnectionStatus.STARTING: WSAStatusAlert(ConnectionStatus.STARTING, InfoBarSeverity.info, (l)=>l.status_starting, (l)=>l.status_starting_desc),
+    ConnectionStatus.ARRESTED: WSAStatusAlert(ConnectionStatus.ARRESTED, InfoBarSeverity.warning, (l)=>l.status_arrested, (l)=>l.status_arrested_desc),
+    ConnectionStatus.OFFLINE: WSAStatusAlert(ConnectionStatus.OFFLINE, InfoBarSeverity.warning, (l)=>l.status_offline, (l)=>l.status_offline_desc),
+    ConnectionStatus.DISCONNECTED: WSAStatusAlert(ConnectionStatus.DISCONNECTED, InfoBarSeverity.error, (l)=>l.status_disconnected, (l)=>l.status_disconnected_desc),
+    ConnectionStatus.CONNECTED: WSAStatusAlert(ConnectionStatus.CONNECTED, InfoBarSeverity.success, (l)=>l.status_connected, (l)=>l.status_connected_desc),
   };
 
-  WSAStatusAlert get statusAlert => _statusAlers[this] ?? WSAStatusAlert(this, InfoBarSeverity.error, "Unmapped status",
-    "Encountered WSA connection status $this, the status is missing an alert message");
+  WSAStatusAlert get statusAlert => _statusAlers[this] ?? WSAStatusAlert(this, InfoBarSeverity.error, (l)=>"Unmapped status",
+    (l)=>"Encountered WSA connection status $this, the status is missing an alert message");
 }
 
 extension __EnumExtension on Enum {

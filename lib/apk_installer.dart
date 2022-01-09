@@ -35,7 +35,7 @@ class ApkInstaller extends StatefulWidget {
       icon: '%LOCALAPPDATA%\\Packages\\${Env.WSA_INFO.familyName}\\LocalState\\$package.ico');
   }
 
-  static void installApk(String apkFile, String ipAddress, int port, [bool downgrade = false]) async {
+  static void installApk(String apkFile, String ipAddress, int port, AppLocalizations lang, [bool downgrade = false]) async {
     log("INSTALLING \"$apkFile\" on on $ipAddress:$port...");
     var installation = Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'install', if (downgrade) '-r', if (downgrade) '-d', apkFile])
       .timeout(const Duration(seconds: 30)).onError((error, stackTrace) => ProcessResult(-1, -1, null, null));
@@ -53,7 +53,7 @@ class ApkInstaller extends StatefulWidget {
       String errorCode = errorMatch?.group(2) ?? "";
       GState.errorCode.update((_) => errorCode.isNotEmpty ? errorCode : "UNKNOWN_ERROR");
       String errorDesc = errorMatch?.group(3) ?? "";
-      GState.errorDesc.update((_) => errorDesc.isNotEmpty ? errorDesc : "The installation has failed, but no error was thrown");
+      GState.errorDesc.update((_) => errorDesc.isNotEmpty ? errorDesc : lang.installer_error_nomsg);
     }
   }
 
@@ -69,7 +69,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
   
   @override
   Widget build(BuildContext context) {
-    final appTheme = context.watch<AppTheme>();
+    final lang = AppLocalizations.of(context)!;
     Widget icon;
     String appTitle = GState.apkTitle.of(context);
     Widget? aForeground = GState.apkForegroundIcon.of(context);
@@ -126,7 +126,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 10),
-              const Text("Do you want to install this application?"),
+              Text(lang.installer_message),
               const SizedBox(height: 10),
               Text("Version:\u00A0${oldVersion.isNotEmpty ? '$oldVersion\u00A0=>\u00A0' : ''}${version.replaceAll(' ', '\u00A0')}", style: TextStyle(color: theme.disabledColor), overflow: TextOverflow.ellipsis, maxLines: 1),
               Text("Package:\u00A0$package", style: TextStyle(color: theme.disabledColor), overflow: TextOverflow.ellipsis, maxLines: 1),
@@ -154,7 +154,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
               for (var permission in GState.permissions.of(context)) Container(
                 padding: EdgeInsets.only(right: 10),
                 child: ThemablePaneItem(
-                  title: Text(permission.description),
+                  title: Text(permission.description(lang)),
                   icon: permission.icon,
                   translucent: mica.enabled
                 ).build(
@@ -173,15 +173,15 @@ class _ApkInstallerState extends State<ApkInstaller> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               noMoveWindow(Button(
-                child: const Text('Cancel'),
+                child: Text(lang.installer_btn_cancel),
                 onPressed: false ? null : (){appWindow.close();},
               )),
               const SizedBox(width: 15),
               noMoveWindow(ToggleButton(
-                child: Text(startingWSA ? "Starting..." : installType?.buttonText ?? "Loading..."),
+                child: Text(startingWSA ? lang.installer_btn_starting : installType?.buttonText(lang) ?? lang.installer_btn_loading),
                 checked: true,
                 style: installType == InstallType.DOWNGRADE ? warningButtonTheme : null,
-                onChanged: !canInstall ? null : (_){ApkInstaller.installApk(ApkReader.APK_FILE, ipAddress, port, installType == InstallType.DOWNGRADE);},
+                onChanged: !canInstall ? null : (_){ApkInstaller.installApk(ApkReader.APK_FILE, ipAddress, port, lang, installType == InstallType.DOWNGRADE);},
               )),
               /*const SizedBox(width: 15),noMoveWindow(ToggleButton(
                 child: const Text('TEST-ICON'),
@@ -194,18 +194,18 @@ class _ApkInstallerState extends State<ApkInstaller> {
         case InstallState.INSTALLING: return [
           titleWidget,
           const SizedBox(height: 10),
-          Text("Installing application $appTitle..."),
+          Text(lang.installer_installing(appTitle)),
           const Spacer(),
           Row(children: const [Expanded(child: ProgressBar(strokeWidth: 6))]),
         ];
         case InstallState.SUCCESS: return [
           titleWidget,
           const SizedBox(height: 10),
-          Text("The application $appTitle was successifully installed"),
+          Text(lang.installer_installed(appTitle)),
           if (installType == InstallType.INSTALL) const SizedBox(height: 10),
           if (installType == InstallType.INSTALL) Checkbox(
             checked: createShortcut,
-            content: const Text("Create desktop shortcut"),
+            content: Text(lang.installer_btn_shortcut),
             onChanged: (value) => setState(() => createShortcut = value!),
           ),
           const Spacer(),
@@ -214,12 +214,12 @@ class _ApkInstallerState extends State<ApkInstaller> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               noMoveWindow(Button(
-                child: const Text('Dismiss'),
+                child: Text(lang.installer_btn_dismiss),
                 onPressed: (){if (createShortcut) ApkInstaller.createLaunchIcon(package, appTitle); appWindow.close();},
               )),
               (){return isLaunchable ? const SizedBox(width: 15) : SizedBox.shrink();}(),
               (){return isLaunchable ? noMoveWindow(ToggleButton(
-                child: const Text('Open app'),
+                child: Text(lang.installer_btn_open),
                 checked: true,
                 onChanged: (_){if (createShortcut) ApkInstaller.createLaunchIcon(package, appTitle); Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'shell', 'am start -n ${GState.package.of(context)}/${GState.activity.of(context)}']); appWindow.close();},
               )) : const SizedBox.shrink();}()
@@ -229,7 +229,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
         case InstallState.ERROR: return [
           titleWidget,
           const SizedBox(height: 10),
-          Text("The application $appTitle was not installed"),
+          Text(lang.installer_fail(appTitle)),
           const SizedBox(height: 10),
           FlexibleInfoBar(
             title: noMoveWindow(material.SelectableText(GState.errorCode.of(context))),
@@ -242,7 +242,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               noMoveWindow(Button(
-                child: const Text('Dismiss'),
+                child: Text(lang.installer_btn_dismiss),
                 onPressed: (){appWindow.close();},
               ))
             ]

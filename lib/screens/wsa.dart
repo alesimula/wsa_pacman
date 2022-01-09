@@ -48,11 +48,12 @@ class _ScreenWSAState extends State<ScreenWSA> {
   @override
   Widget build(BuildContext context) {
     var connectionStatus = GState.connectionStatus.of(context);
+    final lang = AppLocalizations.of(context)!;
 
     const smallSpacer = SizedBox(height: 5.0);
 
     return ScaffoldPage(
-      header: const PageHeader(title: Text('WSA Package Manager')),
+      header: PageHeader(title: Text(lang.screen_wsa)),
       content: ListView(
         padding: EdgeInsets.only(
           bottom: kPageDefaultVerticalPadding,
@@ -63,11 +64,11 @@ class _ScreenWSAState extends State<ScreenWSA> {
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
             child: InfoBar(
-              title: Text(connectionStatus.title),
+              title: Text(connectionStatus.title(lang)),
               content: Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
-                Text(connectionStatus.desc),
+                Text(connectionStatus.desc(lang)),
                 const SizedBox(width: 15.0),
-                if (connectionStatus.type == ConnectionStatus.ARRESTED) Button(child: const Text("Turn on"), onPressed: () => Process.run(Env.WSA_EXECUTABLE, [], workingDirectory: Env.WSA_SYSTEM_PATH))
+                if (connectionStatus.type == ConnectionStatus.ARRESTED) Button(child: Text(lang.btn_boot), onPressed: () => Process.run(Env.WSA_EXECUTABLE, [], workingDirectory: Env.WSA_SYSTEM_PATH))
               ]),
               isLong: true,
               severity: connectionStatus.severity,
@@ -77,11 +78,11 @@ class _ScreenWSAState extends State<ScreenWSA> {
             )
           ),
           const SizedBox(height: 20),
-          Text('Android Management', style: FluentTheme.of(context).typography.bodyLarge),
+          Text(lang.wsa_manage, style: FluentTheme.of(context).typography.bodyLarge),
           const SizedBox(height: 20),
           FluentCard(
             leading: const Icon(Mdi.android , size: 23),
-            content: const Text('Manage Applications'),
+            content: Text(lang.wsa_manage_app),
             isButton: true,
             onPressed: connectionStatus.isDisconnected ? 
                 null : () => Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '${GState.ipAddress.of(context)}:${GState.androidPort.of(context)}', 
@@ -90,7 +91,7 @@ class _ScreenWSAState extends State<ScreenWSA> {
           smallSpacer,
           FluentCard(
             leading: const Icon(Mdi.cogs, size: 23),
-            content: const Text('Manage Settings'),
+            content: Text(lang.wsa_manage_settings),
             isButton: true,
             onPressed: connectionStatus.isDisconnected ?
                 null : () => Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '${GState.ipAddress.of(context)}:${GState.androidPort.of(context)}', 

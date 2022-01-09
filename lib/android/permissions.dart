@@ -3,6 +3,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mdi/mdi.dart';
+import 'package:wsa_pacman/utils/locale_utils.dart';
 
 enum AndroidPermission {
   NONE,
@@ -52,24 +53,24 @@ extension AndroidPermissionList on AndroidPermission {
     case AndroidPermission.NEARBY_DEVICES: return const Icon(Mdi.accessPointNetwork);
   }}
 
-  String get description {switch (this) {
-    case AndroidPermission.NONE: return "No permissions required";
-    case AndroidPermission.X_ADMIN_BRICK: return "Remotely disable or reset device";
-    case AndroidPermission.X_ADMIN_LOCK: return "Remotely lock device";
-    case AndroidPermission.ADMIN: return "Manage device as administrator";
-    case AndroidPermission.STORAGE: return "Files and media";
-    case AndroidPermission.MICROPHONE: return "Microphone";
-    case AndroidPermission.CAMERA: return "Camera";
-    case AndroidPermission.LOCATION: return "Location";
-    case AndroidPermission.PHONE: return "Phone";
-    case AndroidPermission.CALL_LOG: return "Call logs";
-    case AndroidPermission.SMS: return "Messages";
-    case AndroidPermission.CONTACTS: return "Contacts";
-    case AndroidPermission.CALENDAR: return "Calendar";
-    case AndroidPermission.ACTIVITY_RECOGNITION: return "Physical activity";
-    case AndroidPermission.X_SENSORS_BODY: return "Body sensors";
-    case AndroidPermission.SENSORS: return "Device sensors";
-    case AndroidPermission.NEARBY_DEVICES: return "Locate nearby devices";
+  String description(AppLocalizations lang) {switch (this) {
+    case AndroidPermission.NONE: return lang.android_permission_none;
+    case AndroidPermission.X_ADMIN_BRICK: return lang.android_permission_admin_brick;
+    case AndroidPermission.X_ADMIN_LOCK: return lang.android_permission_admin_lock;
+    case AndroidPermission.ADMIN: return lang.android_permission_admin;
+    case AndroidPermission.STORAGE: return lang.android_permission_storage;
+    case AndroidPermission.MICROPHONE: return lang.android_permission_microphone;
+    case AndroidPermission.CAMERA: return lang.android_permission_camera;
+    case AndroidPermission.LOCATION: return lang.android_permission_location;
+    case AndroidPermission.PHONE: return lang.android_permission_phone;
+    case AndroidPermission.CALL_LOG: return lang.android_permission_call_log;
+    case AndroidPermission.SMS: return lang.android_permission_sms;
+    case AndroidPermission.CONTACTS: return lang.android_permission_contacts;
+    case AndroidPermission.CALENDAR: return lang.android_permission_calendar;
+    case AndroidPermission.ACTIVITY_RECOGNITION: return lang.android_permission_activity_recognition;
+    case AndroidPermission.X_SENSORS_BODY: return lang.android_permission_sensors_body;
+    case AndroidPermission.SENSORS: return lang.android_permission_sensors;
+    case AndroidPermission.NEARBY_DEVICES: return lang.android_permission_nearby_devices;
   }}
  
   static final _permissions = {

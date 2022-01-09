@@ -110,6 +110,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
     final appTheme = context.watch<AppTheme>();
     final theme = FluentTheme.of(context);
     final locale_lang = GState.locale.of(context);
+    final lang = AppLocalizations.of(context)!;
     
     final tooltipThemeData = TooltipThemeData(decoration: () {
       const radius = BorderRadius.zero;
@@ -151,13 +152,16 @@ class ScreenSettingsState extends State<ScreenSettings> {
     final autostartWSA = GState.autostartWSA.of(context);
     final locale = AppLocalizations.of(context);
 
+    final OFF = lang.btn_switch_off;
+    final ON = lang.btn_switch_on;
+
     final exampleIcon = FutureBuilder(
       future: legacyIcons ? _exLegacyIcon : (() async =>AdaptiveIcon(background: await _exBackground, foreground: await _exForeground, radius: iconShape.radius))(), 
       builder: (context, AsyncSnapshot<Widget> snapshot) => snapshot.data ?? empty
     );
 
     return ScaffoldPage(
-      header: const PageHeader(title: Text('Settings')),
+      header: PageHeader(title: Text(lang.screen_settings)),
       content: ListView(
         padding: EdgeInsets.only(
           bottom: kPageDefaultVerticalPadding,
@@ -166,8 +170,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
         ),
         controller: controller,
         children: [
-          Text('WSA Port',
-              style: theme.typography.bodyLarge),
+          Text(lang.settings_port, style: theme.typography.bodyLarge),
           spacer,
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
@@ -198,16 +201,16 @@ class ScreenSettingsState extends State<ScreenSettings> {
           biggerSpacer,
           FluentCard(
             leading: const Icon(Mdi.powerStandby , size: 23),
-            content: const Text('Autostart WSA before installation'),
-            trailing: Row(children: [SizedBox(width: 28.5, child: Text(autostartWSA ? 'On' : 'Off')), ToggleSwitch(
+            content: Text(lang.settings_autostart),
+            trailing: Row(children: [SizedBox(width: 28.5, child: Text(autostartWSA ? ON : OFF)), ToggleSwitch(
               checked: autostartWSA,
               onChanged: (v) => GState.autostartWSA..$ = v..persist()
             )]),
           ),
           smallSpacer,
           /*FluentCard(
-            leading: const Icon(Mdi.powerStandby , size: 23),
-            content: const Text('Language'),
+            leading: const Icon(Mdi.translate , size: 23),
+            content: Text(lang.settings_language),
             trailing: SizedBox(width: 300, height: 30, child: Combobox<NamedLocale>(
               onTap: (){}, placeholder: Text(locale_lang.name), 
               isExpanded: true,
@@ -219,7 +222,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
           smallSpacer,*/
           ExpanderWin11(
             leading: const Icon(Mdi.themeLightDark, size: 23),
-            header: const Text('Theme mode'),
+            header: Text(lang.theme_mode),
             content: Column(crossAxisAlignment: CrossAxisAlignment.start, children: 
                 optionsListDeferred<Options_Theme, ThemeMode>(Options_Theme.values, (e) => e.mode, (v) => themeMode == v, (e, v) => GState.theme..update((p0) => e)..persist())
             ),
@@ -230,7 +233,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
           smallSpacer,
           if (WinVer.isWindows11OrGreater) ExpanderWin11(
             leading: const Icon(Mdi.blur, size: 23),
-            header: const Text('Window transparency'),
+            header: Text(lang.theme_mica),
             content: Column(crossAxisAlignment: CrossAxisAlignment.start, children: 
                 optionsList<Options_Mica>(Options_Mica.values, (e) => mica == e, (e) => GState.mica..update((_) => e)..persist())
             ),
@@ -241,11 +244,11 @@ class ScreenSettingsState extends State<ScreenSettings> {
           smallSpacer,
           ExpanderWin11(
             leading: SizedBox(width: 23.00, height: 23.00, child: exampleIcon),
-            header: const Text('Adaptive icons Shape'),
+            header: Text(lang.theme_icon_adaptive),
             content: Column(crossAxisAlignment: CrossAxisAlignment.start, children: 
                 optionsList<Options_IconShape>(Options_IconShape.values, (e) => iconShape == e, (e) => GState.iconShape..update((_) => e)..persist())
             ),
-            trailing: Row(children: [SizedBox(width: 28.5, child: Text(legacyIcons ? 'Off' : 'On')), ToggleSwitch(
+            trailing: Row(children: [SizedBox(width: 28.5, child: Text(legacyIcons ? OFF : ON)), ToggleSwitch(
               checked: !legacyIcons,
               onChanged: (v) => GState.legacyIcons..$ = !v..persist()
             )]),

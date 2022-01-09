@@ -1,3 +1,4 @@
+import 'package:wsa_pacman/utils/locale_utils.dart';
 
 class Resource {
   ResType type;
@@ -15,12 +16,12 @@ enum ResType {
     COLOR, FILE
 }
 extension InstallTypeExt on InstallType {
-  String get buttonText {switch (this) {
-    case InstallType.UNKNOWN: return "Install";
-    case InstallType.INSTALL: return "Install";
-    case InstallType.REINSTALL: return "Reinstall";
-    case InstallType.UPDATE: return "Update";
-    case InstallType.DOWNGRADE: return "Downgrade (unsafe)";
+  String buttonText(AppLocalizations locale) {switch (this) {
+    case InstallType.UNKNOWN: return locale.installer_btn_install;
+    case InstallType.INSTALL: return locale.installer_btn_install;
+    case InstallType.REINSTALL: return locale.installer_btn_reinstall;
+    case InstallType.UPDATE: return locale.installer_btn_update;
+    case InstallType.DOWNGRADE: return locale.installer_btn_downgrade;
   }}
 }
 ResType getResType(String typeId) {switch (typeId) {

@@ -1,0 +1,7 @@
+{
+  "@@locale": "it",
+  "locale_desc": "Italiano",
+
+  "status_connected": "Connesso",
+  "status_connected_desc": "Connesso correttamente a WSA, applicazione pronta"
+}
