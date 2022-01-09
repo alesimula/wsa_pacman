@@ -40,18 +40,31 @@
     "wsa_manage_app": "Appeinstellungen",
     "wsa_manage_settings": "Systemeinstellungen",
 
+
     "settings_port": "WSA Debugging Port",
     "settings_ip": "WSA IP Adresse",
     "settings_autostart": "Starte WSA automatisch",
     "settings_language": "Sprache",
+    "settings_option_generic_system": "System",
+    "settings_option_generic_disabled": "Deaktiviert",
 
 
     "theme_mode": "Design",
+    "theme_mode_dark": "Dunkel",
+    "theme_mode_light": "Hell",
+    "theme_mica_full": "Vollständig",
+    "theme_mica_partial": "Teilweise",
     "theme_mica": "Transparenz",
     "theme_icon_adaptive": "Icons",
+    "theme_icon_adaptive_squircle": "Superkreis",
+    "theme_icon_adaptive_circle": "Kreis",
+    "theme_icon_adaptive_rounded_square": "Runde Ecken",
 
 
     "installer_message": "Soll diese App installiert werden?",
+    "installer_info_version": "Version: {appVersion}",
+    "installer_info_version_change": "Version: {appVersionOld} => {appVersionNew}",
+    "installer_info_package": "Paketname: {appPackage}",
     "installer_installing": "Installiere {appTitle}...",
     "installer_installed": "{appTitle} wurde erfolgreich installiert.",
     "installer_fail": "{appTitle} wurde nicht installiert.",
