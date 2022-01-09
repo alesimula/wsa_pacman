@@ -49,6 +49,7 @@
     "wsa_manage_app": "Manage Applications",
     "wsa_manage_settings": "Manage Settings",
 
+    
     "settings_port": "WSA Port",
     "settings_ip": "WSA IP address",
     "settings_autostart": "Autostart WSA before installation",

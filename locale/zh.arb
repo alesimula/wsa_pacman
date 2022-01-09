@@ -41,6 +41,7 @@
     "wsa_manage_app": "管理应用程序",
     "wsa_manage_settings": "管理设置",
 
+    
     "settings_port": "WSA 端口",
     "settings_ip": "WSA IP 地址",
     "settings_autostart": "在安装之前自动启动 WSA",

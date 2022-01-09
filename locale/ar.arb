@@ -41,6 +41,7 @@
     "wsa_manage_app": "إدارة التطبيقات",
     "wsa_manage_settings": "إدارة الضبط",
 
+    
     "settings_port": "مدخل الWSA",
     "settings_ip": "عنوان الIP الخاص بWSA",
     "settings_autostart": "تفعبل تلقائي لWSA قبل التثبيت",

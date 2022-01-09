@@ -1,6 +1,8 @@
 {
-    "@@locale": "pt_BR",
+    "@@locale": "pt",
+    "@locale_desc": {"description": "Português (Brasil) [pt_BR]"},
     "locale_desc": "Português (Brasil)",
+
     "locale_system": "Sistema",
 
 
@@ -9,13 +11,12 @@
     "btn_switch_off": "Desligado",
 
 
-    "winver_10": "Windows 10",
-    "winver_older": "Versão antiga do Windows",
+    "status_subtext_winver_10": "Windows 10",
+    "status_subtext_winver_older": "Versão antiga do Windows",
 
 
     "status_unsupported": "WSA não instalado",
     "status_unsupported_desc": "{windowsVersion} detectado e WSA não encontrado. Este aplicativo depende do WSA, que é suportado oficialmente no Windows 11",
-
     "status_missing": "WSA não instalado",
     "status_missing_desc": "WSA não encontrado. Este aplicativo depende do WSA, instale o Windows Subsystem for Android (ou Amazon Appstore) da Microsoft Store",
     "status_unknown": "Conectando",
@@ -39,6 +40,7 @@
     "wsa_manage": "Gerenciamento do Android",
     "wsa_manage_app": "Gerenciar aplicativos",
     "wsa_manage_settings": "Gerenciar configurações",
+
 
     "settings_port": "Porta da WSA",
     "settings_ip": "Endereço IP do WSA",
