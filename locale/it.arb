@@ -10,7 +10,7 @@
 
 
   "winver_10": "rilevato Windows 10",
-  "winver_older": "rilevata una versione di Windows più vecchia",
+  "winver_older": "rilevata una vecchia versione di Windows",
 
 
   "status_unsupported": "WSA non installato",
