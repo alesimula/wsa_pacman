@@ -7,8 +7,26 @@
 
 
     "btn_boot": "Ativar",
-    "btn_switch_on": "Ligado",
-    "btn_switch_off": "Desligado",
+    "btn_switch_on": "Lig",
+    "btn_switch_off": "Desl",
+
+
+    "option_thememode_dark": "Escuro",
+    "option_thememode_light": "Claro",
+
+    "option_icon_squircle": "Quadrado-círculo",
+    "option_icon_circle": "Círculo",
+    "option_icon_rounded_square": "Quadrado arredondado",
+
+    "option_transparency_full": "Cheia",
+    "transparency_partial": "Parcial",
+
+    "option_generic_system": "Sistema",
+    "option_generic_disabled": "Desativado",
+
+    "option_apk_version": "Versão: {version}",
+    "option_apk_version_update": "Versão: {oldVersion} => {newVersion}",
+    "option_apk_package": "Pacote: {package}",
 
 
     "status_subtext_winver_10": "Windows 10",
