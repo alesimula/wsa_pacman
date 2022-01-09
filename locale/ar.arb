@@ -46,14 +46,26 @@
     "settings_ip": "عنوان الIP الخاص بWSA",
     "settings_autostart": "تفعبل تلقائي لWSA قبل التثبيت",
     "settings_language": "اللغة",
+    "settings_option_generic_system": "النظام",
+    "settings_option_generic_disabled": "غير مفعل",
 
 
     "theme_mode": "وضع السمات",
+    "theme_mode_dark": "داكن",
+    "theme_mode_light": "ساطع",
     "theme_mica": "شفافية النافذة",
+    "theme_mica_full": "كامل",
+    "theme_mica_partial": "جزئي",
     "theme_icon_adaptive": "ايقونات متكيفة",
+    "theme_icon_adaptive_squircle": "مربع منحني",
+    "theme_icon_adaptive_circle": "دائري",
+    "theme_icon_adaptive_rounded_square": "مربع مستدير",
 
 
     "installer_message": "هل تريد تثبيت هذا التطبيق؟",
+    "installer_info_version": "الإصدار: {appVersion}",
+    "installer_info_version_change": "الإصدار: {appVersionOld} => {appVersionNew}",
+    "installer_info_package": "الحزمة: {appPackage}",
     "installer_installing": "جاري تثبيث {appTitle}...",
     "installer_installed": "تم تثبيت {appTitle} بنجاح",
     "installer_fail": "لم يتم تثبيت {appTitle}",
