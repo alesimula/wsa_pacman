@@ -32,7 +32,7 @@ class GState {
   static final androidPort = PersistableValue(value: 58526, loader: (o)=>o.port, setter: (o,e)=>o.port = e);
   static final androidPortPending = SharedValue(value: androidPort.$.toString());
   // Interface options
-  static final locale = PersistableValue<NamedLocale>(value: LocaleUtils.SYSTEM_LOCALE, loader: (o)=>LocaleUtils.fromHashOrDefault(o.locale.toInt()), setter: (o,e)=> o.locale = $fixnum.Int64(e.hashCode));
+  static final locale = PersistableValue<NamedLocale>(value: LocaleUtils.SYSTEM_LOCALE, loader: (o)=>LocaleUtils.fromLCIDOrDefault(o.locale), setter: (o,e)=> o.locale = e.lcid);
   // Theme options
   static final theme = PersistableValue(value: Options_Theme.SYSTEM, loader: (o)=>o.theme, setter: (o,e)=> o.theme = e); 
   static final iconShape = PersistableValue(value: Options_IconShape.SQUIRCLE, loader: (o)=>o.iconShape, setter: (o,e)=> o.iconShape = e);

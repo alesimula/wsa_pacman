@@ -22,6 +22,9 @@ final _ReleaseMutex = _kernel32.lookupFunction<
 final _GetShortPathName = _kernel32.lookupFunction<
       Uint32 Function(Pointer<Utf16> lpszLongPath, Pointer<Utf16> lpszShortPath, Uint32 cchBuffer),
       int Function(Pointer<Utf16> lpszLongPath, Pointer<Utf16> lpszShortPath, int cchBuffer)>('GetShortPathNameW');
+final _LocaleNameToLCID = _kernel32.lookupFunction<
+    Uint32 Function(Pointer<Utf16> lpName, Uint32 dwFlags), 
+    int Function(Pointer<Utf16> lpName, int dwFlags)>('LocaleNameToLCID');
 
 class RegistryKeyValuePair {
   final String key;
@@ -92,6 +95,15 @@ extension WinFile on File {
 }
 
 class WinIO {
+  static int? localeToLCID(String locale) {
+    final lpName = locale.toNativeUtf16();
+    try {
+      final int lcid = _LocaleNameToLCID(lpName, 0);
+      return lcid != 0 ? lcid : null;
+    }
+    finally {free(lpName);}
+  }
+
   static bool findMutexWstr(LPWSTR lpMutexName) {
     int mutexHandle = _OpenMutex(0x00100000, 0, lpMutexName);
     if (mutexHandle != 0) {CloseHandle(mutexHandle); return true;}
