@@ -202,7 +202,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
           FluentCard(
             leading: const Icon(Mdi.powerStandby , size: 23),
             content: Text(lang.settings_autostart),
-            trailing: Row(children: [SizedBox(width: 28.5, child: Text(autostartWSA ? ON : OFF)), ToggleSwitch(
+            trailing: Row(children: [ConstrainedBox(constraints: const BoxConstraints(minWidth: 28.5), child: Text(autostartWSA ? ON : OFF)), ToggleSwitch(
               checked: autostartWSA,
               onChanged: (v) => GState.autostartWSA..$ = v..persist()
             )]),
@@ -248,7 +248,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
             content: Column(crossAxisAlignment: CrossAxisAlignment.start, children: 
                 optionsList<Options_IconShape>(Options_IconShape.values, (e)=>e.description(lang), (e) => iconShape == e, (e) => GState.iconShape..update((_) => e)..persist())
             ),
-            trailing: Row(children: [SizedBox(width: 28.5, child: Text(legacyIcons ? OFF : ON)), ToggleSwitch(
+            trailing: Row(children: [ConstrainedBox(constraints: const BoxConstraints(minWidth: 28.5), child: Text(legacyIcons ? OFF : ON)), ToggleSwitch(
               checked: !legacyIcons,
               onChanged: (v) => GState.legacyIcons..$ = !v..persist()
             )]),
