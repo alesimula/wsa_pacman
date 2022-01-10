@@ -18,7 +18,7 @@
 
     "@status_subtext_winver_10": {"description": "仅在 'status_unsupported_desc' 中使用，修改时考虑到这一点"},
     "status_subtext_winver_10": "Windows 10",
-	"@status_subtext_winver_older": {"description": "仅在 'status_unsupported_desc' 中使用，修改时考虑到这一点"},
+    "@status_subtext_winver_older": {"description": "仅在 'status_unsupported_desc' 中使用，修改时考虑到这一点"},
     "status_subtext_winver_older": "旧 Windows 版本",
 
 
@@ -38,7 +38,7 @@
     "status_disconnected_desc": "由于未知原因，无法建立 WSA 连接",
     "status_connected": "已连接",
     "status_connected_desc": "成功连接到 WSA，所有系统都运行",
-	"status_connected_desc": "成功连接到 WSA，所有系统正常运行",
+    "status_connected_desc": "成功连接到 WSA，所有系统正常运行",
 
 
     "screen_wsa": "WSA 包管理器",
