@@ -362,6 +362,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final lang = AppLocalizations.of(context)!;
     final appTheme = context.watch<AppTheme>();
     final mica = GState.mica.of(context);
     final theme = FluentTheme.of(context);
@@ -388,9 +389,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(flex: 1,child: MoveWindow(child: Padding(
-                      padding: const EdgeInsets.only(top: 9, left: 13), 
+                      padding: const EdgeInsets.only(top: 9, left: 13, right: 13), 
                       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text(appTitle, style: theme.typography.caption),
+                        Text(lang.screen_wsa, style: theme.typography.caption),
                         const SizedBox(width: 10),
                         Text('v$appVersion', style: theme.typography.caption?.copyWith(color: theme.inactiveColor.withAlpha(theme.brightness.isLight ? 0x3F : 0x1B))),
                       ])
