@@ -1,4 +1,9 @@
 {
+    "@@README_1": "zh.arb 文件是其他文件的模板",
+    "@@README_2": "对于其他语言，不需要翻译 @ 和 @@ 开头的条目，例如 @@locale",
+    "@@README_3": "特定于国家/地区的语言环境（例如“en_GB”）需要一个备用语言环境（例如“en”）才能使用",
+
+
     "@@locale": "zh",
     "@locale_desc": {"description": "Simplified Chinese [zh_CN]"},
     "locale_desc": "简体中文",
@@ -11,7 +16,9 @@
     "btn_switch_off": "关闭",
 
 
+    "@status_subtext_winver_10": {"description": "仅在 'status_unsupported_desc' 中使用，修改时考虑到这一点"},
     "status_subtext_winver_10": "Windows 10",
+    "@status_subtext_winver_older": {"description": "仅在 'status_unsupported_desc' 中使用，修改时考虑到这一点"},
     "status_subtext_winver_older": "旧 Windows 版本",
 
 
@@ -30,7 +37,7 @@
     "status_disconnected": "已断开连接",
     "status_disconnected_desc": "由于未知原因，无法建立 WSA 连接",
     "status_connected": "已连接",
-    "status_connected_desc": "成功连接到 WSA，所有系统都运行",
+    "status_connected_desc": "成功连接到 WSA，所有系统正常运行",
 
 
     "screen_wsa": "WSA 包管理器",
@@ -46,17 +53,35 @@
     "settings_ip": "WSA IP 地址",
     "settings_autostart": "在安装之前自动启动 WSA",
     "settings_language": "语言",
+    "settings_option_generic_system": "系统",
+    "settings_option_generic_disabled": "已禁用",
 
 
     "theme_mode": "主题模式",
+    "theme_mode_dark": "深色模式",
+    "theme_mode_light": "浅色模式",
     "theme_mica": "窗口透明度",
+    "theme_mica_full": "完整",
+    "theme_mica_partial": "部分",
     "theme_icon_adaptive": "自适应图标形状",
+    "theme_icon_adaptive_squircle": "超圆角圆形",
+    "theme_icon_adaptive_circle": "圆形",
+    "theme_icon_adaptive_rounded_square": "圆角方形",
 
 
     "installer_message": "您要安装此应用程序吗？",
-    "installer_installing": "正在安装应用程序 {appTitle}...",
+    "installer_info_version": "版本：{appVersion}",
+    "@installer_info_version" : {"placeholders": {"appVersion": {"type": "String"}}},
+    "installer_info_version_change": "版本：{appVersionOld} => {appVersionNew}",
+    "@installer_info_version_change" : {"placeholders": {"appVersionOld": {"type": "String"}, "appVersionNew": {"type": "String"}}},
+    "installer_info_package": "包名：{appPackage}",
+    "@installer_info_package" : {"placeholders": {"appPackage": {"type": "String"}}},
+    "installer_installing": "正在安装 {appTitle} 应用程序...",
+    "@installer_installing" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_installed": "应用程序 {appTitle} 已成功安装",
+    "@installer_installed" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_fail": "应用程序 {appTitle} 未安装",
+    "@installer_fail" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_error_nomsg": "安装失败，但没有抛出错误",
     "installer_btn_starting": "正在启动...",
     "installer_btn_loading": "加载中...",
@@ -64,7 +89,7 @@
     "installer_btn_install": "安装",
     "installer_btn_reinstall": "重新安装",
     "installer_btn_update": "更新",
-    "installer_btn_downgrade": "降级 (unsafe)",
+    "installer_btn_downgrade": "降级（不安全）",
     "installer_btn_dismiss": "解除",
     "installer_btn_open": "打开应用程序",
     "installer_btn_checkbox_shortcut": "创建桌面快捷方式",
