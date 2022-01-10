@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, constant_identifier_names, curly_braces_in_flow_control_structures
+// ignore_for_file: non_constant_identifier_names, constant_identifier_names, curly_braces_in_flow_control_structures, camel_case_extensions
 
 import 'dart:async';
 import 'dart:developer';
@@ -57,6 +57,8 @@ class GState {
   static final errorDesc = SharedValue<String>(value: "");
 }
 
+const String UNLOCALIZED_OPTION = "UNLOCALIZED_OPTION";
+
 extension Options_Micas_Ext on Options_Mica {
   static late final bool isSupported = WinVer.isWindows11OrGreater;
   bool get supported => isSupported;
@@ -64,28 +66,45 @@ extension Options_Micas_Ext on Options_Mica {
   bool get enabled => this != Options_Mica.DISABLED && isSupported;
   bool get full => this == Options_Mica.FULL && isSupported;
   bool get partial => this == Options_Mica.PARTIAL && isSupported;
+
+  String description(AppLocalizations lang) {switch (this) {
+    case Options_Mica.FULL: return lang.theme_mica_full;
+    case Options_Mica.PARTIAL: return lang.theme_mica_partial;
+    case Options_Mica.DISABLED: return lang.settings_option_generic_disabled;
+    default: return UNLOCALIZED_OPTION;
+  }}
 }
 
-extension Options_IconShape_Radius on Options_IconShape? {
-  double get radius {
-    switch (this) {
-      case Options_IconShape.SQUIRCLE: return 0.6;
-      case Options_IconShape.CIRCLE: return 1;
-      case Options_IconShape.ROUNDED_SQUARE: return 0.35;
-      default: return 0.6;
-    }
-  }
+extension Options_IconShape_Ext on Options_IconShape? {
+  double get radius {switch (this) {
+    case Options_IconShape.SQUIRCLE: return 0.6;
+    case Options_IconShape.CIRCLE: return 1;
+    case Options_IconShape.ROUNDED_SQUARE: return 0.35;
+    default: return 0.6;
+  }}
+
+  String description(AppLocalizations lang) {switch (this) {
+    case Options_IconShape.SQUIRCLE: return lang.theme_icon_adaptive_squircle;
+    case Options_IconShape.CIRCLE: return lang.theme_icon_adaptive_circle;
+    case Options_IconShape.ROUNDED_SQUARE: return lang.theme_icon_adaptive_rounded_square;
+    default: return UNLOCALIZED_OPTION;
+  }}
 }
 
 extension Options_Theme_Mode on Options_Theme? {
-  ThemeMode get mode {
-    switch (this) {
-      case Options_Theme.SYSTEM: return ThemeMode.system;
-      case Options_Theme.LIGHT: return ThemeMode.light;
-      case Options_Theme.DARK: return ThemeMode.dark;
-      default: return ThemeMode.system;
-    }
-  }
+  ThemeMode get mode {switch (this) {
+    case Options_Theme.SYSTEM: return ThemeMode.system;
+    case Options_Theme.LIGHT: return ThemeMode.light;
+    case Options_Theme.DARK: return ThemeMode.dark;
+    default: return ThemeMode.system;
+  }}
+
+  String description(AppLocalizations lang) {switch (this) {
+    case Options_Theme.SYSTEM: return lang.settings_option_generic_system;
+    case Options_Theme.LIGHT: return lang.theme_mode_light;
+    case Options_Theme.DARK: return lang.theme_mode_dark;
+    default: return UNLOCALIZED_OPTION;
+  }}
 }
 
 class AppOptions {

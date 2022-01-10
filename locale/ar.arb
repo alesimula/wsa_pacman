@@ -1,0 +1,102 @@
+{
+    "@@locale": "ar",
+    "@locale_desc": {"description": "Arabic [ar_EG]"},
+    "locale_desc": "العربية",
+    "@locale_system": {"description": "Describes the system locale"},
+    "locale_system": "النظام",
+
+
+    "btn_boot": "تشغيل",
+    "btn_switch_on": "مفعل",
+    "btn_switch_off": "مغلق",
+
+
+    "status_subtext_winver_10": "ويندوز 10",
+    "status_subtext_winver_older": "إصدار ويندوز أقدم",
+
+
+    "status_unsupported": "حزمة WSA غير مثبتة",
+    "status_unsupported_desc": "تم العثور على إصدار {windowsVersion} و لم يثبت WSA ; و هذا التطبيق يعتمد على WSA, و التي تثبت على ويندوز 11 فقط",
+    "status_missing": "حزمة WSA غير مثبتة",
+    "status_missing_desc": "حزمة WSA غير موجودة; و هذا التطبيق يعتمد على WSA, برجاء تحميل نظام اندرويد لويندوز او متجر امازون من متجر مايكروسوفت",
+    "status_unknown": "جاري الاتصال",
+    "status_unknown_desc": "في انتظار الاتصال بWSA",
+    "status_starting": "جاري التشغيل",
+    "status_starting_desc": "جاري تشغيل WSA, برجاء الانتظار",
+    "status_arrested": "غير مفعل",
+    "status_arrested_desc": "WSA غير مفعل",
+    "status_offline": "غير متصل",
+    "status_offline_desc": "لم يمكن الاتصال بWSA: يمكن ان يكون وضع المطور غير مفعل, او تم تحديد المخرج الخاطىء",
+    "status_disconnected": "لا يمكن الاتصال",
+    "status_disconnected_desc": "لا يمكن عمل اتصال لWSA لاسباب غير معلومه",
+    "status_connected": "متصل",
+    "status_connected_desc": "تم الاتصال بنجاح",
+
+
+    "screen_wsa": "مدير حزم الWSA",
+    "screen_settings": "الضبط",
+
+
+    "wsa_manage": "إدارة الاندرويد",
+    "wsa_manage_app": "إدارة التطبيقات",
+    "wsa_manage_settings": "إدارة الضبط",
+
+    
+    "settings_port": "مدخل الWSA",
+    "settings_ip": "عنوان الIP الخاص بWSA",
+    "settings_autostart": "تفعبل تلقائي لWSA قبل التثبيت",
+    "settings_language": "اللغة",
+    "settings_option_generic_system": "النظام",
+    "settings_option_generic_disabled": "غير مفعل",
+
+
+    "theme_mode": "وضع السمات",
+    "theme_mode_dark": "داكن",
+    "theme_mode_light": "ساطع",
+    "theme_mica": "شفافية النافذة",
+    "theme_mica_full": "كامل",
+    "theme_mica_partial": "جزئي",
+    "theme_icon_adaptive": "ايقونات متكيفة",
+    "theme_icon_adaptive_squircle": "مربع منحني",
+    "theme_icon_adaptive_circle": "دائري",
+    "theme_icon_adaptive_rounded_square": "مربع مستدير",
+
+
+    "installer_message": "هل تريد تثبيت هذا التطبيق؟",
+    "installer_info_version": "الإصدار: {appVersion}",
+    "installer_info_version_change": "الإصدار: {appVersionOld} => {appVersionNew}",
+    "installer_info_package": "الحزمة: {appPackage}",
+    "installer_installing": "جاري تثبيث {appTitle}...",
+    "installer_installed": "تم تثبيت {appTitle} بنجاح",
+    "installer_fail": "لم يتم تثبيت {appTitle}",
+    "installer_error_nomsg": "فشل التثبيت, لكن بلا أخطاء",
+    "installer_btn_starting": "يتم التشغيل...",
+    "installer_btn_loading": "تحميل...",
+    "installer_btn_cancel": "إلغاء",
+    "installer_btn_install": "تثبيت",
+    "installer_btn_reinstall": "إعادة التثبيت",
+    "installer_btn_update": "تحديث",
+    "installer_btn_downgrade": "الرجوع إلى إصدار قديم(غير آمن)",
+    "installer_btn_dismiss": "تم",
+    "installer_btn_open": "فتح التطبيق",
+    "installer_btn_checkbox_shortcut": "عمل اختصار على سطح المكتب",
+
+
+    "android_permission_none": "لا يطلب اي اذونات",
+    "android_permission_admin": "يدير الجهاز كمشرف",
+    "android_permission_admin_brick": "يلغي تفعيل الجهاز او يعيد ضبطه عن بعد",
+    "android_permission_admin_lock": "قفل الجهاز عن بعد",
+    "android_permission_storage": "الملفات و الوسائط",
+    "android_permission_microphone": "الميكروفون",
+    "android_permission_camera": "الكاميرا",
+    "android_permission_location": "الموقع",
+    "android_permission_phone": "الهاتف",
+    "android_permission_call_log": "سجلات المكالمات",
+    "android_permission_sms": "الرسائل",
+    "android_permission_contacts": "جهات الاتصال",
+    "android_permission_calendar": "التقويم",
+    "android_permission_activity_recognition": "الانشطة البدنية",
+    "android_permission_sensors": "مستشعرات الجهاز",
+    "android_permission_sensors_body": "مستشعرات البدن",
+    "android_permission_nearby_devices": "تحديد الاجهزة القريبة"
+}

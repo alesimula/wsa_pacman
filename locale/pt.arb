@@ -1,0 +1,101 @@
+{
+    "@@locale": "pt",
+    "@locale_desc": {"description": "Português (Brasil) [pt_BR]"},
+    "locale_desc": "Português (Brasil)",
+    "locale_system": "Sistema",
+
+
+    "btn_boot": "Ativar",
+    "btn_switch_on": "Lig",
+    "btn_switch_off": "Desl",
+
+
+    "status_subtext_winver_10": "Windows 10",
+    "status_subtext_winver_older": "Versão antiga do Windows",
+
+
+    "status_unsupported": "WSA não instalado",
+    "status_unsupported_desc": "{windowsVersion} detectado e WSA não encontrado. Este aplicativo depende do WSA, que é suportado oficialmente no Windows 11",
+    "status_missing": "WSA não instalado",
+    "status_missing_desc": "WSA não encontrado. Este aplicativo depende do WSA, instale o Windows Subsystem for Android (ou Amazon Appstore) da Microsoft Store",
+    "status_unknown": "Conectando",
+    "status_unknown_desc": "Aguardando que uma conexão WSA seja estabelecida...",
+    "status_starting": "Iniciando",
+    "status_starting_desc": "WSA iniciando, aguarde...",
+    "status_arrested": "Suspenso",
+    "status_arrested_desc": "WSA está desativado",
+    "status_offline": "Offline",
+    "status_offline_desc": "Não foi estabelecer uma conexão com o WSA. O modo de desenvolvedor e a depuração USB estão desabilitados ou uma porta errada foi especificada",
+    "status_disconnected": "Desconectado",
+    "status_disconnected_desc": "Uma conexão WSA não pôde ser estabelecido por razões desconhecidas",
+    "status_connected": "Conectado",
+    "status_connected_desc": "Conectado com sucesso no WSA, todos os sistemas ativos",
+
+
+    "screen_wsa": "Gerenciador de pacotes WSA ",
+    "screen_settings": "Configurações",
+
+
+    "wsa_manage": "Gerenciamento do Android",
+    "wsa_manage_app": "Gerenciar aplicativos",
+    "wsa_manage_settings": "Gerenciar configurações",
+
+
+    "settings_port": "Porta da WSA",
+    "settings_ip": "Endereço IP do WSA",
+    "settings_autostart": "Iniciar WSA antes da instalação",
+    "settings_language": "Idioma",
+    "settings_option_generic_system": "Sistema",
+    "settings_option_generic_disabled": "Desativado",
+
+
+    "theme_mode": "Tema",
+    "theme_mode_dark": "Escuro",
+    "theme_mode_light": "Claro",
+    "theme_mica": "Transparência da janela",
+    "theme_mica_full": "Cheia",
+    "theme_mica_partial": "Parcial",
+    "theme_icon_adaptive": "Forma de ícones adaptáveis",
+    "theme_icon_adaptive_squircle": "Quadrado-círculo",
+    "theme_icon_adaptive_circle": "Círculo",
+    "theme_icon_adaptive_rounded_square": "Quadrado arredondado",
+
+
+    "installer_message": "Deseja instalar este aplicativo?",
+    "installer_info_version": "Versão: {appVersion}",
+    "installer_info_version_change": "Versão: {appVersionOld} => {appVersionNew}",
+    "installer_info_package": "Pacote: {appPackage}",
+    "installer_installing": "Instalando aplicativo {appTitle}...",
+    "installer_installed": "O aplicativo {appTitle} foi instalado com sucesso",
+    "installer_fail": "O aplicativo {appTitle} não foi instalado",
+    "installer_error_nomsg": "A instalação falhou, mas nenhum erro foi emitido",
+    "installer_btn_starting": "Iniciando...",
+    "installer_btn_loading": "Carregando...",
+    "installer_btn_cancel": "Cancelar",
+    "installer_btn_install": "Instalar",
+    "installer_btn_reinstall": "Reinstalar",
+    "installer_btn_update": "Atualizar",
+    "installer_btn_downgrade": "Downgrade (não seguro)",
+    "installer_btn_dismiss": "Dispensar",
+    "installer_btn_open": "Abrir aplicativo",
+    "installer_btn_checkbox_shortcut": "Criar ícone na Área de Trabalho",
+
+
+    "android_permission_none": "Nenhuma permissão necessária",
+    "android_permission_admin": "Gerenciar dispositivo como administrador",
+    "android_permission_admin_brick": "Desativar ou redefinir dispositivo remotamente",
+    "android_permission_admin_lock": "Bloquear dispositivo remotamente",
+    "android_permission_storage": "Arquivos e mídia",
+    "android_permission_microphone": "Microfone",
+    "android_permission_camera": "Câmera",
+    "android_permission_location": "Local",
+    "android_permission_phone": "Telefone",
+    "android_permission_call_log": "Registro de chamadas",
+    "android_permission_sms": "Mensagens",
+    "android_permission_contacts": "Contatos",
+    "android_permission_calendar": "Calendário",
+    "android_permission_activity_recognition": "Atividade física",
+    "android_permission_sensors": "Sensores do dispositivo",
+    "android_permission_sensors_body": "Sensores corporais",
+    "android_permission_nearby_devices": "Localizar dispositivos próximos"
+}
