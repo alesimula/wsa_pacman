@@ -212,7 +212,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
           FluentCard(
             leading: const Icon(Mdi.translate , size: 23),
             content: Text(lang.settings_language),
-            trailing: SizedBox(width: 300, height: 30, child: FluentCombobox<NamedLocale>(
+            trailing: SizedBox(width: 300, height: 32, child: FluentCombobox<NamedLocale>(
               onTap: (){}, placeholder: Text(locale_lang.name), 
               isExpanded: true,
               value: locale_lang,
