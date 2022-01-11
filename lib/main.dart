@@ -488,7 +488,7 @@ class _MyHomePageState extends State<MyHomePage> {
           PaneItemSeparator(),
           ThemablePaneItem(
             icon: const Icon(FluentIcons.settings),
-            title: const Text('Settings'),
+            title: Text(lang.screen_settings),
             translucent: mica.enabled,
             forceDisplayMode: appTheme.displayMode
           ),
