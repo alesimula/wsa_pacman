@@ -1,4 +1,9 @@
 {
+    "@@README_1": "The en.arb file is a template for other files",
+    "@@README_2": "For other languages, entries starting with @ and @@ are not needed, except @@locale",
+    "@@README_3": "Country-specific locales (eg. 'en_GB') need a fallback locale (eg. 'en') to exist",
+
+
     "@@locale": "de",
     "@locale_desc": {"description": "Deutsch [de-DE]"},
     "locale_desc": "Deutsch",
@@ -22,10 +27,10 @@
     "status_unknown_desc": "Warte auf die Verbindung zu WSA...",
     "status_starting": "Starte",
     "status_starting_desc": "WSA wird gestartet, bitte warten...",
-    "status_arrested": "Angehalten",
-    "status_arrested_desc": "WSA ist angehalten.",
+    "status_arrested": "Gestoppt",
+    "status_arrested_desc": "WSA läuft nicht.",
     "status_offline": "Offline",
-    "status_offline_desc": "Es konnte keine Verbindung zu WSA hergestellt werden: entweder ist der Entwicklermodus deaktiviert oder USB Debugging nicht aktiv bzw. ein falscher Port angegeben.",
+    "status_offline_desc": "Es konnte keine Verbindung zu WSA hergestellt werden: entweder ist der Entwicklermodus deaktiviert oder USB-Debugging nicht aktiv bzw. ein falscher Port angegeben.",
     "status_disconnected": "Getrennt",
     "status_disconnected_desc": "Es konnte aus unbekannten Gründen keine Verbindung zu WSA hergestellt werden.",
     "status_connected": "Verbunden",
@@ -37,11 +42,11 @@
 
 
     "wsa_manage": "Android Einstellungen",
-    "wsa_manage_app": "Appeinstellungen",
-    "wsa_manage_settings": "Systemeinstellungen",
+    "wsa_manage_app": "Apps",
+    "wsa_manage_settings": "System",
 
 
-    "settings_port": "WSA Debugging Port",
+    "settings_port": "WSA-Debugging Port",
     "settings_ip": "WSA IP Adresse",
     "settings_autostart": "Starte WSA automatisch",
     "settings_language": "Sprache",
@@ -52,11 +57,11 @@
     "theme_mode": "Design",
     "theme_mode_dark": "Dunkel",
     "theme_mode_light": "Hell",
+	"theme_mica": "Transparenz",
     "theme_mica_full": "Vollständig",
     "theme_mica_partial": "Teilweise",
-    "theme_mica": "Transparenz",
-    "theme_icon_adaptive": "Icons",
-    "theme_icon_adaptive_squircle": "Superkreis",
+    "theme_icon_adaptive": "Angepasste Icons",
+	"theme_icon_adaptive_squircle": "Superkreis",
     "theme_icon_adaptive_circle": "Kreis",
     "theme_icon_adaptive_rounded_square": "Runde Ecken",
 
@@ -65,7 +70,7 @@
     "installer_info_version": "Version: {appVersion}",
     "installer_info_version_change": "Version: {appVersionOld} => {appVersionNew}",
     "installer_info_package": "Paketname: {appPackage}",
-    "installer_installing": "Installiere {appTitle}...",
+	"installer_installing": "Installiere {appTitle}...",
     "installer_installed": "{appTitle} wurde erfolgreich installiert.",
     "installer_fail": "{appTitle} wurde nicht installiert.",
     "installer_error_nomsg": "Installation ohne Angabe von Gründen fehlgeschlagen.",
