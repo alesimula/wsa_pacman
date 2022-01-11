@@ -115,7 +115,19 @@ class AppOptions {
   static File? _optionsFile;
   static late Future<DateTime> _lastModified;
   static Future<Options> _optionsFuture = () async {
-    final directory = Directory("${Env.USER_PROFILE}${RegExp(r'.*[/\\]$').hasMatch(Env.USER_PROFILE) ? '' : r'\'}.wsamanager\\")..createSync();
+    // TODO options file migration; remove eventually
+    final oldDirectory = Directory("${Env.USER_PROFILE}${RegExp(r'.*[/\\]$').hasMatch(Env.USER_PROFILE) ? '' : r'\'}.wsamanager\\");
+    // TODO options file migration; remove eventually
+    final _oldOtionsFile = File("${oldDirectory.path}\\options.bin");
+    final directory = Directory("${Env.USER_PROFILE}${RegExp(r'.*[/\\]$').hasMatch(Env.USER_PROFILE) ? '' : r'\'}.wsa-pacman\\")..createSync();
+    // TODO options file migration; remove eventually
+    if (oldDirectory.existsSync()) {
+      if (_oldOtionsFile.existsSync()) {
+        if (!File("${directory.path}\\options.bin").existsSync()) _oldOtionsFile.copySync("${directory.path}\\options.bin");
+        _oldOtionsFile.deleteSync();
+      }
+      oldDirectory.delete(recursive: false);
+    }
     _optionsFile = File("${directory.path}\\options.bin")..createSync()..openSync();
     _lastModified = _optionsFile!.lastModified();
     directory.watch().listen((event) {
