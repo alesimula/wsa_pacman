@@ -473,8 +473,7 @@ class _MyHomePageState extends State<MyHomePage> {
             title: const Text('WSA'),
             translucent: mica.enabled,
             forceDisplayMode: appTheme.displayMode
-          ),
-          PaneItemSeparator(),
+          )
           /*PaneItem(
             icon: Icon(
               appTheme.displayMode == PaneDisplayMode.top
