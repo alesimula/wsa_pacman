@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 // ignore: implementation_imports
 import 'package:fluent_ui/src/controls/form/pickers/pickers.dart';
+import 'package:wsa_pacman/utils/misc_utils.dart';
 
 const Duration _kComboboxMenuDuration = Duration(milliseconds: 300);
 const double _kMenuItemHeight = kPickerHeight;
@@ -30,7 +31,7 @@ class _ComboboxMenuPainter extends CustomPainter {
     required this.getSelectedItemOffset,
   })  : _painter = BoxDecoration(
           borderRadius: BorderRadius.circular(6.0),
-          border: Border.all(width: 0.5),
+          border: Border.all(width: 0.5, color: const ColorConst.withOpacity(0x000000, 0.5)),
         ).createBoxPainter(),
         super(repaint: resize);
 
@@ -272,6 +273,7 @@ class _ComboboxMenuState<T> extends State<_ComboboxMenu<T>> {
     return FadeTransition(
       opacity: _fadeOpacity,
       child: Acrylic(
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(6.0))),
         elevation: route.elevation.toDouble(),
         child: CustomPaint(
           painter: _ComboboxMenuPainter(
@@ -978,7 +980,7 @@ class _FluentComboboxState<T> extends State<FluentCombobox<T>> with WidgetsBindi
           onPressed: _enabled ? _handleTap : null,
           builder: (context, states) {
             return Container(
-              decoration: kPickerDecorationBuilder(context, () {
+              decoration: fluentComboBoxDecorationBuilder(context, () {
                 if (_showHighlight) {
                   return {ButtonStates.focused};
                 } else if (states.isFocused) {
@@ -993,4 +995,29 @@ class _FluentComboboxState<T> extends State<FluentCombobox<T>> with WidgetsBindi
       ),
     );
   }
+}
+
+Color fluentComboBoxColor(bool isDark, Set<ButtonStates> states) {
+  if (isDark) {
+    if (states.isDisabled) return const ColorConst.withOpacity(0xFFFFFF, 0.045);
+    if (states.isPressing) return const ColorConst.withOpacity(0xFFFFFF, 0.03);
+    if (states.isHovering) return const ColorConst.withOpacity(0xFFFFFF, 0.08);
+    return const ColorConst.withOpacity(0xFFFFFF, 0.055);
+  }
+  else {
+    if (states.isDisabled) return const ColorConst.withOpacity(0xf9f9f9, 0.045);
+    if (states.isPressing) return const ColorConst.withOpacity(0xf0f0f0, 0.4);
+    if (states.isHovering) return const ColorConst.withOpacity(0xf9f9f9, 0.65);
+    return const ColorConst.withOpacity(0xFFFFFF, 0.8);
+  }
+}
+
+Decoration fluentComboBoxDecorationBuilder(
+    BuildContext context, Set<ButtonStates> states) {
+  assert(debugCheckHasFluentTheme(context));
+  final theme = FluentTheme.of(context);
+  return BoxDecoration(
+    borderRadius: BorderRadius.circular(4.0),
+    color: fluentComboBoxColor(theme.brightness.isDark, states),
+  );
 }
