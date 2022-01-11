@@ -13,7 +13,7 @@ import 'string_utils.dart';
 
 
 extension LocaleUtils on Locale {
-  _NamedLocale get _asNamedLocale => _NamedLocale(languageCode, countryCode);
+  _NamedLocale _asNamedLocale([int? lcid]) => lcid == null ? _NamedLocale(languageCode, countryCode) : _NamedLocaleLCID(lcid, languageCode, countryCode);
   _SystemLocale get _asSystemLocale => _SystemLocale(languageCode, countryCode);
   static late final NamedLocale _DEFAULT_SYSTEM_LOCALE = _SystemLocale("en");
   static late final _DEFAULT_LOCALIZATION = lookupAppLocalizations(_DEFAULT_SYSTEM_LOCALE);
@@ -60,7 +60,7 @@ class _WinLocale {
     LPWSTR? lpName = malloc<WCHAR>(LOCALE_NAME_MAX_LENGTH).cast<Utf16>();
     try {
       int result = _LCIDToLocaleName(lcid, lpName, LOCALE_NAME_MAX_LENGTH, 0);
-      return result != 0 ? lpName.toDartString().asLocale?._asNamedLocale : null;
+      return result != 0 ? lpName.toDartString().asLocale?._asNamedLocale(lcid) : null;
     }
     finally {free(lpName);}
   }
@@ -78,7 +78,13 @@ class _NamedLocale extends NamedLocale {
   @override late final String name = lookupAppLocalizations(this).locale_desc;
   @override late final int lcid = toLCID() ?? (){throw ArgumentError("Unknown language tag: ${toLanguageTag()}");}();
   @override int get hashCode => lcid;
-  @override bool operator ==(Object other) => other is! _SystemLocale && ((other is NamedLocale && other.languageCode == languageCode && other.lcid == lcid) || super==other);
+  @override bool operator ==(Object other) => other is! _SystemLocale && (other is NamedLocale ? other.languageCode == languageCode && other.lcid == lcid : super==other);
+}
+
+class _NamedLocaleLCID extends _NamedLocale {
+  _NamedLocaleLCID(this.lcid, String _languageCode, [String? _countryCode]) : super(_languageCode, _countryCode);
+  // ignore: overridden_fields 
+  @override final int lcid;
 }
 
 class _SystemLocale extends NamedLocale {
