@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'dart:math' as math;
 import 'dart:ui' show window;
 
@@ -997,6 +999,19 @@ class _FluentComboboxState<T> extends State<FluentCombobox<T>> with WidgetsBindi
   }
 }
 
+BorderSide fluentComboBoxBorderColor(bool isDark, Set<ButtonStates> states) {
+  if (isDark) {
+    if (states.isDisabled) return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0xf0f0f0, 0.05));
+    if (states.isNone || (states.isHovering && !states.isPressing)) return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0xf0f0f0, 0.035));
+    else return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0xf0f0f0, 0.07));
+  }
+  else {
+    if (states.isDisabled) return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0x212121, 0.12));
+    if (states.isNone || (states.isHovering && !states.isDisabled && !states.isPressing)) return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0x212121, 0.22));
+    else return const BorderSide(width: 0.5, color: ColorConst.withOpacity(0x212121, 0.07));
+  }
+}
+
 Color fluentComboBoxColor(bool isDark, Set<ButtonStates> states) {
   if (isDark) {
     if (states.isDisabled) return const ColorConst.withOpacity(0xFFFFFF, 0.045);
@@ -1018,6 +1033,7 @@ Decoration fluentComboBoxDecorationBuilder(
   final theme = FluentTheme.of(context);
   return BoxDecoration(
     borderRadius: BorderRadius.circular(4.0),
+    border: Border.fromBorderSide(fluentComboBoxBorderColor(theme.brightness.isDark, states)),
     color: fluentComboBoxColor(theme.brightness.isDark, states),
   );
 }
