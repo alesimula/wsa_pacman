@@ -1,6 +1,6 @@
 {
     "@@README_1": "it.arb 文件是其他文件的模板",
-    "@@README_2": "对于其他语言，不需要翻译 @ 和 @@ 开头的条目，例如 @@locale",
+    "@@README_2": "对于其他语言，不需要翻译 @ 和 @@ 开头的条目，除外 @@locale",
     "@@README_3": "特定于国家/地区的语言环境（例如“en_GB”）需要一个备用语言环境（例如“en”）才能使用",
 
 
@@ -27,7 +27,7 @@
     "status_missing": "WSA 未安装",
     "status_missing_desc": "未找到 WSA； 此应用程序取决于 WSA，请从 Microsoft Store 安装适用于 Android 的 Windows 子系统（或 Amazon Appstore）",
     "status_unknown": "正在连接",
-    "status_unknown_desc": "正在等待建立 WASA 连接...",
+    "status_unknown_desc": "正在等待建立 WSA 连接...",
     "status_starting": "正在启动",
     "status_starting_desc": "WSA 正在启动，请稍候...",
     "status_arrested": "已停滞",
