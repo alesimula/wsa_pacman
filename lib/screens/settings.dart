@@ -11,6 +11,7 @@ import 'package:wsa_pacman/proto/options.pb.dart';
 import 'package:wsa_pacman/utils/locale_utils.dart';
 import 'package:wsa_pacman/widget/adaptive_icon.dart';
 import 'package:wsa_pacman/widget/fluent_card.dart';
+import 'package:wsa_pacman/widget/fluent_combo_box.dart';
 import 'package:wsa_pacman/widget/fluent_expander.dart';
 import 'package:wsa_pacman/windows/win_info.dart';
 
@@ -208,10 +209,10 @@ class ScreenSettingsState extends State<ScreenSettings> {
             )]),
           ),
           smallSpacer,
-          /*FluentCard(
+          FluentCard(
             leading: const Icon(Mdi.translate , size: 23),
             content: Text(lang.settings_language),
-            trailing: SizedBox(width: 300, height: 30, child: Combobox<NamedLocale>(
+            trailing: SizedBox(width: 300, height: 30, child: FluentCombobox<NamedLocale>(
               onTap: (){}, placeholder: Text(locale_lang.name), 
               isExpanded: true,
               value: locale_lang,
@@ -219,7 +220,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
               items: _localeItems,
             )),
           ),
-          smallSpacer,*/
+          smallSpacer,
           ExpanderWin11(
             leading: const Icon(Mdi.themeLightDark, size: 23),
             header: Text(lang.theme_mode),
