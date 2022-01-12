@@ -242,7 +242,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
             direction: ExpanderDirection.down, // (optional). Defaults to ExpanderDirection.down
             initiallyExpanded: false, // (false). Defaults to false
           ),
-          smallSpacer,
+          if (WinVer.isWindows11OrGreater) smallSpacer,
           ExpanderWin11(
             leading: SizedBox(width: 23.00, height: 23.00, child: exampleIcon),
             header: Text(lang.theme_icon_adaptive),
