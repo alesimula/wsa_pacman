@@ -213,7 +213,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
                 child: Text(lang.installer_btn_dismiss),
                 onPressed: (){if (createShortcut) ApkInstaller.createLaunchIcon(package, appTitle); appWindow.close();},
               )),
-              (){return isLaunchable ? const SizedBox(width: 15) : SizedBox.shrink();}(),
+              (){return isLaunchable ? const SizedBox(width: 15) : const SizedBox.shrink();}(),
               (){return isLaunchable ? noMoveWindow(ToggleButton(
                 child: Text(lang.installer_btn_open),
                 checked: true,
