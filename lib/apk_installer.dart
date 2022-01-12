@@ -217,7 +217,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
               (){return isLaunchable ? noMoveWindow(ToggleButton(
                 child: Text(lang.installer_btn_open),
                 checked: true,
-                onChanged: (_){if (createShortcut) ApkInstaller.createLaunchIcon(package, appTitle); Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'shell', 'am start -n ${GState.package.of(context)}/${GState.activity.of(context)}']); appWindow.close();},
+                onChanged: (_){if (createShortcut) ApkInstaller.createLaunchIcon(package, appTitle); WSAUtils.launchApp(package); appWindow.close();},
               )) : const SizedBox.shrink();}()
             ]
           )
