@@ -52,6 +52,7 @@ class WinPkgInfo {
 
   String get fullName => "${name}_${version}_${architecture}__$publisherId"; 
   String get familyName => "${name}_$publisherId";
+  void parseManifestExtras(String manifest) {}
 
   WinPkgInfo(String manifest) {
     try {
@@ -61,12 +62,15 @@ class WinPkgInfo {
       publisherId = (publisher != null) ? WinPkg.getPublisherId(publisher) : 'UNKNOWN_PUBLISHER_ID';
       version = identity?.find(r'\s+Version\s*=\s*"([^"]*)', 1) ?? 'UNKNOWN_VERSION';
       architecture = identity?.find(r'\s+ProcessorArchitecture\s*=\s*"([^"]*)', 1) ?? 'UNKNOWN_ARCHITECTURE';
+      parseManifestExtras(manifest);
     }
     catch(e) {/**/}
   }
 
-  factory WinPkgInfo.fromSystemPath(String systemPath) {
-    try {return WinPkgInfo(File("$systemPath\\AppxManifest.xml").readAsStringSync());}
-    catch(_) {return WinPkgInfo("");}
+  WinPkgInfo.fromSystemPath(String systemPath) : this(_tryReadManifest("$systemPath\\AppxManifest.xml"));
+
+  static String _tryReadManifest(String manifestFile) {
+    try {return File(manifestFile).readAsStringSync();}
+    catch(_) {return "";}
   }
 }

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:mdi/mdi.dart';
+import 'package:wsa_pacman/utils/wsa_utils.dart';
 import 'package:wsa_pacman/widget/fluent_card.dart';
 import '../main.dart';
 import '../global_state.dart';
@@ -68,7 +69,7 @@ class _ScreenWSAState extends State<ScreenWSA> {
               content: Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
                 Text(connectionStatus.desc(lang)),
                 const SizedBox(width: 15.0),
-                if (connectionStatus.type == ConnectionStatus.ARRESTED) Button(child: Text(lang.btn_boot), onPressed: () => Process.run(Env.WSA_EXECUTABLE, [], workingDirectory: Env.WSA_SYSTEM_PATH))
+                if (connectionStatus.type == ConnectionStatus.ARRESTED) Button(child: Text(lang.btn_boot), onPressed: () => WSAUtils.launch())
               ]),
               isLong: true,
               severity: connectionStatus.severity,

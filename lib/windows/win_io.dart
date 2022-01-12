@@ -91,7 +91,38 @@ extension WinFile on File {
   }
 }
 
+enum ShellOp {
+  EDIT, EXPLORE, FIND, OPEN, PRINT, PROPERTIES, RUNAS
+}
+
+extension on ShellOp {
+  LPWSTR getOperation() {switch (this) {
+    case ShellOp.EDIT: return "edit".toNativeUtf16();
+    case ShellOp.EXPLORE: return "explore".toNativeUtf16();
+    case ShellOp.FIND: return "find".toNativeUtf16();
+    case ShellOp.OPEN: return "open".toNativeUtf16();
+    case ShellOp.PRINT: return "print".toNativeUtf16();
+    case ShellOp.PROPERTIES: return "properties".toNativeUtf16();
+    case ShellOp.RUNAS: return "runas".toNativeUtf16();
+  }}
+}
+
 class WinIO {
+  static bool run(ShellOp operation, String file, String? param) {
+    if (file.isEmpty) return false;
+    LPWSTR lpOperation = operation.getOperation();
+    LPWSTR lpFile = file.toNativeUtf16();
+    LPWSTR lpParameters = param != null && param.isNotEmpty ? param.toNativeUtf16() : nullptr;
+    try {
+      return ShellExecute(0, lpOperation, lpFile, lpParameters, nullptr, SW_HIDE) > 32;
+    } 
+    finally {
+      free(lpOperation);
+      free(lpFile);
+      free(lpParameters);
+    }
+  }
+
   static bool findMutexWstr(LPWSTR lpMutexName) {
     int mutexHandle = _OpenMutex(0x00100000, 0, lpMutexName);
     if (mutexHandle != 0) {CloseHandle(mutexHandle); return true;}

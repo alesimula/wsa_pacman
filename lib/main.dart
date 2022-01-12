@@ -14,9 +14,9 @@ import 'package:flutter/foundation.dart';
 //import 'package:flutter/material.dart' hide showDialog;
 import 'package:shared_value/shared_value.dart';
 import 'package:wsa_pacman/utils/misc_utils.dart';
+import 'package:wsa_pacman/utils/wsa_utils.dart';
 import 'package:wsa_pacman/widget/themed_pane_item.dart';
 import 'package:wsa_pacman/windows/win_info.dart';
-import 'package:wsa_pacman/windows/win_pkg.dart';
 import 'package:wsa_pacman/windows/win_reg.dart';
 import 'package:wsa_pacman/windows/wsa_status.dart';
 import 'global_state.dart';
@@ -92,7 +92,7 @@ class Env {
     )?.group(1) ?? '';
   static late final String WSA_EXECUTABLE = '$WSA_SYSTEM_PATH\\WsaClient\\WsaClient.exe';
   static late final bool WSA_INSTALLED = File('$WSA_SYSTEM_PATH\\AppxManifest.xml').existsSync();
-  static late final WSA_INFO = WinPkgInfo.fromSystemPath(WSA_SYSTEM_PATH);
+  static late final WSA_INFO = WSAPkgInfo.fromSystemPath(WSA_SYSTEM_PATH);
 }
 
 class WSAPeriodicConnector {

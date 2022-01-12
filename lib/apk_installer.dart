@@ -8,6 +8,7 @@ import 'package:wsa_pacman/android/permissions.dart';
 import 'package:wsa_pacman/android/reader_apk.dart';
 import 'package:wsa_pacman/global_state.dart';
 import 'package:wsa_pacman/main.dart';
+import 'package:wsa_pacman/utils/wsa_utils.dart';
 import 'package:wsa_pacman/widget/themed_pane_item.dart';
 import 'package:wsa_pacman/windows/win_io.dart';
 import 'package:wsa_pacman/widget/adaptive_icon.dart';
@@ -16,12 +17,10 @@ import 'package:wsa_pacman/widget/move_window_nomax.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as material;
 
-import 'package:provider/provider.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:wsa_pacman/windows/win_path.dart';
 
 import 'dart:developer';
-import 'theme.dart';
 
 
 class ApkInstaller extends StatefulWidget {
@@ -86,10 +85,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
 
     if (autostartWSA) {
       startingWSA = true;
-      Process.run(Env.WSA_EXECUTABLE, [], workingDirectory: Env.WSA_SYSTEM_PATH).onError((_, __){
-        setState(() {startingWSA = false;});
-        return ProcessResult(-1, -1, null, null);
-      });
+      if (!WSAUtils.launch()) setState(() {startingWSA = false;});
     }
 
     if (installType == InstallType.DOWNGRADE && warningButtonTheme == null) warningButtonTheme = ToggleButtonThemeData.standard(theme.copyWith(accentColor: Colors.orange));
