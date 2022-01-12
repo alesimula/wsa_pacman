@@ -51,7 +51,10 @@ class _WinLocale {
     final lpName = locale.toNativeUtf16();
     try {
       final int lcid = _LocaleNameToLCID(lpName, 0);
-      return lcid != 0 && lcid != 0x1000 ? lcid : null;
+      switch (lcid) {
+        case 0: case 0x1000: case 0x0C00: return null;
+        default: return lcid;
+      }
     }
     finally {free(lpName);}
   }
