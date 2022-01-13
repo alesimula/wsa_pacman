@@ -137,6 +137,7 @@ class FluentCardState extends State<FluentCard>
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasFluentTheme(context));
+    final isLtr = Directionality.of(context) == TextDirection.ltr;
     theme = FluentTheme.of(context);
     bool isDark = theme.brightness == Brightness.dark;
 
@@ -175,7 +176,8 @@ class FluentCardState extends State<FluentCard>
               ),
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               alignment: Alignment.center,
-              child: widget.icon ?? Icon(isDark ? FluentIcons.chevron_right : FluentIcons.chevron_right_med, size: 11),
+              child: widget.icon ?? Icon(isLtr ? isDark ? FluentIcons.chevron_right : FluentIcons.chevron_right_med :
+                  isDark ? FluentIcons.chevron_left : FluentIcons.chevron_left_med, size: 11),
             ),
           ]),
         );
