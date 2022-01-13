@@ -13,6 +13,8 @@ import 'package:wsa_pacman/widget/adaptive_icon.dart';
 import 'package:wsa_pacman/widget/fluent_card.dart';
 import 'package:wsa_pacman/widget/fluent_combo_box.dart';
 import 'package:wsa_pacman/widget/fluent_expander.dart';
+import 'package:wsa_pacman/widget/fluent_icon_button.dart';
+import 'package:wsa_pacman/widget/fluent_text_box.dart';
 import 'package:wsa_pacman/windows/win_info.dart';
 
 import '/utils/string_utils.dart';
@@ -171,11 +173,11 @@ class ScreenSettingsState extends State<ScreenSettings> {
         ),
         controller: controller,
         children: [
-          Text(lang.settings_port, style: theme.typography.bodyLarge),
           spacer,
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: TextBox(
+          FluentCard(
+            leading: const Icon(Mdi.networkOutline , size: 23),
+            content: Text(lang.settings_port),
+            trailing: SizedBox(width: 300, height: 32, child: FluentTextBox(
               inputFormatters: [
                 TextInputFormatter.withFunction((oldValue, newValue) {
                   var androidPortVal = (newValue.text.isNumeric()) ? (newValue.text.length > 5 || (newValue.text.isEmpty ? 58526 : int.parse(newValue.text)) <= 65535 ? newValue : TextEditingValue(text: "65535", selection: newValue.selection)) : 
@@ -192,14 +194,15 @@ class ScreenSettingsState extends State<ScreenSettings> {
               onChanged: (value)=>androidPortUpdater.update(value.isEmpty ? 58526 : int.parse(value)),
               enableSuggestions: false,
               keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
-              prefix: const Padding(padding: EdgeInsets.only(left: 10), child: Text("127.0.0.1 :")),
-              suffix: IconButton(
+              prefix: const Padding(padding: EdgeInsetsDirectional.only(start: 10), child: Text("127.0.0.1 :")),
+              suffix: FluentIconButton(
+                iconButtonMode: IconButtonMode.SMALL,
                 icon: const Icon(FluentIcons.reset),
                 onPressed: () {GState.androidPortPending.update((_) => 58526.toString()); androidPortUpdater.instant(58526); setState((){});},
               )
-            ),
+            )),
           ),
-          biggerSpacer,
+          smallSpacer,
           FluentCard(
             leading: const Icon(Mdi.powerStandby , size: 23),
             content: Text(lang.settings_autostart),
