@@ -6,6 +6,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:mdi/mdi.dart';
 import 'package:wsa_pacman/utils/wsa_utils.dart';
 import 'package:wsa_pacman/widget/fluent_card.dart';
+import 'package:wsa_pacman/widget/fluent_info_bar.dart';
 import '../main.dart';
 import '../global_state.dart';
 
@@ -64,7 +65,7 @@ class _ScreenWSAState extends State<ScreenWSA> {
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
-            child: InfoBar(
+            child: FluentInfoBar(
               title: Text(connectionStatus.title(lang)),
               content: Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
                 Text(connectionStatus.desc(lang)),

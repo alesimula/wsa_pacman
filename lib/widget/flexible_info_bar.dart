@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as material;
+import 'package:wsa_pacman/widget/fluent_info_bar.dart';
 
 class FlexibleInfoBar extends StatelessWidget {
 
@@ -24,7 +25,7 @@ class FlexibleInfoBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Flexible(child: LayoutBuilder(
       builder: (context, BoxConstraints constraints) {
-        return InfoBar(
+        return FluentInfoBar(
           title: SizedBox(
             height: (constraints.maxHeight-25),// - (constraints.maxHeight-constr.maxHeight),
             child: material.Scaffold(
