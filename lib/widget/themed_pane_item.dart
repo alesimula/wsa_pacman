@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 import 'package:fluent_ui/fluent_ui.dart';
+import '../utils/misc_utils.dart';
 
 const double _kCompactNavigationPanelWidth = 50.0;
 
@@ -74,22 +75,18 @@ class ThemablePaneItem extends PaneItem {
         cursor: mouseCursor,
         builder: (context, states) {
           final isLtr = Directionality.of(context) == TextDirection.ltr;
-          var labelPadding = theme.labelPadding;
-          if (labelPadding != null && !isLtr) labelPadding = EdgeInsets.fromLTRB(labelPadding.right, labelPadding.top, labelPadding.left, labelPadding.bottom);
           final textStyle = selected
               ? theme.selectedTextStyle?.resolve(states)
               : theme.unselectedTextStyle?.resolve(states);
           final textResult = titleText.isNotEmpty
               ? Padding(
-                  padding: labelPadding ?? EdgeInsets.zero,
+                  padding: theme.labelPadding?.directional() ?? EdgeInsets.zero,
                   child: Text(titleText, style: textStyle),
                 )
               : const SizedBox.shrink();
-          var iconPadding = theme.iconPadding;
-          //if (iconPadding != null && !isLtr) iconPadding = EdgeInsets.fromLTRB(iconPadding.right, iconPadding.top, iconPadding.left, iconPadding.bottom);
-
+          
           final icon = Padding(
-            padding: iconPadding ?? EdgeInsets.zero,
+            padding: theme.iconPadding?.directional() ?? EdgeInsets.zero,
             child: IconTheme.merge(
               data: IconThemeData(
                 color: (selected ? theme.selectedIconColor?.resolve(states) : theme.unselectedIconColor?.resolve(states)) ?? textStyle?.color,
@@ -113,7 +110,7 @@ class ThemablePaneItem extends PaneItem {
                 : MainAxisAlignment.end,
             children: [
               if (isOpen && infoBadge != null) Padding(
-                padding: isLtr ? const EdgeInsets.only(right: 6.0) : const EdgeInsets.only(left: 6.0),
+                padding: const EdgeInsetsDirectional.only(end: 6.0),
                 child: infoBadge!,
               ),
               if (!isLtr) icon,

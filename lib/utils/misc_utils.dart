@@ -32,6 +32,10 @@ class ColorConst extends Color {
     ( (((opacity * 0xff ~/ 1) & 0xff) << 24) | ((0x00ffffff & value)) ) & 0xFFFFFFFF);
 }
 
+extension EdgeInsetsUtils on EdgeInsets {
+  EdgeInsetsDirectional directional() => this is EdgeInsetsDirectional ? this as EdgeInsetsDirectional : EdgeInsetsDirectional.fromSTEB(left, top, right, bottom);
+}
+
 extension FileUtils<K,V> on File {
   String get basename => lib_path.basename(path);
 }
