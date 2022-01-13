@@ -69,6 +69,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
   @override
   Widget build(BuildContext context) {
     final lang = AppLocalizations.of(context)!;
+    final isLtr = Directionality.of(context) == TextDirection.ltr;
     Widget icon;
     String appTitle = GState.apkTitle.of(context);
     Widget? aForeground = GState.apkForegroundIcon.of(context);
@@ -148,7 +149,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
             //padding: const EdgeInsets.all(5),
             children: [
               for (var permission in GState.permissions.of(context)) Container(
-                padding: EdgeInsets.only(right: 10),
+                padding: EdgeInsets.only(right: isLtr ? 10 : 0, left: isLtr ? 0 : 10),
                 child: ThemablePaneItem(
                   title: Text(permission.description(lang)),
                   icon: permission.icon,

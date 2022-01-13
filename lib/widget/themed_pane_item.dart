@@ -73,15 +73,38 @@ class ThemablePaneItem extends PaneItem {
         onPressed: onPressed,
         cursor: mouseCursor,
         builder: (context, states) {
+          final isLtr = Directionality.of(context) == TextDirection.ltr;
+          var labelPadding = theme.labelPadding;
+          if (labelPadding != null && !isLtr) labelPadding = EdgeInsets.fromLTRB(labelPadding.right, labelPadding.top, labelPadding.left, labelPadding.bottom);
           final textStyle = selected
               ? theme.selectedTextStyle?.resolve(states)
               : theme.unselectedTextStyle?.resolve(states);
           final textResult = titleText.isNotEmpty
               ? Padding(
-                  padding: theme.labelPadding ?? EdgeInsets.zero,
+                  padding: labelPadding ?? EdgeInsets.zero,
                   child: Text(titleText, style: textStyle),
                 )
               : const SizedBox.shrink();
+          var iconPadding = theme.iconPadding;
+          //if (iconPadding != null && !isLtr) iconPadding = EdgeInsets.fromLTRB(iconPadding.right, iconPadding.top, iconPadding.left, iconPadding.bottom);
+
+          final icon = Padding(
+            padding: iconPadding ?? EdgeInsets.zero,
+            child: IconTheme.merge(
+              data: IconThemeData(
+                color: (selected ? theme.selectedIconColor?.resolve(states) : theme.unselectedIconColor?.resolve(states)) ?? textStyle?.color,
+                size: 16.0,
+              ),
+              child: Center(
+                child: Stack(clipBehavior: Clip.none, children: [
+                  this.icon,
+                  // Show here if it's not on top and not open
+                  if (infoBadge != null && !isTop && !isOpen) Positioned(right: -8, top: -8, child: infoBadge!),
+                ]),
+              ),
+            ),
+          );
+          
           Widget child = Flex(
             direction: isTop ? Axis.vertical : Axis.horizontal,
             textDirection: isTop ? ui.TextDirection.ltr : ui.TextDirection.rtl,
@@ -89,42 +112,13 @@ class ThemablePaneItem extends PaneItem {
                 ? MainAxisAlignment.center
                 : MainAxisAlignment.end,
             children: [
-              if (isOpen && infoBadge != null)
-                Padding(
-                  padding: const EdgeInsets.only(right: 6.0),
-                  child: infoBadge!,
-                ),
+              if (isOpen && infoBadge != null) Padding(
+                padding: isLtr ? const EdgeInsets.only(right: 6.0) : const EdgeInsets.only(left: 6.0),
+                child: infoBadge!,
+              ),
+              if (!isLtr) icon,
               if (isOpen) Expanded(child: textResult),
-              () {
-                final icon = Padding(
-                  padding: theme.iconPadding ?? EdgeInsets.zero,
-                  child: IconTheme.merge(
-                    data: IconThemeData(
-                      color: (selected
-                              ? theme.selectedIconColor?.resolve(states)
-                              : theme.unselectedIconColor?.resolve(states)) ??
-                          textStyle?.color,
-                      size: 16.0,
-                    ),
-                    child: Center(
-                      child: Stack(clipBehavior: Clip.none, children: [
-                        this.icon,
-                        // Show here if it's not on top and not open
-                        if (infoBadge != null && !isTop && !isOpen)
-                          Positioned(
-                            right: -8,
-                            top: -8,
-                            child: infoBadge!,
-                          ),
-                      ]),
-                    ),
-                  ),
-                );
-                if (isOpen) {
-                  return icon;
-                }
-                return icon;
-              }(),
+              if (isLtr) icon,
             ],
           );
           if (isTop && showTextOnTop) {
