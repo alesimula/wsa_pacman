@@ -1,0 +1,107 @@
+{
+    "@@README_1": "Le fichier en.arb est un modèle pour d'autres fichiers",
+    "@@README_2": "Pour les autres langues, les entrées commençant par @ et @@ ne sont pas nécessaires, sauf @@locale",
+    "@@README_3": "Locales spécifiques à un pays (ex. 'en_GB') ont besoin d'un locale de secours (ex. 'en') pour exister",
+
+
+    "@@locale": "fr",
+    "@locale_desc": {"description": "French [fr_FR]"},
+    "locale_desc": "Française",
+    "@locale_system": {"description": "Décrit la locale du système"},
+    "locale_system": "Système",
+
+
+    "btn_boot": "Démarrer",
+    "btn_switch_on": "On",
+    "btn_switch_off": "Off",
+
+
+    "status_subtext_winver_10": "Windows 10",
+    "status_subtext_winver_older": "Version antérieure de Windows",
+
+
+    "status_unsupported": "WSA non installé",
+    "status_unsupported_desc": "{windowsVersion} détectée et WSA non trouvé; cette application dépend de WSA, qui n'est officiellement pris en charge que sur Windows 11",
+    "status_missing": "WSA non installé",
+    "status_missing_desc": "WSA non trouvé; cette application dépend de WSA, veuillez installer Windows Subsystem pour Android (ou l'Amazon Appstore) à partir du Microsoft Store",
+    "status_unknown": "Connecting",
+    "status_unknown_desc": "Attente de l'établissement d'une connexion à WSA...",
+    "status_starting": "Démarrage",
+    "status_starting_desc": "WSA démarre, veuillez patienter...",
+    "status_arrested": "Arrêté",
+    "status_arrested_desc": "WSA est éteint",
+    "status_offline": "Hors-ligne",
+    "status_offline_desc": "Impossible d'établir une connexion avec WSA: soit le mode développeur et le débogage USB sont désactivés, soit un port incorrect est spécifié",
+    "status_disconnected": "Déconnecté",
+    "status_disconnected_desc": "Une connexion au WSA n'a pas pu être établie pour des raisons inconnues",
+    "status_connected": "Connecté",
+    "status_connected_desc": "Connecté avec succès à WSA, prêt à partir",
+
+
+    "screen_wsa": "Gestionnaire de paquets WSA",
+    "screen_settings": "Paramètres",
+
+
+    "wsa_manage": "Gestion Android",
+    "wsa_manage_app": "Gérer des applications",
+    "wsa_manage_settings": "Gestion des paramètres",
+
+    
+    "settings_port": "Port WSA",
+    "settings_ip": "Adresse IP WSA",
+    "settings_autostart": "Démarrage automatique de WSA avant l'installation",
+    "settings_language": "Langue",
+    "settings_option_generic_system": "Système",
+    "settings_option_generic_disabled": "Désactivée",
+
+
+    "theme_mode": "Mode thème",
+    "theme_mode_dark": "Sombre",
+    "theme_mode_light": "Clair",
+    "theme_mica": "Fenêtre transparence",
+    "theme_mica_full": "Totale",
+    "theme_mica_partial": "Partielle",
+    "theme_icon_adaptive": "Icônes adaptatives Forme",
+    "theme_icon_adaptive_squircle": "Écureuil",
+    "theme_icon_adaptive_circle": "Cercle",
+    "theme_icon_adaptive_rounded_square": "Carré arrondi",
+
+
+    "installer_message": "Voulez-vous installer cette application ?",
+    "installer_info_version": "Version: {appVersion}",
+    "installer_info_version_change": "Version: {appVersionOld} => {appVersionNew}",
+    "installer_info_package": "Paquet: {appPackage}",
+    "installer_installing": "Installation de l'application {appTitle}...",
+    "installer_installed": "L'application {appTitle} a été installée avec succès",
+    "installer_fail": "The application {appTitle} n'a pas été installée",
+    "installer_error_nomsg": "L'installation a échoué, mais aucune erreur n'a été renvoyée",
+    "installer_btn_starting": "Démarrage...",
+    "installer_btn_loading": "Chargement...",
+    "installer_btn_cancel": "Annuler",
+    "installer_btn_install": "Installer",
+    "installer_btn_reinstall": "Réinstaller",
+    "installer_btn_update": "Mettre à jour",
+    "installer_btn_downgrade": "Rétrograder (non sécuritaire)",
+    "installer_btn_dismiss": "Congédier",
+    "installer_btn_open": "Ouvrir l'app",
+    "installer_btn_checkbox_shortcut": "Créer un raccourci sur le bureau",
+
+
+    "android_permission_none": "Aucune autorisation requise",
+    "android_permission_admin": "Gérer appareil en tant qu'administrateur",
+    "android_permission_admin_brick": "Désactiver ou réinitialiser l'appareil",
+    "android_permission_admin_lock": "Verrouiller l'appareil à distance",
+    "android_permission_storage": "Fichiers et contenus multimédias",
+    "android_permission_microphone": "Microphone",
+    "android_permission_camera": "Caméra",
+    "android_permission_location": "Localisation",
+    "android_permission_phone": "Téléphone",
+    "android_permission_call_log": "Journaux d'appels",
+    "android_permission_sms": "Messages",
+    "android_permission_contacts": "Contacts",
+    "android_permission_calendar": "Calendrier",
+    "android_permission_activity_recognition": "Activité physique",
+    "android_permission_sensors": "Capteurs de l'appareil",
+    "android_permission_sensors_body": "Capteurs corporels",
+    "android_permission_nearby_devices": "Localiser appareils à proximité"
+}
