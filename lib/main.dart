@@ -247,6 +247,7 @@ class _FluentLocalizationsEnglish extends LocalizationsDelegate<FluentLocalizati
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+  static final _supportedLocales = [const Locale("en")].followedBy(AppLocalizations.supportedLocales); 
 
   void setMicaEffect(bool micaEnabled, [bool dark = true]) {
     if (WinVer.isWindows11OrGreater)
@@ -280,7 +281,7 @@ class MyApp extends StatelessWidget {
             //locale.GlobalCupertinoLocalizations.delegate,
             _FluentLocalizationsEnglish(),
           ],
-          supportedLocales: AppLocalizations.supportedLocales,
+          supportedLocales: _supportedLocales,
           routes: {'/': (_) => args.isEmpty ? const MyHomePage() : const ApkInstaller()},
           theme: ThemeData(
             buttonTheme: ButtonThemeData(
