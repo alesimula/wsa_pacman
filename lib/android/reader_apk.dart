@@ -248,7 +248,7 @@ class ApkReader {
         //else data.execute(() => GState.apkInstallType.update((_) => InstallType.INSTALL));
 
         data.execute(() => GState.version.update((_) => info?.find(r"(^|\n|\s)versionName=\s*'([^'\n\s_$]*)", 2) ?? ""));
-        data.execute(() => GState.activity.update((_) => dump.find(r"(^|\n)launchable-activity:.*name='([^'\n\s$]*)", 2) ?? ""));
+        data.execute(() => GState.activity.update((_) => dump.find(r"(^|\n)(leanback-)?launchable-activity:.*name='([^'\n\s$]*)", 3) ?? ""));
 
         String? application = dump.find(r'(^|\n)application:\s*(.*)');
         String? title = application?.find(r"(^|\n|\s)label='([^']*)'", 2);
