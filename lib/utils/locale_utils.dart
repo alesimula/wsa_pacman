@@ -2,28 +2,16 @@
 
 import 'dart:ffi';
 import 'dart:io';
+import 'dart:ui';
 import 'package:ffi/ffi.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 import 'package:win32/win32.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations_en.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 export 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart' as intl;
-import 'package:wsa_pacman/global_state.dart';
 import 'package:wsa_pacman/windows/win_io.dart';
 import 'string_utils.dart';
 
-class _NamedLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
-  const _NamedLocalizationsDelegate();
-  @override bool isSupported(Locale locale) => AppLocalizations.delegate.isSupported(locale);
-  @override bool shouldReload(_NamedLocalizationsDelegate old) => AppLocalizations.delegate.shouldReload(old);
-  @override Future<AppLocalizations> load(Locale locale) =>
-      SynchronousFuture<AppLocalizations>((){try {return lookupAppLocalizations(locale);} catch (e) {return AppLocalizationsEn();}}());
-}
-
 extension LocaleUtils on Locale {
-  static const LocalizationsDelegate<AppLocalizations> delegate = _NamedLocalizationsDelegate();
   _NamedLocale _asNamedLocale([int? lcid]) => lcid == null ? _NamedLocale(languageCode, countryCode) : _NamedLocaleLCID(lcid, languageCode, countryCode);
   _SystemLocale get _asSystemLocale => _SystemLocale(languageCode, countryCode);
   static late final NamedLocale _DEFAULT_SYSTEM_LOCALE = _SystemLocale("en");
