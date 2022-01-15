@@ -255,8 +255,8 @@ class ApkReader {
         String? icon = application?.find(r"(^|\n|\s)icon='([^']*)'", 2);
         data.execute(() => GState.apkTitle.update((_) => title ?? "UNKNOWN_TITLE"));
 
-        Set<AndroidPermission> permissions = dump.toSet("(^|\\n)\\s*uses-permission:\\s+name=[\"']([^\"'\\n]*)", 
-          (m) => AndroidPermissionList.get(m.group(2)!), (a,b)=> a.index - b.index);
+        Set<AndroidPermission> permissions = dump.toSet("(^|\\n)\\s*uses-permission(-[^:]*)?:\\s+name=[\"']([^\"'\\n]*)", 
+          (m) => AndroidPermissionList.get(m.group(3)!), (a,b)=> a.index - b.index);
         if (permissions.isEmpty) permissions.add(AndroidPermission.NONE);
         data.execute(() => GState.permissions.update((_) => permissions));
         
