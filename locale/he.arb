@@ -1,13 +1,13 @@
 {
-    "@@README_1": "El archivo en.arb es una plantilla para otros archivos",
+    "@@README_1": "El archivo en.arb he una plantilla para otros archivos",
     "@@README_2": "Para otros idiomas, no se necesitan entradas que comiencen con @ y @@, excepto @@locale",
     "@@README_3": "Los idiomas específicos de un país (ej. 'en_GB') necesitan un idioma de respaldo existente (ej. 'en')",
 
 
     "@@locale": "he",
-    "@locale_desc": {"description": "Spanish (Spain) [es_ES]"},
+    "@locale_desc": {"תיאור": "עברית [he_HE]"},
     "locale_desc": "עברית",
-    "locale_system": "Sistema",
+    "locale_system": "מערכת",
 
 
     "btn_boot": "הפעל",
@@ -15,12 +15,12 @@
     "btn_switch_off": "כבוי",
 
     "status_subtext_winver_10": "Windows 10",
-    "status_subtext_winver_older": "Older Windows Version",
+    "status_subtext_winver_older": "גרסת Windows ישנה יותר",
 
 
-    "status_unsupported": "WSA not installed",
-    "status_unsupported_desc": "{windowsVersion} detected and WSA not found; this application depends on WSA, which is only officially supported on Windows 11",
-    "status_missing": "WSA not installed",
+    "status_unsupported": "WSA לא מותקן",
+    "status_unsupported_desc": "{windowsVersion} זוהה וה-WSA לא נמצא; תוכנה זו תלויה ב-WSA, אשר נתמך רשמית רק ב-Windows 11",
+    "status_missing": "WSA לא מותקן",
     "status_missing_desc": "WSA לא נמצא; תוכנה זו תלויה ב-WSA, התקן את תת-המערכת של וינדוס עבור Android (לדוגמה מ-Microsoft Store)",
     "status_unknown": "מתחבר",
     "status_unknown_desc": "ממתין ליצירת חיבור עם WSA...",
@@ -30,10 +30,10 @@
     "status_arrested_desc": "WSA כבוי",
     "status_offline": "Offline",
     "status_offline_desc": "לא ניתן להתחבר אל WSA: מצב מפתח ואיתור באגים ב-USB מושבתים או שצויין Port יציאה שגוי",
-    "status_disconnected": "Disconnected",
-    "status_disconnected_desc": "A WSA connection could not be enstablished for unknown reasons",
-    "status_connected": "Connected",
-    "status_connected_desc": "Successfully connected to WSA, all systems go",
+    "status_disconnected": "מנותק",
+    "status_disconnected_desc": "לא ניתן היה ליצור חיבור עם WSA מסיבה לא ידועה",
+    "status_connected": "מתחבר",
+    "status_connected_desc": "מחובר בהצלחה ל-WSA, כל המערכות עוברות",
 
 
     "screen_wsa": "מנהל חבילות של WSA",
@@ -48,9 +48,9 @@
     "settings_port": "WSA Port",
     "settings_ip": "כתובת ה-IP של ה-WSA",
     "settings_autostart": "הפעל אוטומטית את WSA לפני ההתקנה",
-    "settings_language": "Language",
-    "settings_option_generic_system": "System",
-    "settings_option_generic_disabled": "Disabled",
+    "settings_language": "שפה",
+    "settings_option_generic_system": "מערכת",
+    "settings_option_generic_disabled": "כבוי",
 
 
     "theme_mode": "ערכת נושא",
