@@ -1,0 +1,105 @@
+{
+    "@@README_1": "El archivo en.arb he una plantilla para otros archivos",
+    "@@README_2": "Para otros idiomas, no se necesitan entradas que comiencen con @ y @@, excepto @@locale",
+    "@@README_3": "Los idiomas específicos de un país (ej. 'en_GB') necesitan un idioma de respaldo existente (ej. 'en')",
+
+
+    "@@locale": "he",
+    "@locale_desc": {"תיאור": "עברית [he_HE]"},
+    "locale_desc": "עברית",
+    "locale_system": "מערכת",
+
+
+    "btn_boot": "הפעל",
+    "btn_switch_on": "פועל",
+    "btn_switch_off": "כבוי",
+
+    "status_subtext_winver_10": "Windows 10",
+    "status_subtext_winver_older": "גרסת Windows ישנה יותר",
+
+
+    "status_unsupported": "WSA לא מותקן",
+    "status_unsupported_desc": "{windowsVersion} זוהה וה-WSA לא נמצא; תוכנה זו תלויה ב-WSA, אשר נתמך רשמית רק ב-Windows 11",
+    "status_missing": "WSA לא מותקן",
+    "status_missing_desc": "WSA לא נמצא; תוכנה זו תלויה ב-WSA, התקן את תת-המערכת של וינדוס עבור Android (לדוגמה מ-Microsoft Store)",
+    "status_unknown": "מתחבר",
+    "status_unknown_desc": "ממתין ליצירת חיבור עם WSA...",
+    "status_starting": "מפעיל",
+    "status_starting_desc": "מפעיל את WSA, אנא המתן...",
+    "status_arrested": "נעצר",
+    "status_arrested_desc": "WSA כבוי",
+    "status_offline": "Offline",
+    "status_offline_desc": "לא ניתן להתחבר אל WSA: מצב מפתח ואיתור באגים ב-USB מושבתים או שצויין Port יציאה שגוי",
+    "status_disconnected": "מנותק",
+    "status_disconnected_desc": "לא ניתן היה ליצור חיבור עם WSA מסיבה לא ידועה",
+    "status_connected": "מתחבר",
+    "status_connected_desc": "מחובר בהצלחה ל-WSA, כל המערכות עוברות",
+
+
+    "screen_wsa": "מנהל חבילות של WSA",
+    "screen_settings": "הגדרות",
+
+
+    "wsa_manage": "ניהול הגדרות האנדרואיד",
+    "wsa_manage_app": "נהל אפליקציות",
+    "wsa_manage_settings": "נהל הגדרות",
+
+    
+    "settings_port": "WSA Port",
+    "settings_ip": "כתובת ה-IP של ה-WSA",
+    "settings_autostart": "הפעל אוטומטית את WSA לפני ההתקנה",
+    "settings_language": "שפה",
+    "settings_option_generic_system": "מערכת",
+    "settings_option_generic_disabled": "כבוי",
+
+
+    "theme_mode": "ערכת נושא",
+    "theme_mode_dark": "כהה",
+    "theme_mode_light": "בהיר",
+    "theme_mica": "שקיפות חלון",
+    "theme_mica_full": "מלא",
+    "theme_mica_partial": "חלקי",
+    "theme_icon_adaptive": "נוטה להסתגלות",
+    "theme_icon_adaptive_squircle": "Squircle (צורה בין ריבוע לעיגול)",
+    "theme_icon_adaptive_circle": "עגול",
+    "theme_icon_adaptive_rounded_square": "ריבוע עם פינות מעוגלות",
+
+
+    "installer_message": "האם ברצונך להתקין את היישום הזה?",
+    "installer_info_version": "גרסה: {appVersion}",
+    "installer_info_version_change": "גרסה ישנה: {appVersionOld} גרסה חדשה: {appVersionNew}",
+    "installer_info_package": "חתימה: {appPackage}",
+    "installer_installing": "מתקין את האפליקציה {appTitle}...",
+    "installer_installed": "האפליקציה {appTitle} הותקנה בהצלחה",
+    "installer_fail": "האפליקציה {appTitle} לא הותקנה",
+    "installer_error_nomsg": "ההתקנה נכשלה, אבל לא זוהתה השגיאה.",
+    "installer_btn_starting": "מפעיל...",
+    "installer_btn_loading": "טוען...",
+    "installer_btn_cancel": "ביטול",
+    "installer_btn_install": "התקן",
+    "installer_btn_reinstall": "התקן מחדש",
+    "installer_btn_update": "עדכון",
+    "installer_btn_downgrade": "שדרוג גרסה לאחור (לא בטוח)",
+    "installer_btn_dismiss": "סגור",
+    "installer_btn_open": "פתח אפליקציה",
+    "installer_btn_checkbox_shortcut": "צור קיצור דרך בשולחן העבודה",
+
+
+    "android_permission_none": "אין צורך בהרשאות",
+    "android_permission_admin": "נהל את המכשיר כמנהל",
+    "android_permission_admin_brick": "השבת או אפס את המכשיר מרחוק",
+    "android_permission_admin_lock": "נעל את המכשיר מרחוק",
+    "android_permission_storage": "קבצים ומדיה",
+    "android_permission_microphone": "מיקרופון",
+    "android_permission_camera": "מצלמה",
+    "android_permission_location": "מיקום",
+    "android_permission_phone": "טלפון",
+    "android_permission_call_log": "יומן שיחות",
+    "android_permission_sms": "הודעות",
+    "android_permission_contacts": "אנשי קשר",
+    "android_permission_calendar": "לוח שנה",
+    "android_permission_activity_recognition": "פעילות גופנית",
+    "android_permission_sensors": "חיישני מכשיר",
+    "android_permission_sensors_body": "חיישני גוף",
+    "android_permission_nearby_devices": "אתר מכשירים קרובים"
+}
