@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, constant_identifier_names
 
+import 'dart:collection';
 import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
@@ -24,7 +25,7 @@ extension LocaleUtils on Locale {
 
   //String langName() => isSystemLocale ? "System" : lookupAppLocalizations(this).locale_desc;
   static late final supportedLocales = <NamedLocale>[LocaleUtils.SYSTEM_LOCALE]
-      .followedBy(AppLocalizations.supportedLocales.map<NamedLocale>((l) => _NamedLocale(l.languageCode, l.countryCode))).toList();
+      .followedBy(SplayTreeSet.from(AppLocalizations.supportedLocales.map<NamedLocale>((l) => _NamedLocale(l.languageCode, l.countryCode)), (a, b) => a.name.compareTo(b.name)));
   int? toLCID() => _WinLocale.localeToLCID(toLanguageTag());
   static NamedLocale? fromLCID(int lcid) => lcid == 0 ? SYSTEM_LOCALE : _WinLocale.localeFromLCID(lcid);
   static NamedLocale fromLCIDOrDefault(int lcid) => fromLCID(lcid) ?? SYSTEM_LOCALE;
