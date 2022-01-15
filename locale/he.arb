@@ -1,11 +1,11 @@
 {
-    "@@README_1": "El archivo en.arb he una plantilla para otros archivos",
-    "@@README_2": "Para otros idiomas, no se necesitan entradas que comiencen con @ y @@, excepto @@locale",
-    "@@README_3": "Los idiomas específicos de un país (ej. 'en_GB') necesitan un idioma de respaldo existente (ej. 'en')",
+    "@@README_1": "The en.arb file is a template for other files",
+    "@@README_2": "For other languages, entries starting with @ and @@ are not needed, except @@locale",
+    "@@README_3": "Country-specific locales (eg. 'en_GB') need a fallback locale (eg. 'en') to exist",
 
 
     "@@locale": "he",
-    "@locale_desc": {"תיאור": "עברית [he_HE]"},
+    "@locale_desc": {"description": "Hebrew [he_IL]"},
     "locale_desc": "עברית",
     "locale_system": "מערכת",
 
