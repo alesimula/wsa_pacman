@@ -4,7 +4,7 @@
     "@@README_3": "Los idiomas específicos de un país (ej. 'en_GB') necesitan un idioma de respaldo existente (ej. 'en')",
 
 
-    "@@locale": "en",
+    "@@locale": "es",
     "@locale_desc": {"description": "Spanish (Spain) [es_ES]"},
     "locale_desc": "Español",
     "locale_system": "Sistema",
