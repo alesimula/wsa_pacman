@@ -87,6 +87,8 @@ class _NamedLocale extends NamedLocale {
 class _NamedLocaleLCID extends _NamedLocale {
   _NamedLocaleLCID(this.lcid, String _languageCode, [String? _countryCode]) : super(_languageCode, _countryCode);
   // ignore: overridden_fields 
+  @override late final String name = (){try {return super.name;} catch (e) {return "Unknown";}}();
+  // ignore: overridden_fields 
   @override final int lcid;
 }
 

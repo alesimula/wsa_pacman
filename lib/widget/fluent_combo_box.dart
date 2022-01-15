@@ -627,6 +627,7 @@ class FluentCombobox<T> extends StatefulWidget {
   FluentCombobox({
     Key? key,
     required this.items,
+    this.allowUnknown = false,
     this.selectedItemBuilder,
     this.value,
     this.placeholder,
@@ -645,22 +646,13 @@ class FluentCombobox<T> extends StatefulWidget {
     this.focusNode,
     this.autofocus = false,
     this.comboboxColor,
-  })  : assert(
-          items == null ||
-              items.isEmpty ||
-              value == null ||
-              items.where((ComboboxItem<T> item) {
-                    return item.value == value;
-                  }).length ==
-                  1,
-          "There should be exactly one item with [Combobox]'s value: "
-          '$value. \n'
-          'Either zero or 2 or more [ComboboxItem]s were detected '
-          'with the same value',
-        ),
+  }) : assert(allowUnknown || items == null || items.isEmpty || value == null || items.where((item) => item.value == value).length == 1,
+          "There should be exactly one item with [Combobox]'s value: $value. \n"
+          'Either zero or 2 or more [ComboboxItem]s were detected with the same value'),
         assert(itemHeight == null || itemHeight >= kMinInteractiveDimension),
         super(key: key);
 
+  final bool allowUnknown;
   final List<ComboboxItem<T>>? items;
   final T? value;
   final Widget? placeholder;
@@ -774,17 +766,15 @@ class _FluentComboboxState<T> extends State<FluentCombobox<T>> with WidgetsBindi
       _selectedIndex = null;
       return;
     }
-
-    assert(widget.items!
-            .where((ComboboxItem<T> item) => item.value == widget.value)
-            .length ==
-        1);
+    
     for (int itemIndex = 0; itemIndex < widget.items!.length; itemIndex++) {
       if (widget.items![itemIndex].value == widget.value) {
         _selectedIndex = itemIndex;
         return;
       }
     }
+    assert(widget.allowUnknown);
+    _selectedIndex = null;
   }
 
   TextStyle? get _textStyle =>

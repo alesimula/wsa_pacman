@@ -216,6 +216,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
             leading: const Icon(Mdi.translate , size: 23),
             content: Text(lang.settings_language),
             trailing: SizedBox(width: 300, height: 32, child: FluentCombobox<NamedLocale>(
+              allowUnknown: true,
               onTap: (){}, placeholder: Text(locale_lang.name), 
               isExpanded: true,
               value: locale_lang,
