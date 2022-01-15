@@ -29,14 +29,13 @@
     "status_arrested": "נעצר",
     "status_arrested_desc": "WSA כבוי",
     "status_offline": "Offline",
-    "status_offline_desc": "לא ניתן להתחבר אל WSA: מצב מפתח ואיתור באגים ב-USB מושבתים או שצויין Port יציאה שגוי",
-    "status_disconnected": "מנותק",
+    "status_offline_desc": "לא ניתן להתחבר אל WSA: מצב מפתח ואיתור באגים ב-USB מושבתים או שצויין Port שגוי",    "status_disconnected": "מנותק",
     "status_disconnected_desc": "לא ניתן היה ליצור חיבור עם WSA מסיבה לא ידועה",
-    "status_connected": "מתחבר",
-    "status_connected_desc": "מחובר בהצלחה ל-WSA, כל המערכות עוברות",
+    "status_connected": "מחובר",
+    "status_connected_desc": "מחובר בהצלחה ל-WSA, כל המערכות עוברות.",
 
 
-    "screen_wsa": "מנהל חבילות של WSA",
+    "screen_wsa": "WSA PacMan - מנהל חבילות ל-WSA",
     "screen_settings": "הגדרות",
 
 
@@ -59,7 +58,7 @@
     "theme_mica": "שקיפות חלון",
     "theme_mica_full": "מלא",
     "theme_mica_partial": "חלקי",
-    "theme_icon_adaptive": "נוטה להסתגלות",
+    "theme_icon_adaptive": "צורת אייקונים מותאמת",
     "theme_icon_adaptive_squircle": "Squircle (צורה בין ריבוע לעיגול)",
     "theme_icon_adaptive_circle": "עגול",
     "theme_icon_adaptive_rounded_square": "ריבוע עם פינות מעוגלות",
