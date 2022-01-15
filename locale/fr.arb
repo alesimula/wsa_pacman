@@ -1,7 +1,7 @@
 {
     "@@README_1": "Le fichier en.arb est un modèle pour d'autres fichiers",
     "@@README_2": "Pour les autres langues, les entrées commençant par @ et @@ ne sont pas nécessaires, sauf @@locale",
-    "@@README_3": "Locales spécifiques à un pays (ex. 'en_GB') ont besoin d'un locale de secours (ex. 'en') pour exister",
+    "@@README_3": "Locales spécifiques à un pays (ex. 'en_GB') ont besoin d'un locale de secours existant (ex. 'en')",
 
 
     "@@locale": "fr",
@@ -62,7 +62,7 @@
     "theme_mica_full": "Totale",
     "theme_mica_partial": "Partielle",
     "theme_icon_adaptive": "Icônes adaptatives Forme",
-    "theme_icon_adaptive_squircle": "Écureuil",
+    "theme_icon_adaptive_squircle": "Supercercle",
     "theme_icon_adaptive_circle": "Cercle",
     "theme_icon_adaptive_rounded_square": "Carré arrondi",
 
