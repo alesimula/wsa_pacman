@@ -6,12 +6,12 @@
 
     "@@locale": "fr",
     "@locale_desc": {"description": "French [fr_FR]"},
-    "locale_desc": "Française",
+    "locale_desc": "Français",
     "@locale_system": {"description": "Décrit la locale du système"},
     "locale_system": "Système",
 
 
-    "btn_boot": "Démarrer",
+    "btn_boot": "Démarre",
     "btn_switch_on": "On",
     "btn_switch_off": "Off",
 
@@ -20,18 +20,18 @@
     "status_subtext_winver_older": "Version antérieure de Windows",
 
 
-    "status_unsupported": "WSA non installé",
+    "status_unsupported": "WSA pas installé",
     "status_unsupported_desc": "{windowsVersion} détectée et WSA non trouvé; cette application dépend de WSA, qui n'est officiellement pris en charge que sur Windows 11",
-    "status_missing": "WSA non installé",
+    "status_missing": "WSA pas installé",
     "status_missing_desc": "WSA non trouvé; cette application dépend de WSA, veuillez installer Windows Subsystem pour Android (ou l'Amazon Appstore) à partir du Microsoft Store",
     "status_unknown": "Connecting",
-    "status_unknown_desc": "Attente de l'établissement d'une connexion à WSA...",
+    "status_unknown_desc": "Attendent l'établissement d'une connexion à WSA...",
     "status_starting": "Démarrage",
     "status_starting_desc": "WSA démarre, veuillez patienter...",
     "status_arrested": "Arrêté",
     "status_arrested_desc": "WSA est éteint",
     "status_offline": "Hors-ligne",
-    "status_offline_desc": "Impossible d'établir une connexion avec WSA: soit le mode développeur et le débogage USB sont désactivés, soit un port incorrect est spécifié",
+    "status_offline_desc": "Impossible d'établir une connexion avec WSA: ou le mode développeur et le débogage USB sont désactivés, ou un port incorrect a été spécifié",
     "status_disconnected": "Déconnecté",
     "status_disconnected_desc": "Une connexion au WSA n'a pas pu être établie pour des raisons inconnues",
     "status_connected": "Connecté",
