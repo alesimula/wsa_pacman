@@ -19,7 +19,7 @@
 
 
     "status_unsupported": "WSA לא מותקן",
-    "status_unsupported_desc": "{windowsVersion} זוהה וה-WSA לא נמצא; תוכנה זו תלויה ב-WSA, אשר נתמך רשמית רק ב-Windows 11",
+    "status_unsupported_desc": "זוהתה מערכת הפעלה {windowsVersion} WSA ולא נמצא; תוכנה זו תלויה ב WSA, אשר נתמך רשמית רק ב-Windows 11.",
     "status_missing": "WSA לא מותקן",
     "status_missing_desc": "WSA לא נמצא; תוכנה זו תלויה ב-WSA, התקן את תת-המערכת של וינדוס עבור Android (לדוגמה מ-Microsoft Store)",
     "status_unknown": "מתחבר",
