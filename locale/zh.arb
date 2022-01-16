@@ -1,11 +1,11 @@
 {
-    "@@README_1": "it.arb 文件是其他文件的模板",
+    "@@README_1": "en.arb 文件是其他文件的模板",
     "@@README_2": "对于其他语言，不需要翻译 @ 和 @@ 开头的条目，除外 @@locale",
     "@@README_3": "特定于国家/地区的语言环境（例如“en_GB”）需要一个备用语言环境（例如“en”）才能使用",
 
 
     "@@locale": "zh",
-    "@locale_desc": {"description": "Simplified Chinese [zh_CN]"},
+    "@locale_desc": {"description": "Simplified Chinese [zh_CN] < [zh_Hans]"},
     "locale_desc": "简体中文",
     "@locale_system": {"description": "描述系统区域设置"},
     "locale_system": "系统",

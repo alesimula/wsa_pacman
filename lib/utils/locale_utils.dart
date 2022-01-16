@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, constant_identifier_names, curly_braces_in_flow_control_structures
 
 import 'dart:collection';
 import 'dart:ffi';
@@ -23,9 +23,7 @@ extension LocaleUtils on Locale {
     catch (e) {return intl.Intl.systemLocale.asLocale?._asSystemLocale ?? _DEFAULT_SYSTEM_LOCALE;}
   })();
 
-  //String langName() => isSystemLocale ? "System" : lookupAppLocalizations(this).locale_desc;
-  static late final supportedLocales = <NamedLocale>[LocaleUtils.SYSTEM_LOCALE]
-      .followedBy(SplayTreeSet.from(AppLocalizations.supportedLocales.map<NamedLocale>((l) => _NamedLocale(l.languageCode, l.countryCode)), (a, b) => a.name.compareTo(b.name)));
+  static late final supportedLocales = SplayTreeSet<NamedLocale>.from(AppLocalizations.supportedLocales.map<NamedLocale>((l) => _NamedLocale(l.languageCode, l.countryCode, l.scriptCode)), (a, b) => a.name.compareTo(b.name));
   int? toLCID() => _WinLocale.localeToLCID(toLanguageTag());
   static NamedLocale? fromLCID(int lcid) => lcid == 0 ? SYSTEM_LOCALE : _WinLocale.localeFromLCID(lcid);
   static NamedLocale fromLCIDOrDefault(int lcid) => fromLCID(lcid) ?? SYSTEM_LOCALE;
@@ -34,11 +32,31 @@ extension LocaleUtils on Locale {
     try {return lookupAppLocalizations(this);}
     catch(_) {return _DEFAULT_LOCALIZATION;}
   }
+
+  static Locale localeResolutionCallback(Locale? locale, Iterable<Locale> list) {
+    Locale? bestMatch;
+    int confidence = 0;
+    if (locale != null) {
+      if (locale is _NamedLocale && list is Iterable<NamedLocale>) for (final lc in list) {if (locale == lc) return lc;}
+      else for (final lc in list) if (locale.languageCode == lc.languageCode) {
+        int newConfidence = locale.scriptCode == lc.scriptCode ? locale.countryCode == lc.countryCode ? 8 : lc.countryCode == null ? 7 : 6 : 
+            locale.countryCode == lc.countryCode ? 5 : lc.scriptCode == null ? lc.countryCode == null ? 4 : 3 : lc.countryCode == null ? 2 : 1;
+        if (newConfidence > confidence) {
+          confidence = newConfidence;
+          bestMatch = lc;
+          if (confidence == 8) break;
+        }
+      }
+    }
+    return bestMatch ?? const Locale("en");
+  }
 }
 
 
 class _WinLocale {
   static const int LOCALE_NAME_MAX_LENGTH = 85;
+  //static const int LOCALE_SSCRIPTS = 108;
+  static const int LOCALE_SPARENT = 109;
 
   static final _LocaleNameToLCID = kernel32.lookupFunction<
     Uint32 Function(Pointer<Utf16> lpName, Uint32 dwFlags), 
@@ -46,6 +64,19 @@ class _WinLocale {
   static final _LCIDToLocaleName = kernel32.lookupFunction<
     Uint32 Function(Uint32 locale, Pointer<Utf16> lpName, Int32 cchName, Uint32 dwFlags), 
     int Function(int locale, Pointer<Utf16> lpName, int cchName, int dwFlags)>('LCIDToLocaleName');
+
+  static String parentScriptCode(Locale locale) {
+    final lpLocaleName = '${locale.languageCode}${locale.countryCode != null ? "-${locale.countryCode}" : ""}'.toNativeUtf16();
+    final lpLCData = malloc<WCHAR>(LOCALE_NAME_MAX_LENGTH).cast<Utf16>();
+    try {
+      int result = GetLocaleInfoEx(lpLocaleName, LOCALE_SPARENT, lpLCData, LOCALE_NAME_MAX_LENGTH);
+      return (result != 0 ? lpLCData.toDartString() : '').find('^[^_-]*[_-]([^_-]+)', 1) ?? '';
+    }
+    finally {
+      free(lpLocaleName);
+      free(lpLCData);
+    }
+  }
 
   static int? localeToLCID(String locale) {
     final lpName = locale.toNativeUtf16();
@@ -71,13 +102,14 @@ class _WinLocale {
 
 
 abstract class NamedLocale extends Locale {
-  const NamedLocale._(String _languageCode, [String? _countryCode]) : super(_languageCode, _countryCode);
+  const NamedLocale._(String _languageCode, [String? _countryCode, String? _scriptCode]) : 
+      super.fromSubtags(languageCode: _languageCode, countryCode: _countryCode, scriptCode: _scriptCode);
   String get name;
   int get lcid;
 }
 
 class _NamedLocale extends NamedLocale {
-  _NamedLocale(String _languageCode, [String? _countryCode]) : super._(_languageCode, _countryCode);
+  _NamedLocale(String _languageCode, [String? _countryCode, String? _scriptCode]) : super._(_languageCode, _countryCode, _scriptCode);
   @override late final String name = lookupAppLocalizations(this).locale_desc;
   @override late final int lcid = toLCID() ?? (){throw ArgumentError("Unknown language tag: ${toLanguageTag()}");}();
   @override int get hashCode => lcid;
@@ -94,6 +126,8 @@ class _NamedLocaleLCID extends _NamedLocale {
 
 class _SystemLocale extends NamedLocale {
   _SystemLocale(String _languageCode, [String? _countryCode]) : super._(_languageCode, _countryCode);
+  // ignore: overridden_fields
+  @override late final String? scriptCode = _WinLocale.parentScriptCode(this);
   @override late final String name = _localizationOrDefault.locale_system;
   @override final int lcid = 0;
   @override final int hashCode = 0;

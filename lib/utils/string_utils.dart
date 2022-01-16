@@ -18,7 +18,7 @@ extension StringUtils on String {
 
   String? find(String regexp, [int group = 0]) {
     var matches = RegExp(regexp).firstMatch(this);
-      return  matches?.group(group)!;
+      return matches?.group(group);
   }
 
   /// Maps folding repeated entries per key

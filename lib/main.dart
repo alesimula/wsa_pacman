@@ -15,6 +15,7 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_value/shared_value.dart';
 import 'package:wsa_pacman/utils/misc_utils.dart';
 import 'package:wsa_pacman/utils/wsa_utils.dart';
+import 'package:wsa_pacman/utils/locale_utils.dart';
 import 'package:wsa_pacman/widget/themed_pane_item.dart';
 import 'package:wsa_pacman/windows/win_info.dart';
 import 'package:wsa_pacman/windows/win_reg.dart';
@@ -247,7 +248,6 @@ class _FluentLocalizationsEnglish extends LocalizationsDelegate<FluentLocalizati
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-  static final _supportedLocales = [const Locale("en")].followedBy(AppLocalizations.supportedLocales); 
 
   void setMicaEffect(bool micaEnabled, [bool dark = true]) {
     if (WinVer.isWindows11OrGreater)
@@ -281,7 +281,8 @@ class MyApp extends StatelessWidget {
             //locale.GlobalCupertinoLocalizations.delegate,
             _FluentLocalizationsEnglish(),
           ],
-          supportedLocales: _supportedLocales,
+          supportedLocales: LocaleUtils.supportedLocales,
+          localeResolutionCallback: LocaleUtils.localeResolutionCallback,
           routes: {'/': (_) => args.isEmpty ? const MyHomePage() : const ApkInstaller()},
           theme: ThemeData(
             buttonTheme: ButtonThemeData(

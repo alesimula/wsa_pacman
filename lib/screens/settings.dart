@@ -106,7 +106,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
   static List<Widget> optionsList<E extends ProtobufEnum>(List<E> values, String Function(E)? title, bool Function(E e) checked, Function(E e) updater) =>
       optionsListDeferred<E, E>(values, title, (e) => e, checked, (e, v) => updater(e));
   
-  static late final _localeItems = LocaleUtils.supportedLocales.map((l)=>ComboboxItem(child: Text(l.name), value: l)).toList();
+  static late final _localeItems = <NamedLocale>[LocaleUtils.SYSTEM_LOCALE].followedBy(LocaleUtils.supportedLocales).map((l)=>ComboboxItem(child: Text(l.name), value: l)).toList();
 
   @override
   Widget build(BuildContext context) {
