@@ -241,7 +241,7 @@ packages:
       name: jovial_svg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.8-rc.1"
+    version: "1.0.8"
   js:
     dependency: transitive
     description:
