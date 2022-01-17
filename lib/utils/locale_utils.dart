@@ -13,8 +13,8 @@ import 'package:wsa_pacman/windows/win_io.dart';
 import 'string_utils.dart';
 
 extension LocaleUtils on Locale {
-  _NamedLocale _asNamedLocale([int? lcid]) => lcid == null ? _NamedLocale(languageCode, countryCode) : _NamedLocaleLCID(lcid, languageCode, countryCode);
-  _SystemLocale get _asSystemLocale => _SystemLocale(languageCode, countryCode);
+  _NamedLocale _asNamedLocale([int? lcid]) => lcid == null ? _NamedLocale(languageCode, countryCode, scriptCode) : _NamedLocaleLCID(lcid, languageCode, countryCode);
+  _SystemLocale get _asSystemLocale => _SystemLocale(languageCode, countryCode, scriptCode);
   static late final NamedLocale _DEFAULT_SYSTEM_LOCALE = _SystemLocale("en");
   static late final _DEFAULT_LOCALIZATION = lookupAppLocalizations(_DEFAULT_SYSTEM_LOCALE);
   //static late final _LOCALE = {for (final l in supportedLocales) l.lcid : l};
@@ -117,7 +117,7 @@ class _NamedLocale extends NamedLocale {
 }
 
 class _NamedLocaleLCID extends _NamedLocale {
-  _NamedLocaleLCID(this.lcid, String _languageCode, [String? _countryCode]) : super(_languageCode, _countryCode);
+  _NamedLocaleLCID(this.lcid, String _languageCode, [String? _countryCode, String? _scriptCode]) : super(_languageCode, _countryCode, _scriptCode);
   // ignore: overridden_fields 
   @override late final String name = (){try {return super.name;} catch (e) {return "Unknown";}}();
   // ignore: overridden_fields 
@@ -125,9 +125,11 @@ class _NamedLocaleLCID extends _NamedLocale {
 }
 
 class _SystemLocale extends NamedLocale {
-  _SystemLocale(String _languageCode, [String? _countryCode]) : super._(_languageCode, _countryCode);
+  _SystemLocale(String _languageCode, [String? _countryCode, String? _scriptCode]) : super._(_languageCode, _countryCode) {
+    if (_scriptCode != null) scriptCode = _scriptCode;
+  }
   // ignore: overridden_fields
-  @override late final String? scriptCode = _WinLocale.parentScriptCode(this);
+  @override late String? scriptCode = _WinLocale.parentScriptCode(this);
   @override late final String name = _localizationOrDefault.locale_system;
   @override final int lcid = 0;
   @override final int hashCode = 0;
