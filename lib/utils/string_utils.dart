@@ -5,8 +5,9 @@ import 'dart:ui';
 import 'dart:io';
 
 extension StringUtils on String {
-  Locale? get asLocale => findAnd<Locale?>(r"^([^_-]*)([_-]([^_-]*))*$", (m) => m.group(1)?.isNotEmpty ?? false ? 
-      Locale(m.group(1)!, m.group(3)?.isNotEmpty ?? false ? m.group(3)! : null) : null);
+  Locale? get asLocale => findAnd<Locale?>(r"^([a-z]*)([_-]([A-Za-z][a-z]{2,3}))?([_-]([A-Z]*))?", (m) => m.group(1)?.isNotEmpty ?? false ? 
+      Locale.fromSubtags(languageCode: m.group(1)!, countryCode: m.group(5)?.isNotEmpty ?? false ? m.group(5)! : null,
+      scriptCode: m.group(3)?.isNotEmpty ?? false ? m.group(3)! : null) : null);
   int? get ipv4AsInt => InternetAddress.tryParse(this)?.rawAddress.buffer.asByteData().getInt32(0);
 
   String get capitalized => '${this[0].toUpperCase()}${substring(1)}';
