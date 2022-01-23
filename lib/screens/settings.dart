@@ -13,7 +13,6 @@ import 'package:wsa_pacman/widget/adaptive_icon.dart';
 import 'package:wsa_pacman/widget/fluent_card.dart';
 import 'package:wsa_pacman/widget/fluent_combo_box.dart';
 import 'package:wsa_pacman/widget/fluent_expander.dart';
-import 'package:wsa_pacman/widget/fluent_icon_button.dart';
 import 'package:wsa_pacman/widget/fluent_text_box.dart';
 import 'package:wsa_pacman/windows/win_info.dart';
 
@@ -195,8 +194,8 @@ class ScreenSettingsState extends State<ScreenSettings> {
               enableSuggestions: false,
               keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
               prefix: const Padding(padding: EdgeInsetsDirectional.only(start: 10), child: Text("127.0.0.1 :")),
-              suffix: FluentIconButton(
-                iconButtonMode: IconButtonMode.SMALL,
+              suffix: IconButton (
+                iconButtonMode: IconButtonMode.small,
                 icon: const Icon(FluentIcons.reset),
                 onPressed: () {GState.androidPortPending.update((_) => 58526.toString()); androidPortUpdater.instant(58526); setState((){});},
               )
