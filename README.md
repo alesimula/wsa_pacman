@@ -14,6 +14,8 @@ The app additionally provides a button to open Android settings and one to open 
   - on/off
 - Android port
   - Default: 58526
+- Language
+  - [All options](./locale/)
 - Theme mode 
   - System
   - Dark
