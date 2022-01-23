@@ -60,9 +60,9 @@ final _CreateDirectoryObject = ntdll.lookupFunction<
     Uint32 Function(Pointer<IntPtr> lpHandle, Uint32 desiredAccess, Pointer<OBJECT_ATTRIBUTES> obj_attr, HANDLE shadowDirectoryHandle, Uint32 flags), 
     int Function(Pointer<IntPtr> lpHandle, int desiredAccess, Pointer<OBJECT_ATTRIBUTES> obj_attr, int shadowDirectoryHandle, int flags)>('NtCreateDirectoryObjectEx');
 
-final _DefineDosDevice = kernel32.lookupFunction<
+/*final _DefineDosDevice = kernel32.lookupFunction<
     Uint32 Function(Uint32 dwFlags, Pointer<Utf16> lpDeviceName, Pointer<Utf16> lpTargetPath),
-    int Function(int dwFlags, Pointer<Utf16> lpDeviceName, Pointer<Utf16> lpTargetPath)>('DefineDosDeviceW');
+    int Function(int dwFlags, Pointer<Utf16> lpDeviceName, Pointer<Utf16> lpTargetPath)>('DefineDosDeviceW');*/
 
 final _LookupPrivilegeValue = advapi32.lookupFunction<
     Uint32 Function(LPWSTR lpSystemName, LPWSTR lpName, Pointer<LUID> lpLuid),
@@ -80,27 +80,12 @@ extension on LPWSTR {
     unicodeString.maximumLength = unicodeString.length + 2;
     return lpUnicodeString;
   }
-
-  //wcsrchr
-  LPWSTR lastOccourence(String char) {
-    int charCode = char.codeUnitAt(0);
-    int? lastIndex;
-    final codeUnits = cast<Uint16>();
-    for (int i = 0; ; i++) {
-      int unit = codeUnits[i];
-      if (unit == charCode) lastIndex = i;
-      if (unit == 0) break;
-    }
-    return lastIndex != null ? cast<WCHAR>().elementAt(lastIndex).cast<Utf16>() : nullptr;
-  }
 }
-
 
 extension WinDir on Directory {
   int? toNativeDir() {
     final lpPath = absolute.path.toNativeUtf16();
     HANDLE hToken;
-
 
     try {
       final handle = CreateFile(lpPath, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, 
@@ -170,23 +155,24 @@ class NtIO {
   static late final _SE_RESTORE_NAME = TEXT("SeRestorePrivilege");
   static late final _SE_BACKUP_NAME = TEXT("SeBackupPrivilege");
 
-  static int? _NT_JUNCTION_HANDLE;
-  static late final _initJunction = (){
-    if (_DOS_DIRECTORY != null) _NT_JUNCTION_HANDLE = NtIO.createJunctionHandle(_DOS_DIRECTORY!, "${WinPath.tempSubdir}\\$NT_TEMP_DIR_NAME", true);
-  }();
+  static late final int? _NT_JUNCTION_HANDLE = (_DOS_DIRECTORY != null) ? createJunction(_DOS_DIRECTORY!, "${WinPath.tempSubdir}\\$NT_TEMP_DIR_NAME", true) : null;
 
+  /// Creates a temporary shortcut inside the object manager and links it inside %TEMP%
+  /// Returns the relative path starting from WinPath.tempSubdir to access it
   static String? createTempShortcut(String target, String shortcutName) {
     String? directory = _DOS_DIRECTORY;
     if (directory != null) {
       NtIO.createNativeSymlink(0, "\\??\\$target", "$_DOS_DIRECTORY\\$shortcutName");
-      _initJunction;
+      _NT_JUNCTION_HANDLE;
       return "$NT_TEMP_DIR_NAME\\$shortcutName";
     }
   }
 
-  static void deleteNtTempDir() => (_NT_JUNCTION_HANDLE != null) ? CloseHandle(_NT_JUNCTION_HANDLE!) != 0 : false;
+  /// Deletes the junction to the NT directory
+  static void deleteNtTempDirJunction() => (_NT_JUNCTION_HANDLE != null) ? CloseHandle(_NT_JUNCTION_HANDLE!) != 0 : false;
   
 
+  /// Opens a directory, returns its handle
   static int? openDirectory(String path, bool bReadWrite, [bool deleteOnClose = false]) {
     final lpToken = malloc<HANDLE>();
     final pszPath = path.toNativeUtf16();
@@ -214,119 +200,12 @@ class NtIO {
     }
   }
 
-  /*static bool createSymlink(String xsymlink, String xxtarget, String? xbaseobjdir) {
-    LPWSTR m_junctiondir;
-    bool m_created_junction = false;
-    final bool m_permanent = false;
-    int? m_hlink;
-
-
-    LPWSTR symlink = xsymlink.toNativeUtf16();
-    LPWSTR xtarget = xxtarget.toNativeUtf16();
-    LPWSTR baseobjdir = xbaseobjdir?.toNativeUtf16() ?? "\\RPC Control\\${DOSIO.NT_TEMP_DIR_NAME}".toNativeUtf16();
-
-    final lpIsNative = malloc<BOOL>();
-    var linkname = GetNativePath(symlink, lpIsNative);
-    bool isnative() => lpIsNative.value != 0;
-
-    if (linkname.length == 0) return true;
-
-    if (!isnative()) {
-      //symlink.cast<Uint16>().
-      LPWSTR slash = symlink.lastOccourence(r'\');
-      if (slash == nullptr) {
-        log(r"\x1B[91mSymlink creation error: must supply a directory and link name", level: 1000);
-        return false;
-      }
-
-      //TODO free
-      linkname = (baseobjdir.toDartString() + slash.toDartString()).toNativeUtf16();
-
-      // *slash = 0;
-
-      m_junctiondir = symlink;
-      if (CreateDirectory(m_junctiondir, nullptr) == 0 && GetLastError() != ERROR_ALREADY_EXISTS) {
-        log("x1B[91mSymlink creation error: couldn't create symlink directory");
-        return false;
-      }
-      
-      LPWSTR destdir = baseobjdir;
-      log("DESTDIR: ${destdir.toDartString()}");
-      log("JUNC: ${m_junctiondir.toDartString()}");
-
-      //createJunction(destdir.toDartString(), m_junctiondir.toDartString());
-
-      if (!createJunction(destdir.toDartString(), m_junctiondir.toDartString())) {
-        log("x1B[91mSymlink creation error: error creating junction: ${getMessageDOS(GetLastError())}");
-        return false;
-      }		
-
-      m_created_junction = true;
-    }
-
-    LPWSTR target = GetNativePath(xtarget, lpIsNative);
-    if (target.length == 0) {
-      return false;
-    }
-
-    if (!isnative()) {
-      target = (r"\??\" + target.toDartString()).toNativeUtf16();
-    }
-
-    if (m_permanent) {
-      /*linkname = L"Global\\GLOBALROOT" + linkname;
-
-      if (!CreatePermanentSymlink(linkname, target))
-      {
-        DebugPrintf("Error creating symlink %ls\n", GetErrorMessage().c_str());
-        return false;
-      }*/
-    }
-    else
-    {
-      log("NATIVE_PATH: ${target.toDartString()}");
-      log("LINK_PATH: ${linkname.toDartString()}");
-      m_hlink = createNativeSymlink(0, target.toDartString(), linkname.toDartString());
-      if (m_hlink != null) {
-        return false;
-      }		
-    }
-
-    //m_linkname = linkname;
-    //m_target = target;
-
-    return true;
-  }*/
-
-
-
-  static LPWSTR GetNativePath(LPWSTR name, Pointer<BOOL> isnative) {
-    if (name.cast<WCHAR>().elementAt(0).value == '@'.codeUnitAt(0)) {
-      isnative.value = 1;
-      return name.cast<WCHAR>().elementAt(1).cast<Utf16>();
-    }
-    else {
-      isnative.value = 0;
-      var lpBuffer = malloc<WCHAR>(MAX_PATH).cast<Utf16>();
-      try {
-        int result = GetFullPathName(name, MAX_PATH, lpBuffer, nullptr);
-        if (result > MAX_PATH) {
-          free(lpBuffer);
-          lpBuffer = malloc<WCHAR>(result).cast<Utf16>();
-          result = GetFullPathName(name, result, lpBuffer, nullptr);
-        }
-        return result == 0 ? ''.toNativeUtf16() : lpBuffer;
-      }
-      finally {
-        free(lpBuffer);
-      }
-    }
-  }
-
-  //TODO parse targetDir and append "\??\" if necessary?
-  static int? createJunctionHandle(String targetDir, String symlinkDir, [bool deleteOnClose = true]) {
+  /// Creates a junction of the target directory using the symlink directory and returns the handle
+  /// The symlink directory must be empty
+  /// TODO parse targetDir and append "\??\" if necessary?
+  static int? createJunction(String targetDir, String symlinkDir, [bool deleteOnClose = true]) {
     final lpReparseBuffer = targetDir.toReparseMountpoint();
-    int? dirHandle = NtIO.openDirectory(symlinkDir, true, deleteOnClose);
+    int? dirHandle = openDirectory(symlinkDir, true, deleteOnClose);
     final lpBytesReturned = malloc<Uint32>();
     try {
       int result = dirHandle != null ? DeviceIoControl(dirHandle, FSCTL_SET_REPARSE_POINT, lpReparseBuffer,
@@ -342,8 +221,9 @@ class NtIO {
     }
   }
 
-  static bool createJunction(String targetDir, String symlinkDir) {
-    int? handle = createJunctionHandle(targetDir, symlinkDir, false);
+  /// Like createJunction, but returns a boolean (created) and is always permanent
+  static bool createJunctionPerm(String targetDir, String symlinkDir) {
+    int? handle = createJunction(targetDir, symlinkDir, false);
     if (handle != null) CloseHandle(handle);
     return handle != null;
   }
@@ -360,16 +240,18 @@ class NtIO {
     return lpAttributes;
   }
 
-  static void defineDosDevice() {
+  /*static void defineDosDevice() {
     log("DIRNAME: \\${NT_TEMP_DIR_NAME}");
     log("${_CreateDirectoryObject}");
     final lpTargetPath = "Global\\GLOBALROOT\\$NT_TEMP_DIR_NAME".toNativeUtf16();
     final lpDeviceName = r"C:\Users\Alex\Downloads\lolktestk".toNativeUtf16();
     int dosDevice = _DefineDosDevice(DDD_NO_BROADCAST_SYSTEM | DDD_RAW_TARGET_PATH, lpDeviceName, lpTargetPath);
     log("DOS_CREATE: ${dosDevice}");
-  }
+  }*/
 
+  /// Converts NT status code to an error message
   static String getMessageNt(int code) => getMessageDOS(_NtStatusToDosError(code));
+  /// Converts DOS code to an error message
   static String getMessageDOS(int code) {
     const _FORMAT_MESSAGE_ALLOCATE_BUFFER = 0x00000100;
     const LANGID_EN = 0x0409;
@@ -384,13 +266,14 @@ class NtIO {
     }
   }
 
+  /// Creates a directory inside the object manager
   static int? createNativeDirectory(String nativePath) {
     final objectName = nativePath.toUnicodeString();
     final objAttrs = _InitializeObjectAttributes(objectName, OBJ_CASE_INSENSITIVE, 0, nullptr);
     final lpHandle = calloc<IntPtr>();
     try {
       int result = _CreateDirectoryObject(lpHandle, DIRECTORY_ALL_ACCESS, objAttrs, 0, 0);
-      if (result != 0) log("\x1B[91mNative directory cration failed: ${getMessageNt(result)}");
+      if (result != 0) log("\x1B[91mNative directory cration failed: ${getMessageNt(result)}", level: 1000);
       else return lpHandle.value;
     }
     finally {
@@ -400,6 +283,7 @@ class NtIO {
     }
   }
 
+  /// Creates a shortcut inside the object manager
   static int? createNativeSymlink(int rootDirHandle, String target, String symlink) {
     final lpTarget = target.toUnicodeString();
     final lpSymlink = symlink.toUnicodeString();

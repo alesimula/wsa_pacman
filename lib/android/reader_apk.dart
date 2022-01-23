@@ -251,7 +251,7 @@ class ApkReader {
     Future? iconUpdThread;
     Future<ProcessResult>? inner;
     var process = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'badging', APK_NAME], stdoutEncoding: utf8, workingDirectory: APK_DIRECORY).then((value) async {
-      if (ntSymlinkCreated) NtIO.deleteNtTempDir();
+      if (ntSymlinkCreated) NtIO.deleteNtTempDirJunction();
       if (value.exitCode == 0) {
         String dump = value.stdout;
         String? info = dump.find(r'(^|\n)package:.*');
