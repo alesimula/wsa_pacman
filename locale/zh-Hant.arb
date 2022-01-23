@@ -7,7 +7,7 @@
     "@@locale": "zh_Hant",
     "@locale_desc": {"description": "Chinese (traditional) [zh_TW] < [zh_Hant]"},
     "locale_desc": "中文 (繁体)",
-    "@locale_system": {"description": "Describes the system locale"},
+    "@locale_system": {"description": "描述系統區域設置"},
     "locale_system": "系統",
 
 
