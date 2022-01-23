@@ -310,12 +310,12 @@ class ApkReader {
     if (inner != null) await inner;
     if (iconUpdThread != null) await iconUpdThread;
     if (data.legacyIcon)  data.execute(() async {if (GState.apkForegroundIcon.$ == null && GState.apkIcon.$ == null) {
-      final legacy = await ScalableImage.fromSvgAsset(rootBundle, "assets/icons/missing_icon_legacy.svg");
+      final legacy = await ScalableImage.fromSIAsset(rootBundle, "assets/icons/missing_icon_legacy.si");
       GState.apkIcon.update((p0) => (ScalableImageWidget(si: legacy)));
     }});
     else data.execute(() async {if (GState.apkForegroundIcon.$ == null && GState.apkIcon.$ == null) {
-      final fBackground = ScalableImage.fromAvdAsset(rootBundle, "assets/icons/missing_icon_background.xml");
-      final fForeground = ScalableImage.fromAvdAsset(rootBundle, "assets/icons/missing_icon_foreground.xml");
+      final fBackground = ScalableImage.fromSIAsset(rootBundle, "assets/icons/missing_icon_background.si");
+      final fForeground = ScalableImage.fromSIAsset(rootBundle, "assets/icons/missing_icon_foreground.si");
       final background = await fBackground;
       final foreground = await fForeground;
       GState.apkBackgroundIcon.update((p0) => (ScalableImageWidget(si: background)));

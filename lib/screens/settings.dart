@@ -74,12 +74,12 @@ class ScreenSettingsState extends State<ScreenSettings> {
   ScreenSettingsState({this.controller});
   final ScrollController? controller;
 
-  static late final _exBackground = _loadIcon("assets/icons/missing_icon_background.xml", true);
-  static late final _exForeground = _loadIcon("assets/icons/missing_icon_foreground.xml", true);
-  static late final _exLegacyIcon = _loadIcon("assets/icons/missing_icon_legacy.svg");
+  static late final _exBackground = _loadIcon("assets/icons/missing_icon_background.si");
+  static late final _exForeground = _loadIcon("assets/icons/missing_icon_foreground.si");
+  static late final _exLegacyIcon = _loadIcon("assets/icons/missing_icon_legacy.si");
 
-  static Future<ScalableImageWidget> _loadIcon(String asset, [bool isAvd = false]) async {
-    var scalable = isAvd ? ScalableImage.fromAvdAsset(rootBundle, asset) : ScalableImage.fromSvgAsset(rootBundle, asset);
+  static Future<ScalableImageWidget> _loadIcon(String asset) async {
+    var scalable = ScalableImage.fromSIAsset(rootBundle, asset);
     return ScalableImageWidget(si: await scalable);
   }
 

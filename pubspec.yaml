@@ -46,9 +46,9 @@ flutter:
   generate: true
   uses-material-design: true
   assets:
-    - assets/icons/missing_icon_background.xml
-    - assets/icons/missing_icon_foreground.xml
-    - assets/icons/missing_icon_legacy.svg
+    - assets/icons/missing_icon_background.si
+    - assets/icons/missing_icon_foreground.si
+    - assets/icons/missing_icon_legacy.si
     - assets/images/logo.png
 
 flutter_native_splash:
