@@ -33,12 +33,17 @@ extension LocaleUtils on Locale {
     catch(_) {return _DEFAULT_LOCALIZATION;}
   }
 
+  static Locale? _SYSTEM_MATCH;
   static Locale localeResolutionCallback(Locale? locale, Iterable<Locale> list) {
     Locale? bestMatch;
     int confidence = 0;
     if (locale != null) {
-      if (locale is _NamedLocale && list is Iterable<NamedLocale>) for (final lc in list) {if (locale == lc) return lc;}
-      else for (final lc in list) if (locale.languageCode == lc.languageCode) {
+      if (locale is _NamedLocale && list is Iterable<NamedLocale>) {
+        if (locale._isValid == true) return locale;
+        else if (locale._isValid == null) for (final lc in list) if (locale == lc) {locale._isValid = true; return lc;}
+        locale._isValid = false;
+      }
+      else if (locale is! _SystemLocale || _SYSTEM_MATCH == null) for (final lc in list) if (locale.languageCode == lc.languageCode) {
         int newConfidence = locale.scriptCode == lc.scriptCode ? locale.countryCode == lc.countryCode ? 8 : lc.countryCode == null ? 7 : 6 : 
             locale.countryCode == lc.countryCode ? 5 : lc.scriptCode == null ? lc.countryCode == null ? 4 : 3 : lc.countryCode == null ? 2 : 1;
         if (newConfidence > confidence) {
@@ -48,7 +53,8 @@ extension LocaleUtils on Locale {
         }
       }
     }
-    return bestMatch ?? const Locale("en");
+    bestMatch = bestMatch ?? const Locale("en");
+    return (locale is _SystemLocale) ? _SYSTEM_MATCH ??= bestMatch : bestMatch;
   }
 }
 
@@ -109,6 +115,7 @@ abstract class NamedLocale extends Locale {
 }
 
 class _NamedLocale extends NamedLocale {
+  bool? _isValid;
   _NamedLocale(String _languageCode, [String? _countryCode, String? _scriptCode]) : super._(_languageCode, _countryCode, _scriptCode);
   @override late final String name = lookupAppLocalizations(this).locale_desc;
   @override late final int lcid = toLCID() ?? (){throw ArgumentError("Unknown language tag: ${toLanguageTag()}");}();
