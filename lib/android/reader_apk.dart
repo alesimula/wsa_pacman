@@ -6,7 +6,9 @@ import 'dart:collection';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:wsa_pacman/windows/nt_io.dart';
 import 'package:wsa_pacman/windows/win_io.dart';
+import 'package:wsa_pacman/windows/win_path.dart';
 
 import 'android_utils.dart';
 import 'permissions.dart';
@@ -206,8 +208,23 @@ class ApkReader {
   static void _loadApkData(IsolateData pData) async {
     data = pData;
     File _APK_FILE_F = File(APK_FILE = data.fileName);
+    bool ntSymlinkCreated = false;
     String APK_DIRECORY = _APK_FILE_F.parent.path;
     String APK_NAME = _APK_FILE_F.shortBaseName ?? _APK_FILE_F.basename;
+    
+    if (!APK_NAME.isASCII) {
+      String? shortName =  _APK_FILE_F.shortBaseName;
+      if (shortName != null) APK_NAME = shortName;
+      else {
+        String? ntSymlink = NtIO.createTempShortcut(_APK_FILE_F.absolute.path, "install-symlink@$pid.apk");
+        if (ntSymlink != null) {
+          ntSymlinkCreated = true;
+          APK_NAME = ntSymlink;
+          APK_DIRECORY = WinPath.tempSubdir;
+        }
+      }
+    }
+
     _resourceDump = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'resources', APK_NAME], workingDirectory: APK_DIRECORY).then((p) => 
       p.stdout.toString().foldToMap(r'(^|\n)\s*resource\s+(0x[0-9a-zA-Z]*)[\s]+.*\st=0x0*([^\s\n]*).*\sd=0x0*([^\s\n]*)[\s|\n]', (m) => m.group(2)!, 
       (m,old) => Resource((old != null) ? ((old.values as ListQueue<String>)..addAll([m.group(4)!])) : ListQueue<String>.from([m.group(4)!]), old?.type ?? getResType(m.group(3)!)) )
@@ -234,6 +251,7 @@ class ApkReader {
     Future? iconUpdThread;
     Future<ProcessResult>? inner;
     var process = Process.run('${Env.TOOLS_DIR}\\aapt.exe', ['dump', 'badging', APK_NAME], stdoutEncoding: utf8, workingDirectory: APK_DIRECORY).then((value) async {
+      if (ntSymlinkCreated) NtIO.deleteNtTempDir();
       if (value.exitCode == 0) {
         String dump = value.stdout;
         String? info = dump.find(r'(^|\n)package:.*');

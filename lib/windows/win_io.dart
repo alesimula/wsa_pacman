@@ -22,6 +22,12 @@ final _ReleaseMutex = kernel32.lookupFunction<
 final _GetShortPathName = kernel32.lookupFunction<
       Uint32 Function(Pointer<Utf16> lpszLongPath, Pointer<Utf16> lpszShortPath, Uint32 cchBuffer),
       int Function(Pointer<Utf16> lpszLongPath, Pointer<Utf16> lpszShortPath, int cchBuffer)>('GetShortPathNameW');
+/*final _CreateSymbolicLink = kernel32.lookupFunction<
+      Uint32 Function(Pointer<Utf16> lpSymlinkFileName, Pointer<Utf16> lpTargetFileName, Uint32 dwFlags),
+      int Function(Pointer<Utf16> lpSymlinkFileName, Pointer<Utf16> lpTargetFileName, int dwFlags)>('CreateSymbolicLinkW');
+final _UnicodeStringInit = ntdll.lookupFunction<
+    Uint32 Function(Pointer<UNICODE_STRING> destinationString, Pointer<Utf16> pszSrc),
+    int Function(Pointer<UNICODE_STRING> destinationString, Pointer<Utf16> pszSrc)>('RtlInitUnicodeStringEx');*/
 
 class RegistryKeyValuePair {
   final String key;
@@ -135,6 +141,13 @@ class WinIO {
     try {return findMutexWstr(lpMutexName);}
     finally {free(lpMutexName);}
   }
+
+  /*static bool createSymLink(String filePath, String linkPath) {
+    if (filePath.isEmpty || linkPath.isEmpty) return false;
+    final lpSymlinkFileName = linkPath.toNativeUtf16();
+    final lpTargetFileName = filePath.toNativeUtf16();
+    _CreateSymbolicLink()
+  }*/
 
   /// Creates a Windows shortcut (.lnk);
   static void createShortcut(String filePath, String linkPath, {String? description, String? args, String? icon}) {

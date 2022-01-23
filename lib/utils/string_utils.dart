@@ -14,6 +14,8 @@ extension StringUtils on String {
   String get normalized => '${this[0].toUpperCase()}${replaceAll('_', ' ').substring(1).toLowerCase()}';
   String get unquoted => RegExp('^["\']?([^\'"]*([\'"][^\$])*)["\']?\$', multiLine: true).firstMatch(this)?.group(1) ?? this;
 
+  /// Is 7-bit ASCII only
+  bool get isASCII => RegExp(r'^[\x00-\x7F]+$', multiLine: true, dotAll: true).hasMatch(this);
   bool isNumeric() => contains(RegExp(r'^[0-9]*$'));
   bool isSignedNumeric() => contains(RegExp(r'^[+-]?[0-9]*$'));
 

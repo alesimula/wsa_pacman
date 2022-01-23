@@ -5,33 +5,16 @@
 // Demonstrates usage of various shell APIs to retrieve known folder locations
 
 import 'dart:ffi';
+import 'dart:io';
 import 'package:ffi/ffi.dart';
 import 'package:win32/win32.dart';
 
 class WinPath {
-  // Get the path of the temporary directory (typically %TEMP%)
-  static late String temp = (){
-    final buffer = wsalloc(MAX_PATH + 1);
-    final length = GetTempPath(MAX_PATH, buffer);
+  /// Get the path of the temporary directory (typically %TEMP%)
+  static late String temp = Directory.systemTemp.absolute.path;
 
-    try {
-      if (length == 0) {
-        final error = GetLastError();
-        throw WindowsException(error);
-      } else {
-        var path = buffer.toDartString();
-
-        // GetTempPath adds a trailing backslash, but SHGetKnownFolderPath does not.
-        // Strip off trailing backslash for consistency with other methods here.
-        if (path.endsWith('\\')) {
-          path = path.substring(0, path.length - 1);
-        }
-        return path;
-      }
-    } finally {
-      free(buffer);
-    }
-  }();
+  /// Sub-directory inside %TEMP% to use by the application
+  static late String tempSubdir = Directory.systemTemp.createTempSync("WSA-PacMan-").absolute.path;
 
   /// Get the desktop path
   static late String desktop = (){
