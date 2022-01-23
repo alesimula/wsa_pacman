@@ -5,8 +5,8 @@
 
 
     "@@locale": "zh",
-    "@locale_desc": {"description": "Simplified Chinese [zh_CN] < [zh_Hans]"},
-    "locale_desc": "简体中文",
+    "@locale_desc": {"description": "Chinese (simplified) [zh_CN] < [zh_Hans]"},
+    "locale_desc": "中文 (简体)",
     "@locale_system": {"description": "描述系统区域设置"},
     "locale_system": "系统",
 
