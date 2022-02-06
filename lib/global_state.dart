@@ -51,7 +51,9 @@ class GState {
   static final apkIcon = SharedValue<Widget?>(value: null);
   static final apkBackgroundIcon = SharedValue<Widget?>(value: null);
   static final apkForegroundIcon = SharedValue<Widget?>(value: null);
+  static final apkAdaptiveNoScale = SharedValue<bool>(value: false);
   static final apkBackgroundColor = SharedValue<Color?>(value: null);
+  static final installCallback = SharedValue<Function(String ipAddress, int port, AppLocalizations lang, [bool downgrade])?>(value: null);
   // Installation info
   static final errorCode = SharedValue<String>(value: "");
   static final errorDesc = SharedValue<String>(value: "");

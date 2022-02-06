@@ -25,7 +25,8 @@ dependencies:
   url_strategy: ^0.2.0
   yaml: ^3.1.0
   #transparent_pointer: ^1.0.0
-  archive: ^3.1.6
+  archive: #3.1.11
+    git: https://github.com/brendan-duncan/archive.git
   #flutter_svg: ^0.23.0+1
   jovial_svg: ^1.0.8
   protobuf: ^2.0.0
@@ -39,7 +40,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_native_splash: ^1.1.7+1
+  #flutter_native_splash: ^2.0.1+1
   flutter_lints: ^1.0.4
 
 flutter:
@@ -51,7 +52,7 @@ flutter:
     - assets/icons/missing_icon_legacy.si
     - assets/images/logo.png
 
-flutter_native_splash:
-  color: "#42a5f5"
-  image: web/assets/flutter_logo.png
+#flutter_native_splash:
+  #color: "#42a5f5"
+  #image: web/assets/flutter_logo.png
 

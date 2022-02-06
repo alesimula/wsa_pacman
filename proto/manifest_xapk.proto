@@ -1,0 +1,38 @@
+syntax = "proto2";
+
+package proto;
+option optimize_for = SPEED;
+
+message ManifestXapk {
+    // App options
+    optional uint32 xapk_version = 1 [default = 1];
+    optional string package_name = 2;
+    optional string name = 3;
+    map<string, string> locales_name = 4;
+    optional uint32 version_code = 5;
+    optional string version_name = 6;
+    optional uint32 min_sdk_version = 7;
+    optional uint32 target_sdk_version = 8;
+    repeated string permissions = 9;
+    repeated string split_configs = 10;
+    optional uint32 total_size = 11;
+    optional string icon = 12;
+    repeated ApkFile split_apks = 13;
+    repeated ApkExpansion expansions = 14;
+
+    message ApkFile {
+        optional string id = 1;
+        optional string file = 2;
+    }
+
+    message ApkExpansion {
+        optional InstallDir install_location = 1;
+        optional string file = 2;
+        optional string install_path = 3;
+    }
+
+    enum InstallDir {
+        EXTERNAL_STORAGE = 0;
+        INTERNAL_STORAGE = 1;
+    }
+}

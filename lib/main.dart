@@ -7,7 +7,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart' as material;
 import 'package:mdi/mdi.dart';
 import 'package:flutter_localizations/flutter_localizations.dart' as locale;
-import 'package:wsa_pacman/android/reader_apk.dart';
+import 'package:wsa_pacman/android/android_utils.dart';
 import 'package:wsa_pacman/apk_installer.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
@@ -177,13 +177,18 @@ bool get isDesktop {
   ].contains(defaultTargetPlatform);
 }
 
-late final List<String> args;
-late final bool installMode;
+class Constants {
+  //static late final List<String> args;
+  static late final AppPackage packageType;
+  static late final bool installMode;
+}
 
 void main(List<String> arguments) async {
   //arguments = [r'C:\Users\Alex\Downloads\com.google.android.googlequicksearchbox_12.41.16.23.x86_64-301172250_minAPI23(x86_64)(nodpi)_apkmirror.com.apk'];
+  //arguments = [r'C:\Users\Alex\Downloads\YouTube_v17.01.35_apkpure.com.xapk'];
   
-  installMode = arguments.isNotEmpty;
+  Constants.installMode = arguments.isNotEmpty;
+  Constants.packageType = AppPackageType.fromArguments(arguments);
   AppOptions.init();
   WidgetsFlutterBinding.ensureInitialized();
   //TODO args = arguments;
@@ -191,8 +196,8 @@ void main(List<String> arguments) async {
   //args = [];
   const app = MyApp();
   final wrappedApp = SharedValue.wrapApp(app);
-  if (installMode) ApkReader.start(arguments.first);
-  args = arguments;
+  if (Constants.installMode) Constants.packageType.read(arguments.first);
+  //if (installMode) XapkReader.start(arguments.first);
 
   setPathUrlStrategy();
 
@@ -223,7 +228,7 @@ void main(List<String> arguments) async {
   if (isDesktop) {
     doWhenWindowReady(() {
       final win = appWindow;
-      if (args.isEmpty) {
+      if (!Constants.installMode) {
         win.minSize = const Size(640, 500);
         win.size = const Size(740, 540);
         win.title = appTitle;
@@ -261,7 +266,7 @@ class MyApp extends StatelessWidget {
 
     final bool isDark = theme == ThemeMode.system ? darkMode : theme == ThemeMode.dark;
     setMicaEffect(mica.enabled, isDark);
-    final bool isMicaInstall = installMode && mica.enabled;
+    final bool isMicaInstall = Constants.installMode && mica.enabled;
     final bool IsFullMicaOrInstall = mica.full || isMicaInstall;
     
     return ChangeNotifierProvider(
@@ -283,7 +288,7 @@ class MyApp extends StatelessWidget {
           ],
           supportedLocales: LocaleUtils.supportedLocales,
           localeResolutionCallback: LocaleUtils.localeResolutionCallback,
-          routes: {'/': (_) => args.isEmpty ? const MyHomePage() : const ApkInstaller()},
+          routes: {'/': (_) => Constants.installMode ? const ApkInstaller() : const MyHomePage()},
           theme: ThemeData(
             buttonTheme: ButtonThemeData(
               defaultButtonStyle: ButtonStyle(

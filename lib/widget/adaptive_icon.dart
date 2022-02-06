@@ -4,13 +4,13 @@ import 'package:fluent_ui/fluent_ui.dart';
 //Display an Android adaptive icon
 //TODO not immutable
 class AdaptiveIcon extends StatelessWidget {
-  static const double _scale = 1.5;
+  final double _scale;
   final double radius;
   Color? backColor;
   Widget? background;
   Widget? foreground;
 
-  AdaptiveIcon({Key? key, this.radius = 0.6, this.background, this.foreground, this.backColor}) : super(key: key);
+  AdaptiveIcon({Key? key, this.radius = 0.6, this.background, this.foreground, this.backColor, bool noScale = false}) : _scale = noScale ? 1 : 1.5 ,super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,5 @@
+import 'package:wsa_pacman/android/reader_apk.dart';
+import 'package:wsa_pacman/android/reader_xapk.dart';
 import 'package:wsa_pacman/utils/locale_utils.dart';
 
 class Resource {
@@ -7,14 +9,30 @@ class Resource {
 }
 
 enum InstallState {
-    PROMPT, INSTALLING, SUCCESS, ERROR
+  PROMPT, INSTALLING, SUCCESS, ERROR
 }
 enum InstallType {
-    UNKNOWN, INSTALL, REINSTALL, UPDATE, DOWNGRADE
+  UNKNOWN, INSTALL, REINSTALL, UPDATE, DOWNGRADE
 }
 enum ResType {
-    COLOR, FILE
+  COLOR, FILE
 }
+enum AppPackage {
+  NONE, APK, XAPK
+}
+
+extension AppPackageType on AppPackage {
+  static AppPackage fromArguments(List<String> args) => args.isEmpty ? AppPackage.NONE : fromFilename(args.first);
+  static AppPackage fromFilename(String? name) => name == null || name.isEmpty ? AppPackage.NONE : 
+      name.endsWith(".xapk") ? AppPackage.XAPK : AppPackage.APK;
+  void Function(String) get read { switch (this) {
+    case AppPackage.APK: return ApkReader.start;
+    case AppPackage.XAPK: return XapkReader.start;
+    case AppPackage.NONE: return (_){};
+  }}
+  bool get directInstall => this == AppPackage.APK;
+}
+
 extension InstallTypeExt on InstallType {
   String buttonText(AppLocalizations locale) {switch (this) {
     case InstallType.UNKNOWN: return locale.installer_btn_install;

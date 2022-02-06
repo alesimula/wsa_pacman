@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart' as lib_path;
@@ -60,5 +62,23 @@ extension ArchiveUtils on Archive {
       if (regex.hasMatch(file.name)) files.add(file);
     }
     return files;
+  }
+
+  Future<bool> extractAll(Directory directory, {bool replaceExisting = false}) async => extractAllSync(directory, replaceExisting: replaceExisting);
+  bool extractAllSync(Directory directory, {bool replaceExisting = false}) {
+    bool success = true;
+    Future.wait([for (final file in files) () async {if (file.extractSync(directory, replaceExisting: replaceExisting)) success = false;}()]);
+    return success;
+  }
+}
+
+extension ArchiveFileUtils on ArchiveFile {
+  Future<bool> extract(Directory directory, {bool replaceExisting = false}) async => extractSync(directory, replaceExisting: replaceExisting);
+  bool extractSync(Directory directory, {bool replaceExisting = false}) {
+    final file = File("${directory.absolute.path}\\$name");
+    bool confirmExist = false;
+    if (!replaceExisting && (confirmExist = file.existsSync())) return false;
+    if (!confirmExist) file..createSync(recursive: true)..writeAsBytesSync(content);
+    return true;
   }
 }

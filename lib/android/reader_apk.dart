@@ -6,6 +6,7 @@ import 'dart:collection';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:archive/archive_io.dart';
 import 'package:wsa_pacman/windows/nt_io.dart';
 import 'package:wsa_pacman/windows/win_io.dart';
 import 'package:wsa_pacman/windows/win_path.dart';
@@ -46,7 +47,7 @@ extension on int {
 class ApkReader {
   //I just put '&& true' there so I could conveniently switch it off
   static bool DEBUG = !kReleaseMode && true;
-  static String APK_FILE = /*r'C:\Users\Alex\Downloads\com.atono.dropticket.apk'*/ '';
+  static String APK_FILE = '';
   static late Future<Map<String, Resource>> _resourceDump;
   static late Future<Map<int, String>> _stringDump;
   static late Future<Archive> _apkArchive;
@@ -56,6 +57,7 @@ class ApkReader {
   static const String REGEX_QUOTED_TYPE = r'["'']type[0-9]+/([0-9]*)["'']';
 
   static Future<Archive> _initArchiveFile(File file) async {
+    //var stream = InputFileStream(file.absolute.path);
     return ZipDecoder().decodeBytes(file.readAsBytesSync());
   }
   static void _initArchive() {
@@ -184,7 +186,7 @@ class ApkReader {
   }
 
   /// Retrieves installation type (whether installing for the first time, reinstalling the same version, upgrading or downgrading)
-  static Future _loadInstallType(String package, int versionCode) async {if (package.isNotEmpty) {
+  static Future loadInstallType(String package, int versionCode) async {if (package.isNotEmpty) {
     GState.androidPort;
     String ipAddress = await GState.ipAddress.whenReady();
     int port = await GState.androidPort.whenReady();
@@ -261,7 +263,7 @@ class ApkReader {
 
         String package = info?.find(r"(^|\n|\s)name=\s*'([^'\n\s$]*)", 2) ?? "";
         if (package.isNotEmpty) {
-          data.execute(() {GState.package.update((_) => package); _loadInstallType(package, versionCode);});
+          data.execute(() {GState.package.update((_) => package); loadInstallType(package, versionCode);});
         }
         //else data.execute(() => GState.apkInstallType.update((_) => InstallType.INSTALL));
 
@@ -309,19 +311,29 @@ class ApkReader {
     await process;
     if (inner != null) await inner;
     if (iconUpdThread != null) await iconUpdThread;
-    if (data.legacyIcon)  data.execute(() async {if (GState.apkForegroundIcon.$ == null && GState.apkIcon.$ == null) {
-      final legacy = await ScalableImage.fromSIAsset(rootBundle, "assets/icons/missing_icon_legacy.si");
-      GState.apkIcon.update((p0) => (ScalableImageWidget(si: legacy)));
-    }});
-    else data.execute(() async {if (GState.apkForegroundIcon.$ == null && GState.apkIcon.$ == null) {
-      final fBackground = ScalableImage.fromSIAsset(rootBundle, "assets/icons/missing_icon_background.si");
-      final fForeground = ScalableImage.fromSIAsset(rootBundle, "assets/icons/missing_icon_foreground.si");
-      final background = await fBackground;
-      final foreground = await fForeground;
-      GState.apkBackgroundIcon.update((p0) => (ScalableImageWidget(si: background)));
-      GState.apkForegroundIcon.update((p0) => (ScalableImageWidget(si: foreground)));
-    }});
-    //data.pipe.send("WOOOOOOOO2: ${coso.stdout.toString()}");
+    bool legacyIcon = data.legacyIcon;
+    data.execute(() {
+      setDefaultIcon(legacyIcon);
+    });
+    //(await _apkArchive).clear();
+  }
+
+  /// Uses the default application icon if no icon has been found
+  /// Has to be called in the UI thread
+  static void setDefaultIcon(bool legacyIcon) async {
+    if (GState.apkForegroundIcon.$ == null && GState.apkIcon.$ == null) {
+      if (legacyIcon) {
+        final legacy = await ScalableImage.fromSIAsset(rootBundle, "assets/icons/missing_icon_legacy.si");
+        GState.apkIcon.update((p0) => (ScalableImageWidget(si: legacy)));
+      }
+      else {
+        final fBackground = ScalableImage.fromSIAsset(rootBundle, "assets/icons/missing_icon_background.si");
+        final fForeground = ScalableImage.fromSIAsset(rootBundle, "assets/icons/missing_icon_foreground.si");
+        final background = await fBackground, foreground = await fForeground;
+        GState.apkBackgroundIcon.update((p0) => (ScalableImageWidget(si: background)));
+        GState.apkForegroundIcon.update((p0) => (ScalableImageWidget(si: foreground)));
+      }
+    }
   }
 
   FutureOr<R> computeOrDebug<Q, R>(ComputeCallback<Q, R> callback, Q message, {String? debugLabel}) => (DEBUG) ? 
@@ -342,7 +354,7 @@ class ApkReader {
       String package = GState.package.$;
       InstallType? installType = GState.apkInstallType.$;
       if (GState.apkInstallType.$ == InstallType.UNKNOWN) {
-        await _loadInstallType(GState.package.$, _versionCode);
+        await loadInstallType(GState.package.$, _versionCode);
         if (GState.apkInstallType.$ != InstallType.UNKNOWN) sub?.cancel();
       }
       else if (installType != null) sub?.cancel();

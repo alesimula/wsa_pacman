@@ -73,6 +73,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
     Widget icon;
     String appTitle = GState.apkTitle.of(context);
     Widget? aForeground = GState.apkForegroundIcon.of(context);
+    bool adaptiveNoScale = GState.apkAdaptiveNoScale.of(context);
     Widget? lIcon = GState.apkIcon.of(context);
     WSAStatusAlert connectionStatus = GState.connectionStatus.of(context);
     bool isConnected = connectionStatus.isConnected;
@@ -101,7 +102,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
     String ipAddress = GState.ipAddress.of(context);
     int port = GState.androidPort.of(context);
 
-    if (aForeground != null) icon = AdaptiveIcon(backColor: GState.apkBackgroundColor.of(context), background: GState.apkBackgroundIcon.of(context), foreground: aForeground, radius: GState.iconShape.of(context).radius);
+    if (aForeground != null) icon = AdaptiveIcon(noScale: adaptiveNoScale, backColor: GState.apkBackgroundColor.of(context), background: GState.apkBackgroundIcon.of(context), foreground: aForeground, radius: GState.iconShape.of(context).radius);
     else if (lIcon != null) icon = FittedBox(child: lIcon);
     else icon = const ProgressRing();
 
@@ -178,7 +179,10 @@ class _ApkInstallerState extends State<ApkInstaller> {
                 child: Text(startingWSA ? lang.installer_btn_starting : installType?.buttonText(lang) ?? lang.installer_btn_loading),
                 checked: true,
                 style: installType == InstallType.DOWNGRADE ? warningButtonTheme : null,
-                onChanged: !canInstall ? null : (_){ApkInstaller.installApk(ApkReader.APK_FILE, ipAddress, port, lang, installType == InstallType.DOWNGRADE);},
+                onChanged: !canInstall ? null : (_){
+                  if (Constants.packageType.directInstall) ApkInstaller.installApk(ApkReader.APK_FILE, ipAddress, port, lang, installType == InstallType.DOWNGRADE);
+                  else GState.installCallback.$?.call(ipAddress, port, lang, installType == InstallType.DOWNGRADE);
+                },
               )),
               /*const SizedBox(width: 15),noMoveWindow(ToggleButton(
                 child: const Text('TEST-ICON'),
