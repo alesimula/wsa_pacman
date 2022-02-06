@@ -7,6 +7,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:archive/archive_io.dart';
+import 'package:shared_value/shared_value.dart';
 import 'package:wsa_pacman/windows/nt_io.dart';
 import 'package:wsa_pacman/windows/win_io.dart';
 import 'package:wsa_pacman/windows/win_path.dart';
@@ -55,6 +56,25 @@ class ApkReader {
 
   static late final IsolateData data;
   static const String REGEX_QUOTED_TYPE = r'["'']type[0-9]+/([0-9]*)["'']';
+
+  /// Run operation on UI thread
+  /// Local variables should never be called
+  static void setInUIThread<T>(T value, Function(T val) setter) => data.execute(() {
+    setter(value);
+  });
+
+  /// Changes shared value on UI thread
+  /// Local variables should never be called
+  static void updateState<T>(SharedValue<T> Function() valGetter, T dataIn) => data.execute(() {
+    valGetter().$ = dataIn;
+  });
+
+  /// Changes shared value on UI thread via a callback
+  /// Local variables should never be called
+  static void updateStateWith<T, E>(SharedValue<T> Function() valGetter, E dataIn, [T Function(E data)? provider]) => data.execute(() {
+    final sharedValue = valGetter();
+    provider != null ? sharedValue.$ = provider(dataIn) : sharedValue.$ = dataIn as T;
+  });
 
   static Future<Archive> _initArchiveFile(File file) async {
     //var stream = InputFileStream(file.absolute.path);
@@ -146,7 +166,7 @@ class ApkReader {
     Uint8List image = IconFile.content;
     String xmlData = isXml ? await decodeXml(image) : "";
     Widget? widget = isXml ? null : Image.memory(image);
-    data.execute(() => GState.apkIcon.update((_) => isXml ? ScalableImageWidget(si: ScalableImage.fromAvdString(xmlData)) : widget));
+    updateStateWith(()=>GState.apkIcon, isXml ? xmlData : widget, !isXml ? null : (data)=>ScalableImageWidget(si: ScalableImage.fromAvdString(data as String)));
   }
 
   /// Retrieves adaptive icon background and foreground images
@@ -179,10 +199,10 @@ class ApkReader {
 
     if (isBackColor) {
       final color = Color(int.parse(background!.values.first, radix: 16));
-      data.execute(() => GState.apkBackgroundColor.update((_)=>color));
+      updateState(()=>GState.apkBackgroundColor, color);
     }
-    else if (backWidget != null || backXml != null) data.execute(() => GState.apkBackgroundIcon.update((_)=>!isBackXml ? backWidget : ScalableImageWidget(si: ScalableImage.fromAvdString(backXmlData))));
-    data.execute(() => GState.apkForegroundIcon.update((_)=>!isForeXml ? foreWidget : ScalableImageWidget(si: ScalableImage.fromAvdString(foreXmlData)) ));
+    else if (backWidget != null || backXml != null) updateStateWith(()=>GState.apkBackgroundIcon, isBackXml ? backXmlData : backWidget, !isBackXml ? null : (data)=>ScalableImageWidget(si: ScalableImage.fromAvdString(data as String)));
+    updateStateWith(()=>GState.apkForegroundIcon, isForeXml ? foreXmlData : foreWidget, !isForeXml ? null : (data)=>ScalableImageWidget(si: ScalableImage.fromAvdString(data as String)));
   }
 
   /// Retrieves installation type (whether installing for the first time, reinstalling the same version, upgrading or downgrading)
@@ -205,6 +225,11 @@ class ApkReader {
       else GState.apkInstallType.update((_) => InstallType.INSTALL);
     }).onError((_, __) {GState.apkInstallType.update((_) => InstallType.UNKNOWN);});
   } else return null;}
+
+  static void loadInstallInfoOnUIThread(String package, int versionCode) => package.isNotEmpty ? data.execute(() {
+    GState.package.update((_) => package);
+    loadInstallType(package, versionCode);
+  }) : null;
 
   //Retrieves APK information
   static void _loadApkData(IsolateData pData) async {
@@ -259,26 +284,23 @@ class ApkReader {
         String? info = dump.find(r'(^|\n)package:.*');
 
         int versionCode = int.parse(info?.find(r"(^|\n|\s)versionCode=\s*'([^'\n\s$]*)", 2) ?? "0");
-        data.execute(() {ApkReader._versionCode = versionCode;});
+        setInUIThread(versionCode, (int v)=>ApkReader._versionCode = v);
 
         String package = info?.find(r"(^|\n|\s)name=\s*'([^'\n\s$]*)", 2) ?? "";
-        if (package.isNotEmpty) {
-          data.execute(() {GState.package.update((_) => package); loadInstallType(package, versionCode);});
-        }
-        //else data.execute(() => GState.apkInstallType.update((_) => InstallType.INSTALL));
+        loadInstallInfoOnUIThread(package, versionCode);
 
-        data.execute(() => GState.version.update((_) => info?.find(r"(^|\n|\s)versionName=\s*'([^'\n\s_$]*)", 2) ?? ""));
-        data.execute(() => GState.activity.update((_) => dump.find(r"(^|\n)(leanback-)?launchable-activity:.*name='([^'\n\s$]*)", 3) ?? ""));
+        updateStateWith(()=>GState.version, info, (String? v)=>v?.find(r"(^|\n|\s)versionName=\s*'([^'\n\s_$]*)", 2) ?? "");
+        updateStateWith(()=>GState.activity, dump, (String v)=>v.find(r"(^|\n)(leanback-)?launchable-activity:.*name='([^'\n\s$]*)", 3) ?? "");
 
         String? application = dump.find(r'(^|\n)application:\s*(.*)');
         String? title = application?.find(r"(^|\n|\s)label='([^']*)'", 2);
         String? icon = application?.find(r"(^|\n|\s)icon='([^']*)'", 2);
-        data.execute(() => GState.apkTitle.update((_) => title ?? "UNKNOWN_TITLE"));
+        updateState(()=>GState.apkTitle, title ?? "UNKNOWN_TITLE");
 
         Set<AndroidPermission> permissions = dump.toSet("(^|\\n)\\s*uses-permission(-[^:]*)?:\\s+name=[\"']([^\"'\\n]*)", 
           (m) => AndroidPermissionList.get(m.group(3)!), (a,b)=> a.index - b.index);
         if (permissions.isEmpty) permissions.add(AndroidPermission.NONE);
-        data.execute(() => GState.permissions.update((_) => permissions));
+        updateState(()=>GState.permissions, permissions);
         
         if (data.legacyIcon && await legacyIconFound) return;
         else if (icon?.endsWith(".xml") ?? false) inner = Process.run('${Env.TOOLS_DIR}\\aapt2.exe', ['dump', 'xmltree', '--file', icon!, APK_FILE])..then((value) {
@@ -311,10 +333,7 @@ class ApkReader {
     await process;
     if (inner != null) await inner;
     if (iconUpdThread != null) await iconUpdThread;
-    bool legacyIcon = data.legacyIcon;
-    data.execute(() {
-      setDefaultIcon(legacyIcon);
-    });
+    setInUIThread(data.legacyIcon, (bool v) => setDefaultIcon(v));
     //(await _apkArchive).clear();
   }
 

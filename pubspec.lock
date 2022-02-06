@@ -6,7 +6,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: e9955c37227834e4367e750e3649d34e36ddb747
+      resolved-ref: "89f196befc8590ff00b968ab20656772f8cfa975"
       url: "https://github.com/brendan-duncan/archive.git"
     source: git
     version: "3.1.11"
