@@ -1,8 +1,7 @@
 {
     "@@locale": "ru",
-    "@locale_desc": {"description": "Русский [ru_RU]"},
+    "@locale_desc": {"description": "Russian [ru_RU]"},
     "locale_desc": "Русский",
-    "@locale_system": {"description": "Describes the system locale"},
     "locale_system": "Как в системе",
 
 
@@ -11,15 +10,12 @@
     "btn_switch_off": "Выключить",
 
 
-    "@status_subtext_winver_10": {"description": "Only used inside 'status_unsupported_desc', modify taking this in consideration"},
     "status_subtext_winver_10": "Windows 10",
-    "@status_subtext_winver_older": {"description": "Only used inside 'status_unsupported_desc', modify taking this in consideration"},
     "status_subtext_winver_older": "Устаревшая версия Windows",
 
 
     "status_unsupported": "Подсистема Windows под Android не поддерживается",
     "status_unsupported_desc": "{windowsVersion} detected and WSA not found; this application depends on WSA, which is only officially supported on Windows 11",
-    "@status_unsupported_desc" : {"placeholders": {"windowsVersion": {"type": "String"}}},
     "status_missing": "Подсистема Windows под Android не установлена",
     "status_missing_desc": "Подсистема Windows под Android не найдена: это приложение зависит от WSA, установите подсистему Windows для Android (или Магазин приложений Amazon) из магазина Microsoft Store",
     "status_unknown": "Подключение",
@@ -67,17 +63,11 @@
 
     "installer_message": "Вы хотите установить это приложение?",
     "installer_info_version": "Версия: {appVersion}",
-    "@installer_info_version" : {"placeholders": {"appVersion": {"type": "String"}}},
     "installer_info_version_change": "Версия: {appVersionOld} => {appVersionNew}",
-    "@installer_info_version_change" : {"placeholders": {"appVersionOld": {"type": "String"}, "appVersionNew": {"type": "String"}}},
     "installer_info_package": "Имя пакета: {appPackage}",
-    "@installer_info_package" : {"placeholders": {"appPackage": {"type": "String"}}},
     "installer_installing": "Установка приложения {appTitle}...",
-    "@installer_installing" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_installed": "Приложение {appTitle} было успешно установлено",
-    "@installer_installed" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_fail": "Приложение {appTitle} не было установлено",
-    "@installer_fail" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_error_nomsg": "Установка не удалась, но ошибок не было обнаружено",
     "installer_btn_starting": "Запуск...",
     "installer_btn_loading": "Загрузка...",

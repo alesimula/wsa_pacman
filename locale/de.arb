@@ -5,7 +5,7 @@
 
 
     "@@locale": "de",
-    "@locale_desc": {"description": "Deutsch [de-DE]"},
+    "@locale_desc": {"description": "German [de-DE]"},
     "locale_desc": "Deutsch",
     "locale_system": "System",
 
