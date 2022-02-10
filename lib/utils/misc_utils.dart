@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart' as lib_path;
 import 'package:archive/archive.dart';
+import '../windows/win_io.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 class DynamicTimer {
@@ -64,21 +65,22 @@ extension ArchiveUtils on Archive {
     return files;
   }
 
-  Future<bool> extractAll(Directory directory, {bool replaceExisting = false}) async => extractAllSync(directory, replaceExisting: replaceExisting);
-  bool extractAllSync(Directory directory, {bool replaceExisting = false}) {
+  Future<bool> extractAll(Directory directory, {bool replaceExisting = false, FileDisposeQueue? disposeLock}) async => extractAllSync(directory, replaceExisting: replaceExisting, disposeLock: disposeLock);
+  bool extractAllSync(Directory directory, {bool replaceExisting = false, FileDisposeQueue? disposeLock }) {
     bool success = true;
-    Future.wait([for (final file in files) () async {if (file.extractSync(directory, replaceExisting: replaceExisting)) success = false;}()]);
+    Future.wait([for (final file in files) () async {if (file.extractSync(directory, replaceExisting: replaceExisting, disposeLock: disposeLock)) success = false;}()]);
     return success;
   }
 }
 
 extension ArchiveFileUtils on ArchiveFile {
-  Future<bool> extract(Directory directory, {bool replaceExisting = false}) async => extractSync(directory, replaceExisting: replaceExisting);
-  bool extractSync(Directory directory, {bool replaceExisting = false}) {
+  Future<bool> extract(Directory directory, {bool replaceExisting = false, FileDisposeQueue? disposeLock}) async => extractSync(directory, replaceExisting: replaceExisting, disposeLock: disposeLock);
+  bool extractSync(Directory directory, {bool replaceExisting = false, FileDisposeQueue? disposeLock}) {
     final file = File("${directory.absolute.path}\\$name");
     bool confirmExist = false;
     if (!replaceExisting && (confirmExist = file.existsSync())) return false;
     if (!confirmExist) file..createSync(recursive: true)..writeAsBytesSync(content);
+    disposeLock?.add(file);
     return true;
   }
 }

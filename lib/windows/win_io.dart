@@ -22,12 +22,86 @@ final _ReleaseMutex = kernel32.lookupFunction<
 final _GetShortPathName = kernel32.lookupFunction<
       Uint32 Function(Pointer<Utf16> lpszLongPath, Pointer<Utf16> lpszShortPath, Uint32 cchBuffer),
       int Function(Pointer<Utf16> lpszLongPath, Pointer<Utf16> lpszShortPath, int cchBuffer)>('GetShortPathNameW');
+final _SetFileInformationByHandle = kernel32.lookupFunction<
+      Uint32 Function(Uint32 hFile, Uint32 fileInformationClass,Pointer lpFileInformation, DWORD dwBufferSize),
+      int Function(int hFile, int fileInformationClass, Pointer lpFileInformation, int dwBufferSize)>('SetFileInformationByHandle');
+
+enum _FILE_INFO_BY_HANDLE_CLASS {
+  FileBasicInfo, FileStandardInfo, FileNameInfo, FileRenameInfo, FileDispositionInfo, FileAllocationInfo,
+  FileEndOfFileInfo, FileStreamInfo, FileCompressionInfo, FileAttributeTagInfo, FileIdBothDirectoryInfo,
+  FileIdBothDirectoryRestartInfo, FileIoPriorityHintInfo, FileRemoteProtocolInfo, FileFullDirectoryInfo,
+  FileFullDirectoryRestartInfo, FileStorageInfo, FileAlignmentInfo, FileIdInfo, FileIdExtdDirectoryInfo,
+  FileIdExtdDirectoryRestartInfo, FileDispositionInfoEx, FileRenameInfoEx, FileCaseSensitiveInfo,
+  FileNormalizedNameInfo, MaximumFileInfoByHandleClass
+}
 
 class RegistryKeyValuePair {
   final String key;
   final String value;
 
   const RegistryKeyValuePair(this.key, this.value);
+}
+
+/// Locks files and marks them for deletion
+/// The files will be deleted if the application is closed or by calling dispose()
+/// The files cannot be opened unless unflagged by calling clear()
+class FileDisposeQueue {
+  final _handles = <int>{};
+
+  /// Adds a file to the deletion queue
+  /// File will be locked
+  bool add(File file) {
+    int? handle = _lockFile(file);
+    if (handle != null) _handles.add(handle);
+    return handle != null;
+  }
+
+  /// Unlock all, remove delete flag and clear collection
+  /// Returns true if all files are cleared successfully, false otherwise
+  bool clear() {
+    final failed = <int>[];
+    for (int handle in _handles) {
+      if (_setLock(handle, false)) CloseHandle(handle);
+      else failed.add(handle);
+    }
+    failed.isEmpty ? _handles.clear() : _handles.retainAll(failed);
+    return failed.isEmpty;
+  }
+
+  /// Dispose of all files immediately and clear collection
+  void dispose() {
+    for (int handle in _handles) CloseHandle(handle);
+    _handles.clear();
+  }
+
+  bool _setLock(int handle, bool lock) {
+    Pointer<BOOL> lpBool = malloc<BOOL>()..value = lock ? TRUE : FALSE;
+    try {
+      int res1 = _SetFileInformationByHandle(handle, _FILE_INFO_BY_HANDLE_CLASS.FileDispositionInfo.index, lpBool, sizeOf<BOOL>());
+      int res2 = _SetFileInformationByHandle(handle, _FILE_INFO_BY_HANDLE_CLASS.FileDispositionInfoEx.index, lpBool, sizeOf<BOOL>());
+      return res1 != 0 || res2 != 0;
+    }
+    finally {
+      free(lpBool);
+    }
+  }
+
+  int? _lockFile(File file) {
+    final lpToken = malloc<HANDLE>();
+    final pszPath = file.absolute.path.toNativeUtf16();
+    
+    try {
+      int handle = CreateFile(pszPath, DELETE, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr, 
+          OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+      bool locked = _setLock(handle, true);
+      if (!locked) CloseHandle(handle);
+      return handle != INVALID_HANDLE_VALUE && locked ? handle : null;
+    }
+    finally {
+      free(lpToken);
+      free(pszPath);
+    }
+  }
 }
 
 extension WinFile on File {
