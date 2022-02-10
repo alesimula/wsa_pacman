@@ -21,6 +21,7 @@ import 'package:wsa_pacman/proto/manifest_xapk.pb.dart';
 import 'package:wsa_pacman/utils/regexp_utils.dart';
 import 'package:wsa_pacman/widget/adaptive_icon.dart';
 import 'package:wsa_pacman/windows/nt_io.dart';
+import 'package:wsa_pacman/windows/win_io.dart';
 import 'package:wsa_pacman/windows/win_path.dart';
 
 enum Architecture {
@@ -58,13 +59,14 @@ class XapkReader {
   static ManifestXapk _decodeManifest(List<int> bytes) => ManifestXapk.create()
     ..mergeFromProto3Json(utf8.decoder.fuse(json.decoder).convert(bytes));
 
-  static void installXApk(String workingDir, List<String> apkFiles, List<ManifestXapk_ApkExpansion> expansions, String ipAddress, int port, AppLocalizations lang, [bool downgrade = false]) async {
+  static void installXApk(String workingDir, List<String> apkFiles, List<ManifestXapk_ApkExpansion> expansions, String ipAddress, int port, AppLocalizations lang, FileDisposeQueue disposeLock, [bool downgrade = false]) async {
     if (apkFiles.isNotEmpty) log("INSTALLING \"${apkFiles.first}\" on on $ipAddress:$port...");
+    disposeLock.clear();
     var installation = Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'install-multiple', if (downgrade) '-r', if (downgrade) '-d', ...apkFiles], workingDirectory: workingDir)
       .timeout(const Duration(seconds: 30)).onError((error, stackTrace) => ProcessResult(-1, -1, null, null));
-    log("COMMAND: ${['-s', '$ipAddress:$port', 'install-multiple', if (downgrade) '-r', if (downgrade) '-d', ...apkFiles].join(" ")}");
     GState.apkInstallState.update((_) => InstallState.INSTALLING);
     var result = await installation;
+    Directory(workingDir).deleteSync(recursive: true);
     log("EXIT CODE: ${result.exitCode}");
     String error = result.stderr.toString();
     log("OUTPUT: ${result.stdout}");
@@ -139,18 +141,19 @@ class XapkReader {
 
     final apkList = _getApkList(manifest);
     String installDir = _xapkTempDir.absolute.path;
-    pData.execute(() {
-      GState.installCallback.$ = (ipAddress, port, lang, [downgrade = false]) => installXApk(installDir, apkList, [], ipAddress, port, lang, downgrade);
-    });
+    final disposeLock = FileDisposeQueue();
 
 
 
     /*final handle = NtIO.openDirectory(_xapkTempDir.absolute.path, true, true);
     log("HANDLE: $handle");*/
 
-    archive.extractAllSync(_xapkTempDir);
+    archive.extractAllSync(_xapkTempDir, disposeLock: disposeLock);
     if (manifest.packageName.isNotEmpty) pData.execute(() {
       ApkReader.loadInstallType(manifest.packageName, manifest.versionCode);
+    });
+    pData.execute(() {
+      GState.installCallback.$ = (ipAddress, port, lang, [downgrade = false]) => installXApk(installDir, apkList, [], ipAddress, port, lang, disposeLock, downgrade);
     });
 
     log("DIRECTORY: ${_xapkTempDir.path}");
