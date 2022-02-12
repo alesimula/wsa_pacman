@@ -205,7 +205,7 @@ class PersistableValue<T> extends SharedValue<T> {
   }
 
   @override
-  T of(BuildContext context) {
+  T of(BuildContext? context) {
     // TODO: implement of
     return super.of(context);
   }
