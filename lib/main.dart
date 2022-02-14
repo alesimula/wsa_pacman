@@ -190,40 +190,23 @@ void main(List<String> arguments) async {
   //arguments = [r'C:\Users\Alex\Downloads\com.google.android.googlequicksearchbox_12.41.16.23.x86_64-301172250_minAPI23(x86_64)(nodpi)_apkmirror.com.apk'];
   //arguments = [r'C:\Users\Alex\Downloads\PUBG MOBILE Aftermath_v1.8.0_apkpure.com.xapk'];
   
-  Constants.installMode = arguments.isNotEmpty;
-  Constants.packageType = AppPackageType.fromArguments(arguments);
-  AppOptions.init();
+
   WidgetsFlutterBinding.ensureInitialized();
-  //TODO args = arguments;
-  //args = [r'C:\Users\Alex\Downloads\youtube.apk'];
-  //args = [];
+  final darkModeFuture = SystemTheme.darkMode;
   const app = MyApp();
   final wrappedApp = SharedValue.wrapApp(app);
+  darkMode = await darkModeFuture;
+  runApp(wrappedApp);
+
+  AppOptions.init();
+  Constants.installMode = arguments.isNotEmpty;
+  Constants.packageType = AppPackageType.fromArguments(arguments);
   Constants.isolate = Constants.installMode ? Constants.packageType.read(arguments.first) : null;
-  //if (installMode) XapkReader.start(arguments.first);
 
-  setPathUrlStrategy();
-
-  // The platforms the plugin support (01/04/2021 - DD/MM/YYYY):
-  //   - Windows
-  //   - Web
-  //   - Android
-  if (defaultTargetPlatform == TargetPlatform.windows ||
-      defaultTargetPlatform == TargetPlatform.android ||
-      kIsWeb) {
-    darkMode = await SystemTheme.darkMode;
-    await SystemTheme.accentInstance.load();
-  } else {
-    darkMode = true;
-  }
-  if (!kIsWeb &&
-      [TargetPlatform.windows, TargetPlatform.linux]
-          .contains(defaultTargetPlatform)) {
-    await flutter_acrylic.Window.initialize();
-  }
+  //await SystemTheme.accentInstance.load();
+  await flutter_acrylic.Window.initialize();
 
   WSAPeriodicConnector._checkConnectionStatus();
-  runApp(wrappedApp);
 
   flutter_acrylic.Window.hideWindowControls();
   //flutter_acrylic.Window.setEffect(effect: flutter_acrylic.WindowEffect.mica);
