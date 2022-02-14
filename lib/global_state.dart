@@ -198,6 +198,12 @@ class PersistableValue<T> extends SharedValue<T> {
 
   void _saveOptions() => AppOptions.withOptions((options) => _setter(options, $));
 
+  void doWhenReady(void Function(T value) callback, [BuildContext? context]) {
+    final initializer = _initializer;
+    if (initializer != null) initializer.then((_)=>callback(context == null ? $ : of(context)));
+    else callback(context == null ? $ : of(context));
+  }
+
   Future<T> whenReady([BuildContext? context]) async {
     final initializer = _initializer;
     if (initializer != null) await initializer;

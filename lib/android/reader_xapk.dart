@@ -4,23 +4,18 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:isolate';
-import 'dart:ui';
+import 'package:archive/archive_io.dart';
 import 'package:collection/collection.dart';
 
-import 'package:archive/archive.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:wsa_pacman/android/android_utils.dart';
 import 'package:wsa_pacman/android/permissions.dart';
 import 'package:wsa_pacman/android/reader_apk.dart';
 import 'package:wsa_pacman/global_state.dart';
+import 'package:wsa_pacman/io/isolate_runner.dart';
 import 'package:wsa_pacman/main.dart';
 import 'package:wsa_pacman/utils/misc_utils.dart';
 import 'package:wsa_pacman/proto/manifest_xapk.pb.dart';
-import 'package:wsa_pacman/utils/regexp_utils.dart';
-import 'package:wsa_pacman/widget/adaptive_icon.dart';
-import 'package:wsa_pacman/windows/nt_io.dart';
 import 'package:wsa_pacman/windows/win_io.dart';
 import 'package:wsa_pacman/windows/win_path.dart';
 
@@ -41,18 +36,15 @@ extension Architectures on Architecture {
   }}();
 }
 
-
-
-class XapkReader {
+class XapkReader extends IsolateRunner<String, APK_READER_FLAGS> {
   static int _versionCode = 0;
-  static String APK_FILE = '';
   static late Future<Archive> _xapkArchive;
   static late final Directory _xapkTempDir = Directory(WinPath.tempSubdir).createTempSync("XAPK-Extracted@$pid@");
 
-  static Future<Archive> _initArchiveFile(File file) async => ZipDecoder().decodeBytes(file.readAsBytesSync());
-  static void _initArchive() {
+  Future<Archive> _initArchiveFile(File file) async => ZipDecoder().decodeBuffer(InputFileStream(file.path));
+  void _initArchive() {
     //Maintain a lock on the file
-    File file = File(APK_FILE)..open();
+    File file = File(data)..open();
     _xapkArchive = _initArchiveFile(file);
   }
 
@@ -108,29 +100,19 @@ class XapkReader {
     }
     return apkList.followedBy([apkList.first]).toList();
   }
-
-  static void _readManifest(IsolateData pData) async { try {
-    APK_FILE = pData.fileName;
-    _initArchive();
-    final archive = (await _xapkArchive);
-    final manifestFile = archive.findFile('manifest.json');
-    log("LOADING MANIFEST");
-    // TODO loading
-    if (manifestFile == null) return;
-    log("READING MANIFEST");
-    final manifest = _decodeManifest(manifestFile.content as List<int>);
-    Set<AndroidPermission> permissions = manifest.permissions.map((perm) => AndroidPermissionList.get(perm)).whereNotNull().toSet();
-    pData.execute(() {
+  
+  void updateManifest(ManifestXapk manifest, Set<AndroidPermission> permissions) {
+    executeInUi(() {
       _versionCode = manifest.versionCode;
       GState.apkTitle.$ = manifest.name;
       GState.version.$ = manifest.versionName;
       GState.package.$ = manifest.packageName;
       GState.permissions.$ = permissions;
     });
-    String iconFile = manifest.icon.isNotEmpty ? manifest.icon : "icon.png";
-    final icon = archive.findFile(iconFile);
-    final image = icon != null ? Image.memory(icon.content) : null;
-    pData.execute(() async {
+  }
+
+  void updateIcon(Image? image) {
+    executeInUi(() async {
       if (image != null) {
         GState.apkAdaptiveNoScale.$ = true;
         GState.apkBackgroundIcon.$ = image;
@@ -138,23 +120,38 @@ class XapkReader {
       }
       else ApkReader.setDefaultIcon(await GState.legacyIcons.whenReady());
     });
+  }
+
+  void updateInstallInfo(ManifestXapk manifest, String installDir, List<String> apkList, FileDisposeQueue disposeLock) {
+    executeInUi(() {
+      if (manifest.packageName.isNotEmpty) ApkReader.loadInstallType(manifest.packageName, manifest.versionCode);
+      GState.installCallback.$ = (ipAddress, port, lang, [downgrade = false]) => installXApk(installDir, apkList, [], ipAddress, port, lang, disposeLock, downgrade);
+    });
+  }
+
+  @override
+  void run() async { try {
+    _initArchive();
+    final archive = (await _xapkArchive);
+    log("LOADING MANIFEST");
+    final manifestFile = archive.findFile('manifest.json');
+    if (manifestFile == null) return;
+    log("READING MANIFEST");
+    final manifest = _decodeManifest(manifestFile.content as List<int>);
+    Set<AndroidPermission> permissions = manifest.permissions.map((perm) => AndroidPermissionList.get(perm)).whereNotNull().toSet();
+    updateManifest(manifest, permissions);
+    String iconFile = manifest.icon.isNotEmpty ? manifest.icon : "icon.png";
+    final icon = archive.findFile(iconFile);
+    final image = icon != null ? Image.memory(icon.content) : null;
+    updateIcon(image);
 
     final apkList = _getApkList(manifest);
     String installDir = _xapkTempDir.absolute.path;
     final disposeLock = FileDisposeQueue();
-
-
-
-    /*final handle = NtIO.openDirectory(_xapkTempDir.absolute.path, true, true);
-    log("HANDLE: $handle");*/
-
+    
+    await waitFlag(APK_READER_FLAGS.UI_LOADED);
     archive.extractAllSync(_xapkTempDir, disposeLock: disposeLock);
-    if (manifest.packageName.isNotEmpty) pData.execute(() {
-      ApkReader.loadInstallType(manifest.packageName, manifest.versionCode);
-    });
-    pData.execute(() {
-      GState.installCallback.$ = (ipAddress, port, lang, [downgrade = false]) => installXApk(installDir, apkList, [], ipAddress, port, lang, disposeLock, downgrade);
-    });
+    updateInstallInfo(manifest, installDir, apkList, disposeLock);
 
     log("DIRECTORY: ${_xapkTempDir.path}");
   } catch (e) {
@@ -162,25 +159,16 @@ class XapkReader {
     //(await _xapkArchive).clear();
   }}
 
-
-  /// Starts a process to read apk data
-  static void start(String fileName) async {
-    APK_FILE = fileName;
-    ReceivePort port = ReceivePort();
-    port.listen((message) {
-      if (message is VoidCallback) {message();}
-    });
-    //Recheck installation type when connected
-    compute(_readManifest, IsolateData(fileName, false, port.sendPort));
-    StreamSubscription? sub;
-    sub = GState.connectionStatus.stream.listen((event) async {
+  @override
+  FutureOr<void> postStartCallback(IsolateRef<String, APK_READER_FLAGS> isolate) {
+    late StreamSubscription sub; sub = GState.connectionStatus.stream.listen((event) async {
       String package = GState.package.$;
       InstallType? installType = GState.apkInstallType.$;
       if (GState.apkInstallType.$ == InstallType.UNKNOWN) {
         await ApkReader.loadInstallType(GState.package.$, _versionCode);
-        if (GState.apkInstallType.$ != InstallType.UNKNOWN) sub?.cancel();
+        if (GState.apkInstallType.$ != InstallType.UNKNOWN) sub.cancel();
       }
-      else if (installType != null) sub?.cancel();
+      else if (installType != null) sub.cancel();
     });
   }
 }

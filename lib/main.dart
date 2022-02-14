@@ -13,6 +13,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 //import 'package:flutter/material.dart' hide showDialog;
 import 'package:shared_value/shared_value.dart';
+import 'package:wsa_pacman/io/isolate_runner.dart';
 import 'package:wsa_pacman/utils/misc_utils.dart';
 import 'package:wsa_pacman/utils/wsa_utils.dart';
 import 'package:wsa_pacman/utils/locale_utils.dart';
@@ -181,11 +182,13 @@ class Constants {
   //static late final List<String> args;
   static late final AppPackage packageType;
   static late final bool installMode;
+  static late final IsolateRef<dynamic, APK_READER_FLAGS>? isolate;
 }
 
 void main(List<String> arguments) async {
+  //int prevTime = DateTime.now().millisecondsSinceEpoch;
   //arguments = [r'C:\Users\Alex\Downloads\com.google.android.googlequicksearchbox_12.41.16.23.x86_64-301172250_minAPI23(x86_64)(nodpi)_apkmirror.com.apk'];
-  //arguments = [r'C:\Users\Alex\Downloads\YouTube_v17.01.35_apkpure.com.xapk'];
+  //arguments = [r'C:\Users\Alex\Downloads\PUBG MOBILE Aftermath_v1.8.0_apkpure.com.xapk'];
   
   Constants.installMode = arguments.isNotEmpty;
   Constants.packageType = AppPackageType.fromArguments(arguments);
@@ -196,7 +199,7 @@ void main(List<String> arguments) async {
   //args = [];
   const app = MyApp();
   final wrappedApp = SharedValue.wrapApp(app);
-  if (Constants.installMode) Constants.packageType.read(arguments.first);
+  Constants.isolate = Constants.installMode ? Constants.packageType.read(arguments.first) : null;
   //if (installMode) XapkReader.start(arguments.first);
 
   setPathUrlStrategy();
@@ -227,6 +230,7 @@ void main(List<String> arguments) async {
 
   if (isDesktop) {
     doWhenWindowReady(() {
+      //log("UI started after ${DateTime.now().millisecondsSinceEpoch - prevTime}");
       final win = appWindow;
       if (!Constants.installMode) {
         win.minSize = const Size(640, 500);
@@ -238,6 +242,11 @@ void main(List<String> arguments) async {
       }
       win.alignment = Alignment.center;
       win.show();
+      late final _SET_VISIBLE = Constants.isolate?.sendFlag(APK_READER_FLAGS.UI_LOADED, true);
+      late final Timer uiTimer; uiTimer = Timer.periodic(const Duration(milliseconds: 100), (t) {if (win.isVisible) {
+        _SET_VISIBLE;
+        uiTimer.cancel();
+      }});
     });
   }
 }

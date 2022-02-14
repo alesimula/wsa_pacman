@@ -1,6 +1,5 @@
 // ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures, constant_identifier_names
 
-import 'dart:isolate';
 import 'dart:async';
 import 'dart:collection';
 import 'dart:io';
@@ -8,6 +7,7 @@ import 'dart:typed_data';
 
 import 'package:archive/archive_io.dart';
 import 'package:shared_value/shared_value.dart';
+import 'package:wsa_pacman/io/isolate_runner.dart';
 import 'package:wsa_pacman/windows/nt_io.dart';
 import 'package:wsa_pacman/windows/win_io.dart';
 import 'package:wsa_pacman/windows/win_path.dart';
@@ -28,24 +28,13 @@ import '../utils/regexp_utils.dart';
 import '../utils/string_utils.dart';
 import '../utils/misc_utils.dart';
 
-class IsolateData {
-  final String fileName;
-  final SendPort pipe;
-  final bool legacyIcon;
-  //Listener has to execute this in the main thread
-  execute(VoidCallback callback) {
-    pipe.send(callback);
-  }
-  IsolateData(this.fileName, this.legacyIcon, this.pipe);
-}
-
 extension on int {
   String get asResId => "0x"+toRadixString(16).padLeft(8, '0');
 }
 
 /// Reads apk file data on a different process and updates global state
 /// Must call [ApkReader.start] to start the process
-class ApkReader {
+class ApkReader extends IsolateRunner<String, APK_READER_FLAGS> {
   //I just put '&& true' there so I could conveniently switch it off
   static bool DEBUG = !kReleaseMode && true;
   static String APK_FILE = '';
@@ -54,24 +43,23 @@ class ApkReader {
   static late Future<Archive> _apkArchive;
   static int _versionCode = 0;
 
-  static late final IsolateData data;
   static const String REGEX_QUOTED_TYPE = r'["'']type[0-9]+/([0-9]*)["'']';
 
   /// Run operation on UI thread
   /// Local variables should never be called
-  static void setInUIThread<T>(T value, Function(T val) setter) => data.execute(() {
+  void setInUIThread<T>(T value, Function(T val) setter) => executeInUi(() {
     setter(value);
   });
 
   /// Changes shared value on UI thread
   /// Local variables should never be called
-  static void updateState<T>(SharedValue<T> Function() valGetter, T dataIn) => data.execute(() {
+  void updateState<T>(SharedValue<T> Function() valGetter, T dataIn) => executeInUi(() {
     valGetter().$ = dataIn;
   });
 
   /// Changes shared value on UI thread via a callback
   /// Local variables should never be called
-  static void updateStateWith<T, E>(SharedValue<T> Function() valGetter, E dataIn, [T Function(E data)? provider]) => data.execute(() {
+  void updateStateWith<T, E>(SharedValue<T> Function() valGetter, E dataIn, [T Function(E data)? provider]) => executeInUi(() {
     final sharedValue = valGetter();
     provider != null ? sharedValue.$ = provider(dataIn) : sharedValue.$ = dataIn as T;
   });
@@ -158,7 +146,7 @@ class ApkReader {
   }
 
   /// Retrieves non-adaptive icon image
-  static Future _getIconFile(String fileName) async {
+  Future _getIconFile(String fileName) async {
     bool isXml = fileName.endsWith(".xml");
     Archive apkFile = await _apkArchive;
     ArchiveFile IconFile = apkFile.findFile(fileName)!;
@@ -170,7 +158,7 @@ class ApkReader {
   }
 
   /// Retrieves adaptive icon background and foreground images
-  static Future _getAdaptiveIconFiles(String? backgroundId, String foregroundId) async {
+  Future _getAdaptiveIconFiles(String? backgroundId, String foregroundId) async {
     Future<Resource?>? futureBackground = backgroundId != null ? getResources(backgroundId) : null;
     Future<Resource?> futureForeground = getResources(foregroundId);
     Resource? background = futureBackground != null ? await futureBackground : null;
@@ -226,15 +214,15 @@ class ApkReader {
     }).onError((_, __) {GState.apkInstallType.update((_) => InstallType.UNKNOWN);});
   } else return null;}
 
-  static void loadInstallInfoOnUIThread(String package, int versionCode) => package.isNotEmpty ? data.execute(() {
+  void loadInstallInfoOnUIThread(String package, int versionCode) => package.isNotEmpty ? executeInUi(() {
     GState.package.update((_) => package);
     loadInstallType(package, versionCode);
   }) : null;
 
-  //Retrieves APK information
-  static void _loadApkData(IsolateData pData) async {
-    data = pData;
-    File _APK_FILE_F = File(APK_FILE = data.fileName);
+  /// Retrieves APK information
+  @override
+  void run() async {
+    File _APK_FILE_F = File(APK_FILE = data);
     bool ntSymlinkCreated = false;
     String APK_DIRECORY = _APK_FILE_F.parent.path;
     String APK_NAME = _APK_FILE_F.shortBaseName ?? _APK_FILE_F.basename;
@@ -262,7 +250,8 @@ class ApkReader {
     );
     _initArchive();
 
-    Future<bool> legacyIconFound = (data.legacyIcon) ? Process.run('${Env.TOOLS_DIR}\\axmldec.exe', ['-i', APK_FILE], stdoutEncoding: null).then((value) async {
+    bool legacyIcon = await waitFlag(APK_READER_FLAGS.LEGACY_ICON);
+    Future<bool> legacyIconFound = (legacyIcon) ? Process.run('${Env.TOOLS_DIR}\\axmldec.exe', ['-i', APK_FILE], stdoutEncoding: null).then((value) async {
       String manifest = utf8.decode(await _decodeXml(value.stdout), allowMalformed: true);
       String? icon = RegExp('<application\\s+${REGEX_XML_NOCLOSE}android:icon\\s*=\\s*$REGEX_QUOTED_TYPE', multiLine: true, dotAll: true).firstMatch(manifest)?.group(2);
 
@@ -302,7 +291,7 @@ class ApkReader {
         if (permissions.isEmpty) permissions.add(AndroidPermission.NONE);
         updateState(()=>GState.permissions, permissions);
         
-        if (data.legacyIcon && await legacyIconFound) return;
+        if (legacyIcon && await legacyIconFound) return;
         else if (icon?.endsWith(".xml") ?? false) inner = Process.run('${Env.TOOLS_DIR}\\aapt2.exe', ['dump', 'xmltree', '--file', icon!, APK_FILE])..then((value) {
           if (value.exitCode != 0) {log("XML ICON ERROR"); return;}
           String iconData = value.stdout.toString();
@@ -333,7 +322,7 @@ class ApkReader {
     await process;
     if (inner != null) await inner;
     if (iconUpdThread != null) await iconUpdThread;
-    setInUIThread(data.legacyIcon, (bool v) => setDefaultIcon(v));
+    setInUIThread(legacyIcon, (bool v) => setDefaultIcon(v));
     //(await _apkArchive).clear();
   }
 
@@ -358,25 +347,19 @@ class ApkReader {
   FutureOr<R> computeOrDebug<Q, R>(ComputeCallback<Q, R> callback, Q message, {String? debugLabel}) => (DEBUG) ? 
       callback(message) : compute(callback, message, debugLabel: debugLabel);
 
-  /// Starts a process to read apk data
-  static void start(String fileName) async {
-    APK_FILE = fileName;
-    Future<bool> legacyIcon = GState.legacyIcons.whenReady();
-    ReceivePort port = ReceivePort();
-    port.listen((message) {
-      if (message is VoidCallback) {message();}
+  @override
+  FutureOr<void> postStartCallback(IsolateRef<String, APK_READER_FLAGS> isolate) {
+    GState.legacyIcons.doWhenReady((value) {
+      isolate.sendFlag(APK_READER_FLAGS.LEGACY_ICON, value);
     });
-    //Recheck installation type when connected
-    compute(_loadApkData, IsolateData(fileName, await legacyIcon, port.sendPort));
-    StreamSubscription? sub;
-    sub = GState.connectionStatus.stream.listen((event) async {
+    late StreamSubscription sub; sub = GState.connectionStatus.stream.listen((event) async {
       String package = GState.package.$;
       InstallType? installType = GState.apkInstallType.$;
       if (GState.apkInstallType.$ == InstallType.UNKNOWN) {
         await loadInstallType(GState.package.$, _versionCode);
-        if (GState.apkInstallType.$ != InstallType.UNKNOWN) sub?.cancel();
+        if (GState.apkInstallType.$ != InstallType.UNKNOWN) sub.cancel();
       }
-      else if (installType != null) sub?.cancel();
+      else if (installType != null) sub.cancel();
     });
   }
 }
