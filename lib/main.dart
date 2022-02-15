@@ -180,6 +180,7 @@ bool get isDesktop {
 
 class Constants {
   //static late final List<String> args;
+  static late final String packageFile;
   static late final AppPackage packageType;
   static late final bool installMode;
   static late final IsolateRef<dynamic, APK_READER_FLAGS>? isolate;
@@ -200,6 +201,7 @@ void main(List<String> arguments) async {
 
   AppOptions.init();
   Constants.installMode = arguments.isNotEmpty;
+  Constants.packageFile = Constants.installMode ? arguments.first : '';
   Constants.packageType = AppPackageType.fromArguments(arguments);
   Constants.isolate = Constants.installMode ? Constants.packageType.read(arguments.first) : null;
 

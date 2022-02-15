@@ -195,7 +195,6 @@ class ApkReader extends IsolateRunner<String, APK_READER_FLAGS> {
 
   /// Retrieves installation type (whether installing for the first time, reinstalling the same version, upgrading or downgrading)
   static Future loadInstallType(String package, int versionCode) async {if (package.isNotEmpty) {
-    GState.androidPort;
     String ipAddress = await GState.ipAddress.whenReady();
     int port = await GState.androidPort.whenReady();
 

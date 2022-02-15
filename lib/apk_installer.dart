@@ -180,7 +180,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
                 checked: true,
                 style: installType == InstallType.DOWNGRADE ? warningButtonTheme : null,
                 onChanged: !canInstall ? null : (_){
-                  if (Constants.packageType.directInstall) ApkInstaller.installApk(ApkReader.APK_FILE, ipAddress, port, lang, installType == InstallType.DOWNGRADE);
+                  if (Constants.packageType.directInstall) ApkInstaller.installApk(Constants.packageFile, ipAddress, port, lang, installType == InstallType.DOWNGRADE);
                   else GState.installCallback.$?.call(ipAddress, port, lang, installType == InstallType.DOWNGRADE);
                 },
               )),
