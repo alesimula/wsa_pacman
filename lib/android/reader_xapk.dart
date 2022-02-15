@@ -55,6 +55,7 @@ class XapkReader extends IsolateRunner<String, APK_READER_FLAGS> {
   static Future<List<ProcessResult>> copyApkResources(List<ManifestXapk_ApkExpansion> expansions, String workingDir, String ipAddress, int port) => Future.wait(() sync* {
     int index = 0;
     for (ManifestXapk_ApkExpansion exp in expansions) {
+      if (exp.installPath.isEmpty) exp.installPath = exp.file;
       final tempName = '${path.basename(workingDir)}@${index++}';
       final resourceName = path.basename(exp.installPath);
       final resourceDir = '${exp.installPath.startsWith('/') ? '' : '/sdcard/'}${path.dirname(exp.installPath)}';
