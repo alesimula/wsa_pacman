@@ -18,6 +18,7 @@ import 'package:wsa_pacman/utils/misc_utils.dart';
 import 'package:wsa_pacman/proto/manifest_xapk.pb.dart';
 import 'package:wsa_pacman/windows/win_io.dart';
 import 'package:wsa_pacman/windows/win_path.dart';
+import 'package:path/path.dart' as path;
 
 enum Architecture {
   amd64, i386, aarch64, arm, ppc64, ppc
@@ -51,13 +52,31 @@ class XapkReader extends IsolateRunner<String, APK_READER_FLAGS> {
   static ManifestXapk _decodeManifest(List<int> bytes) => ManifestXapk.create()
     ..mergeFromProto3Json(utf8.decoder.fuse(json.decoder).convert(bytes));
 
-  static void installXApk(String workingDir, List<String> apkFiles, List<ManifestXapk_ApkExpansion> expansions, String ipAddress, int port, AppLocalizations lang, FileDisposeQueue disposeLock, [bool downgrade = false]) async {
+  static Future<List<ProcessResult>> copyApkResources(List<ManifestXapk_ApkExpansion> expansions, String workingDir, String ipAddress, int port) => Future.wait(() sync* {
+    int index = 0;
+    for (ManifestXapk_ApkExpansion exp in expansions) {
+      final tempName = '${path.basename(workingDir)}@${index++}';
+      final resourceName = path.basename(exp.installPath);
+      final resourceDir = '${exp.installPath.startsWith('/') ? '' : '/sdcard/'}${path.dirname(exp.installPath)}';
+      yield Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'push', exp.file, '/sdcard/$tempName'], workingDirectory: workingDir)
+          .timeout(const Duration(seconds: 30)).then((_) =>
+          Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'shell',
+              'mkdir -p "$resourceDir"; cd "$resourceDir"; mv /sdcard/$tempName ./$resourceName'], workingDirectory: workingDir)
+              .timeout(const Duration(seconds: 30)));
+    }
+  }());
+
+  static void installXApk(String workingDir /* tempDir */, List<String> apkFiles, List<ManifestXapk_ApkExpansion> expansions, String ipAddress, int port, AppLocalizations lang, FileDisposeQueue disposeLock, [bool downgrade = false]) async {
     if (apkFiles.isNotEmpty) log("INSTALLING \"${apkFiles.first}\" on on $ipAddress:$port...");
     disposeLock.clear();
     var installation = Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'install-multiple', if (downgrade) '-r', if (downgrade) '-d', ...apkFiles], workingDirectory: workingDir)
       .timeout(const Duration(seconds: 30)).onError((error, stackTrace) => ProcessResult(-1, -1, null, null));
+    final resources = copyApkResources(expansions, workingDir, ipAddress, port);
     GState.apkInstallState.update((_) => InstallState.INSTALLING);
-    var result = await installation;
+
+    final result = await installation;
+    await resources;
+
     Directory(workingDir).deleteSync(recursive: true);
     log("EXIT CODE: ${result.exitCode}");
     String error = result.stderr.toString();
@@ -125,7 +144,7 @@ class XapkReader extends IsolateRunner<String, APK_READER_FLAGS> {
   void updateInstallInfo(ManifestXapk manifest, String installDir, List<String> apkList, FileDisposeQueue disposeLock) {
     executeInUi(() {
       if (manifest.packageName.isNotEmpty) ApkReader.loadInstallType(manifest.packageName, manifest.versionCode);
-      GState.installCallback.$ = (ipAddress, port, lang, [downgrade = false]) => installXApk(installDir, apkList, [], ipAddress, port, lang, disposeLock, downgrade);
+      GState.installCallback.$ = (ipAddress, port, lang, [downgrade = false]) => installXApk(installDir, apkList, manifest.expansions, ipAddress, port, lang, disposeLock, downgrade);
     });
   }
 
