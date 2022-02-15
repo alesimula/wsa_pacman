@@ -158,8 +158,7 @@ class XapkReader extends IsolateRunner<String, APK_READER_FLAGS> {
     if (manifestFile == null) return;
     log("READING MANIFEST");
     final manifest = _decodeManifest(manifestFile.content as List<int>);
-    Set<AndroidPermission> permissions = manifest.permissions.map((perm) => AndroidPermissionList.get(perm)).whereNotNull().toSet();
-    if (permissions.isEmpty) permissions.add(AndroidPermission.NONE);
+    final permissions = AndroidPermissionList.fromNames(manifest.permissions);
     updateManifest(manifest, permissions);
     String iconFile = manifest.icon.isNotEmpty ? manifest.icon : "icon.png";
     final icon = archive.findFile(iconFile);

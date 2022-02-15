@@ -1,9 +1,11 @@
 // All permissions available at https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/res/AndroidManifest.xml
 
+import 'dart:collection';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mdi/mdi.dart';
 import 'package:wsa_pacman/utils/locale_utils.dart';
+import 'package:collection/collection.dart';
 
 enum AndroidPermission {
   NONE,
@@ -27,11 +29,15 @@ enum AndroidPermission {
 
 extension AndroidPermissionList on AndroidPermission {
 
-  static AndroidPermission? get(String name) => _permissions[name];
-  //AndroidPermission? operator [] (String name) => _permissions[name];
-  int coso() {
-    return 1;
+  static Set<AndroidPermission> fromNames(Iterable<String> names) {
+    final permissions = SplayTreeSet<AndroidPermission>((a,b)=> a.index - b.index)
+        ..addAll(names.map((perm) => AndroidPermissionList.get(perm)).whereNotNull());
+    if (permissions.isEmpty) permissions.add(AndroidPermission.NONE);
+    return permissions;
   }
+
+  static AndroidPermission? get(String name) => _permissions[name];
+
 
   Icon get icon {switch (this) {
     case AndroidPermission.NONE: return const Icon(Mdi.gitlab);
