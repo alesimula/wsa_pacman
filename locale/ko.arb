@@ -5,7 +5,7 @@
 
 
     "@@locale": "ko",
-    "@locale_desc": {"description": "한국어 [ko_KR]"},
+    "@locale_desc": {"description": "Korean [ko_KR]"},
     "locale_desc": "한국어",
     "@locale_system": {"description": "시스템 언어를 지칭합니다"},
     "locale_system": "시스템",
@@ -14,17 +14,14 @@
     "btn_boot": "켜기",
     "btn_switch_on": "켬",
     "btn_switch_off": "끔",
+    
 
-
-    "@status_subtext_winver_10": {"description": "'status_unsupported_desc' 내에서만 쓰입니다, 이 점을 고려해 수정하십시오"},
     "status_subtext_winver_10": "Windows 10",
-    "@status_subtext_winver_older": {"description": "'status_unsupported_desc' 내에서만 쓰입니다, 이 점을 고려해 수정하십시오"},
     "status_subtext_winver_older": "구형 Windows",
 
 
     "status_unsupported": "WSA가 설치되지 않음",
     "status_unsupported_desc": "운영 체제가 {windowsVersion}인 것으로 보이며 WSA를 찾을 수 없습니다. 본 프로그램은 WSA에 종속되어 있으며, Windows 11에서만 이용할 수 있습니다.",
-    "@status_unsupported_desc" : {"placeholders": {"windowsVersion": {"type": "String"}}},
     "status_missing": "WSA가 설치되지 않음",
     "status_missing_desc": "WSA를 찾을 수 없습니다. 본 프로그램은 WSA에 종속되어 있으므로, Microsoft Store에서 Windows Subsystem for Android (또는 Amazon 앱스토어)를 설치하십시오.",
     "status_unknown": "연결 중",
@@ -72,17 +69,11 @@
 
     "installer_message": "이 애플리케이션을 설치하시겠습니까?",
     "installer_info_version": "버전: {appVersion}",
-    "@installer_info_version" : {"placeholders": {"appVersion": {"type": "String"}}},
     "installer_info_version_change": "버전: {appVersionOld} => {appVersionNew}",
-    "@installer_info_version_change" : {"placeholders": {"appVersionOld": {"type": "String"}, "appVersionNew": {"type": "String"}}},
     "installer_info_package": "패키지: {appPackage}",
-    "@installer_info_package" : {"placeholders": {"appPackage": {"type": "String"}}},
     "installer_installing": "{appTitle} 앱을 설치하고 있습니다...",
-    "@installer_installing" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_installed": "{appTitle} 앱이 성공적으로 설치되었습니다",
-    "@installer_installed" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_fail": "{appTitle} 앱이 설치되지 않았습니다",
-    "@installer_fail" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_error_nomsg": "설치에 실패하였으나, 오류를 확인할 수 없습니다",
     "installer_btn_starting": "시작하는 중...",
     "installer_btn_loading": "불러오는 중...",
