@@ -4,7 +4,7 @@
 
 A GUI package manager and package installer for Windows Subsystem for Android (WSA).
 
-Currently provides a double-click GUI installer for .apk files that shows app information (package, icon, version and permissions), allows normal installations as well as upgrades and downgrades.
+Currently provides a double-click GUI installer for .apk and .xapk files that shows app information (package, icon, version and permissions), allows normal installations as well as upgrades and downgrades.
 
 The app additionally provides a button to open Android settings and one to open the "Manage Applications" Android settings page, from which you can uninstall or disable applications and grant or revoke permissions
 
