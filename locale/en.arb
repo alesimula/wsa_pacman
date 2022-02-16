@@ -28,7 +28,7 @@
     "status_missing": "WSA not installed",
     "status_missing_desc": "WSA not found; this application depends on WSA, please install Windows Subsystem for Android (or the Amazon Appstore) from the Microsoft Store",
     "status_unknown": "Connecting",
-    "status_unknown_desc": "Waiting for a WSA connection to be enstablished...",
+    "status_unknown_desc": "Waiting for a WSA connection to be established...",
     "status_starting": "Starting",
     "status_starting_desc": "WSA is starting, please stand by...",
     "status_arrested": "Arrested",
