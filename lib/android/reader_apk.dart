@@ -224,11 +224,11 @@ class ApkReader extends IsolateRunner<String, APK_READER_FLAGS> {
     File _APK_FILE_F = File(APK_FILE = data);
     bool ntSymlinkCreated = false;
     String APK_DIRECORY = _APK_FILE_F.parent.path;
-    String APK_NAME = _APK_FILE_F.shortBaseName ?? _APK_FILE_F.basename;
+    String APK_NAME = _APK_FILE_F.basename;
     
     if (!APK_NAME.isASCII) {
       String? shortName =  _APK_FILE_F.shortBaseName;
-      if (shortName != null) APK_NAME = shortName;
+      if (shortName != null && shortName.isASCII) APK_NAME = shortName;
       else {
         String? ntSymlink = NtIO.createTempShortcut(_APK_FILE_F.absolute.path, "install-symlink@$pid.apk");
         if (ntSymlink != null) {
