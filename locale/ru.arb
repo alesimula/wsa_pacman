@@ -6,8 +6,8 @@
 
 
     "btn_boot": "Запустить",
-    "btn_switch_on": "Включить",
-    "btn_switch_off": "Выключить",
+    "btn_switch_on": "Вкл.",
+    "btn_switch_off": "Выкл.",
 
 
     "status_subtext_winver_10": "Windows 10",
