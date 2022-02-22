@@ -1,0 +1,101 @@
+{
+    "@@locale": "pl",
+    "@locale_desc": {"description": "Polish (PL) [pl_PL]"},
+    "locale_desc": "Polski",
+    "locale_system": "System",
+
+
+    "btn_boot": "Włącz",
+    "btn_switch_on": "On",
+    "btn_switch_off": "Off",
+
+    
+    "status_subtext_winver_10": "Windows 10",
+    "status_subtext_winver_older": "Starsza Wersja Systemu Windows",
+
+
+    "status_unsupported": "WSA nie jest zainstalowany",
+    "status_unsupported_desc": "Wykryto {windowsVersion} i nie znaleziono WSA; ta aplikacja jest zależna od WSA, który jest oficjalnie wspierany tylko w systemie Windows 11",
+    "status_missing": "WSA nie jest zainstalowany",
+    "status_missing_desc": "Nie znaleziono WSA; ta aplikacja jest zależna od WSA, zainstaluj Podsystem Windows dla systemu Android (lub Amazon Appstore) ze sklepu Microsoft Store",
+    "status_unknown": "Łączenie",
+    "status_unknown_desc": "Oczekiwanie na nawiązanie połączenia z WSA...",
+    "status_starting": "Uruchamiania",
+    "status_starting_desc": "WSA uruchamia się, proszę czekać...",
+    "status_arrested": "Zatrzymany",
+    "status_arrested_desc": "WSA jest wyłączony",
+    "status_offline": "Offline",
+    "status_offline_desc": "Nie można nawiązać połączenia z WSA: tryb programisty i debugowanie USB są wyłączone lub podano niewłaściwy port",
+    "status_disconnected": "Odłączony",
+    "status_disconnected_desc": "Z nieznanych przyczyn nie udało się nawiązać połączenia z WSA",
+    "status_connected": "Połączony",
+    "status_connected_desc": "Pomyślnie połączono z WSA, wszystkie systemy działają",
+
+
+    "screen_wsa": "Menedżer Pakietów WSA",
+    "screen_settings": "Ustawienia",
+
+
+    "wsa_manage": "Zarządzanie Androidem",
+    "wsa_manage_app": "Aplikacje",
+    "wsa_manage_settings": "Ustawienia",
+
+    
+    "settings_port": "Port WSA",
+    "settings_ip": "Adres IP WSA",
+    "settings_autostart": "Autostart WSA przed instalacją",
+    "settings_language": "Język",
+    "settings_option_generic_system": "System",
+    "settings_option_generic_disabled": "Wyłączone",
+
+
+    "theme_mode": "Motyw",
+    "theme_mode_dark": "Ciemny",
+    "theme_mode_light": "Jasny",
+    "theme_mica": "Przezroczystość okna",
+    "theme_mica_full": "Pełna",
+    "theme_mica_partial": "Częściowa",
+    "theme_icon_adaptive": "Adaptacyjny kształt Ikon",
+    "theme_icon_adaptive_squircle": "Domyślny",
+    "theme_icon_adaptive_circle": "Okrągły",
+    "theme_icon_adaptive_rounded_square": "Zaokrąglony Kwadrat",
+
+
+    "installer_message": "Czy chcesz zainstalować tą aplikację?",
+    "installer_info_version": "Wersja: {appVersion}",
+    "installer_info_version_change": "Wersja: {appVersionOld} => {appVersionNew}",
+    "installer_info_package": "Pakiet: {appPackage}",
+    "installer_installing": "Instalowanie aplikacji {appTitle}...",
+    "installer_installed": "Aplikacja {appTitle} została pomyślnie zainstalowana",
+    "installer_fail": "Aplikacja {appTitle} nie została zainstalowana",
+    "installer_error_nomsg": "Instalacja nie powiodła się, ale nie zgłoszono żadnego błędu",
+    "installer_btn_starting": "Rozpoczynanie...",
+    "installer_btn_loading": "Wczytywanie...",
+    "installer_btn_cancel": "Anuluj",
+    "installer_btn_install": "Zainstaluj",
+    "installer_btn_reinstall": "Zainstaluj Ponownie",
+    "installer_btn_update": "Aktualizuj",
+    "installer_btn_downgrade": "Downgrade (niebezpieczny)",
+    "installer_btn_dismiss": "Gotowe",
+    "installer_btn_open": "Otwórz",
+    "installer_btn_checkbox_shortcut": "Utwórz skrót na pulpicie",
+
+
+    "android_permission_none": "Nie wymaga żadnych uprawnień",
+    "android_permission_admin": "Zarządzanie urządzeniem jako administrator",
+    "android_permission_admin_brick": "Zdalne wyłączenie lub reset urządzenia",
+    "android_permission_admin_lock": "Zdalne zablokowanie urządzenia",
+    "android_permission_storage": "Pliki i multimedia",
+    "android_permission_microphone": "Mikrofon",
+    "android_permission_camera": "Aparat",
+    "android_permission_location": "Lokalizacja",
+    "android_permission_phone": "Telefon",
+    "android_permission_call_log": "Rejestry połączeń",
+    "android_permission_sms": "Wiadomości",
+    "android_permission_contacts": "Kontakty",
+    "android_permission_calendar": "Kalendarz",
+    "android_permission_activity_recognition": "Aktywność fizyczna",
+    "android_permission_sensors": "Czujniki urządzenia",
+    "android_permission_sensors_body": "Czujniki na ciele",
+    "android_permission_nearby_devices": "Wykrywanie urządzeń w pobliżu"
+}
