@@ -1,0 +1,112 @@
+{
+
+    "@@locale": "fa",
+    "@locale_desc": {"description": "Farsi (Persian) [fa_IR]"},
+    "locale_desc": "فارسی",
+    "@locale_system": {"description": "Describes the system locale"},
+    "locale_system": "سیستم",
+
+
+    "btn_boot": "روشن کردن",
+    "btn_switch_on": "روشن",
+    "btn_switch_off": "خاموش",
+
+
+    "@status_subtext_winver_10": {"description": "Only used inside 'status_unsupported_desc', modify taking this in consideration"},
+    "status_subtext_winver_10": "ویندوز 10",
+    "@status_subtext_winver_older": {"description": "Only used inside 'status_unsupported_desc', modify taking this in consideration"},
+    "status_subtext_winver_older": "نسخه قدیمی ویندوز",
+
+
+    "status_unsupported": "WSA نصب نشده",
+    "status_unsupported_desc": "{windowsVersion} شناسایی شد و یافت نشد. این برنامه به WSA وابسته است که به طور رسمی فقط  در ویندوز 11 پشتیبانی می شود",
+    "@status_unsupported_desc" : {"placeholders": {"windowsVersion": {"type": "String"}}},
+    "status_missing": "WSA نصب نشده",
+    "status_missing_desc": "WSA یافت نشد. این برنامه وابسته به WSA است، لطفا زیرسیستم ویندوز را برای اندروید (یا اپ استور آمازون) از Microsoft Store را نصب کنید",
+    "status_unknown": "در حال اتصال",
+    "status_unknown_desc": "در انتظار برقراری اتصال WSA...",
+    "status_starting": "شروع ...",
+    "status_starting_desc": "WSA در حال شروع است، لطفا منتظر بمانید...",
+    "status_arrested": "دستگیر شد",
+    "status_arrested_desc": "WSA خاموش شد",
+    "status_offline": "آفلاین",
+    "status_offline_desc": "اتصال با WSA امکان‌پذیر نیست: یا حالت برنامه‌نویس و اشکال‌زدایی USB غیرفعال هستند یا پورت اشتباهی مشخص شده است.",
+    "status_disconnected": "قطع شده",
+    "status_disconnected_desc": "اتصال WSA به دلایل نامعلومی برقرار نشد",
+    "status_connected": "وصل شده",
+    "status_connected_desc": "با موفقیت به WSA متصل شد، سیستم ها کار میکند",
+
+
+    "screen_wsa": "مدیریت بسته WSA",
+    "screen_settings": "تنظیمان",
+
+
+    "wsa_manage": "مدیریت اندروید",
+    "wsa_manage_app": "مدیریت برنامه ها",
+    "wsa_manage_settings": "مدیریت تنظیمات",
+
+    
+    "settings_port": "پورت WSA",
+    "settings_ip": "آدری آی پی WSA",
+    "settings_autostart": "قبل از نصب WSA را به صورت خودکار راه اندازی شود",
+    "settings_language": "زبان",
+    "settings_option_generic_system": "سیستم",
+    "settings_option_generic_disabled": "غیرفعال",
+
+
+    "theme_mode": "نوع زمینه",
+    "theme_mode_dark": "تاریک",
+    "theme_mode_light": "روشن",
+    "theme_mica": "شفافیت پنجره ها",
+    "theme_mica_full": "کامل",
+    "theme_mica_partial": "جزئي",
+    "theme_icon_adaptive": "سازگارسازی آیکون",
+    "theme_icon_adaptive_squircle": "مربع",
+    "theme_icon_adaptive_circle": "دایره",
+    "theme_icon_adaptive_rounded_square": "گوشه های کرد",
+
+
+    "installer_message": "آیا از نصب این برنامه اطمینان دارید؟",
+    "installer_info_version": "تسخه: {appVersion}",
+    "@installer_info_version" : {"placeholders": {"appVersion": {"type": "String"}}},
+    "installer_info_version_change": "نسخه: {appVersionOld} => {appVersionNew}",
+    "@installer_info_version_change" : {"placeholders": {"appVersionOld": {"type": "String"}, "appVersionNew": {"type": "String"}}},
+    "installer_info_package": "بسته: {appPackage}",
+    "@installer_info_package" : {"placeholders": {"appPackage": {"type": "String"}}},
+    "installer_installing": "در حال نصب {appTitle}...",
+    "@installer_installing" : {"placeholders": {"appTitle": {"type": "String"}}},
+    "installer_installed": "برنامه {appTitle} نصب شد",
+    "@installer_installed" : {"placeholders": {"appTitle": {"type": "String"}}},
+    "installer_fail": "برنامه {appTitle} نصب نشد.",
+    "@installer_fail" : {"placeholders": {"appTitle": {"type": "String"}}},
+    "installer_error_nomsg": "نصب انجام نشد، اما خطایی هم رخ نداد",
+    "installer_btn_starting": "شروع...",
+    "installer_btn_loading": "بارگذاری...",
+    "installer_btn_cancel": "لغو",
+    "installer_btn_install": "نصب",
+    "installer_btn_reinstall": "نصب مجدد",
+    "installer_btn_update": "بروزرسانی",
+    "installer_btn_downgrade": "Downgrade (امن نیست)",
+    "installer_btn_dismiss": "رد کردن",
+    "installer_btn_open": "باز کردن",
+    "installer_btn_checkbox_shortcut": "ساخت میانبر در دسکتاپ",
+
+
+    "android_permission_none": "هیچ مجوزی لازم نیست",
+    "android_permission_admin": "مدیریت دستگاه",
+    "android_permission_admin_brick": "غیرفعال یا بازنشانی دستگاه از راه دور",
+    "android_permission_admin_lock": "قفل دستگاه از راه دور",
+    "android_permission_storage": "فایل ها و رسانه ها",
+    "android_permission_microphone": "میکروفون",
+    "android_permission_camera": "دوربین",
+    "android_permission_location": "موقعیت مکانی",
+    "android_permission_phone": "تلفن",
+    "android_permission_call_log": "تماس ها",
+    "android_permission_sms": "پیام ها",
+    "android_permission_contacts": "مخاطبین",
+    "android_permission_calendar": "تقویم",
+    "android_permission_activity_recognition": "فعالیت های بدنی",
+    "android_permission_sensors": "سنسور دستگاه",
+    "android_permission_sensors_body": "سنسور بدن",
+    "android_permission_nearby_devices": "پیدا کردن دستگاه های نزدیک"
+}
