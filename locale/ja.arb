@@ -1,0 +1,102 @@
+{
+    "@@locale": "ja",
+    "@locale_desc": {"description": "Japanese [ja_JP]"},
+    "locale_desc": "日本語",
+    "@locale_system": {"description": "システム ロケールを記述します"},
+    "locale_system": "システム",
+
+
+    "btn_boot": "オンにします",
+    "btn_switch_on": "オン",
+    "btn_switch_off": "オフ",
+
+
+    "status_subtext_winver_10": "ウィンドウズ 10",
+    "status_subtext_winver_older": "古いウィンドウのバージョン",
+
+
+    "status_unsupported": "WSA がインストールされていません",
+    "status_unsupported_desc": "{windowsVersion} が検出され、WSA が見つかりません。このアプリケーションは WSA に依存しており、ウィンドウズ 11 でのみ正式にサポートされています",
+    "status_missing": "WSA がインストールされていません",
+    "status_missing_desc": "WSA が見つかりません。このアプリケーションはWSAに依存、マイクロソフトストアからアンドロイド(またはアマゾンアプリストア)用の ウィンドウズ サブシステムをインストールしてください",
+    "status_unknown": "接続中",
+    "status_unknown_desc": "WSA 接続が確立されるのを待っています……",
+    "status_starting": "起動中",
+    "status_starting_desc": "WSA が起動しています。しばらくお待ちください……",
+    "status_arrested": "逮捕",
+    "status_arrested_desc": "WSA がオフになっている",
+    "status_offline": "オフライン",
+    "status_offline_desc": "WSA との接続を確立できませんでした：開発者モードと USB デバッグが無効になっているか、間違ったポートが指定されています",
+    "status_disconnected": "切断",
+    "status_disconnected_desc": "WSA 接続を不明な理由で確立できませんでした",
+    "status_connected": "接続",
+    "status_connected_desc": "WSA への接続に成功し、に進む準備できています",
+
+
+    "screen_wsa": "WSA パッケージ マネージャ",
+    "screen_settings": "設定",
+
+
+    "wsa_manage": "アンドロイド管理",
+    "wsa_manage_app": "アプリケーションの管理",
+    "wsa_manage_settings": "設定の管理",
+
+    
+    "settings_port": "WSA ポート",
+    "settings_ip": "WSA IP アドレス",
+    "settings_autostart": "インストール前に WSA を自動起動する",
+    "settings_language": "言語",
+    "settings_option_generic_system": "システム",
+    "settings_option_generic_disabled": "非アクティブ",
+
+
+    "theme_mode": "テーマモード",
+    "theme_mode_dark": "暗い",
+    "theme_mode_light": "明るい",
+    "theme_mica": "ウィンドウの透明度",
+    "theme_mica_full": "全体",
+    "theme_mica_partial": "一部",
+    "theme_icon_adaptive": "アダプティブアイコンのスタイル",
+    "theme_icon_adaptive_squircle": "半円",
+    "theme_icon_adaptive_circle": "円",
+    "theme_icon_adaptive_rounded_square": "丸み正方形",
+
+
+    "installer_message": "このアプリケーションをインストールしますか？",
+    "installer_info_version": "バージョン： {appVersion}",
+    "installer_info_version_change": "バージョン： {appVersionOld} ⇒ {appVersionNew}",
+    "installer_info_package": "パッケージ： {appPackage}",
+    "installer_installing": "アプリケーション「{appTitle}」のインストール……",
+    "installer_installed": "アプリケーション「{appTitle}」が正常にインストールされました",
+    "installer_fail": "アプリケーション「{appTitle}」をインストールできませんでした",
+    "installer_error_nomsg": "インストールは失敗しましたが、エラーはスローされませんでした",
+    "installer_btn_starting": "起動……",
+    "installer_btn_loading": "積載……",
+    "installer_btn_cancel": "キャンセル",
+    "installer_btn_install": "インストール",
+    "installer_btn_reinstall": "再インストール",
+    "installer_btn_update": "更新",
+    "installer_btn_downgrade": "ダウングレード（安全でない）",
+    "installer_btn_dismiss": "閉じる",
+    "installer_btn_open": "アプリを開く",
+    "installer_btn_checkbox_shortcut": "デスクトップショートカットを作成",
+
+
+    "android_permission_none": "権限は必要ありません",
+    "android_permission_admin": "管理者としてデバイスを管理",
+    "android_permission_admin_brick": "デバイスをリモートで無効にする",
+    "android_permission_admin_lock": "デバイスをリモートでロックする",
+    "android_permission_storage": "ファイルとメディア",
+    "android_permission_microphone": "マイク",
+    "android_permission_camera": "カメラ",
+    "android_permission_location": "場所",
+    "android_permission_phone": "電話",
+    "android_permission_call_log": "通話履歴",
+    "android_permission_sms": "メッセージ",
+    "android_permission_contacts": "連絡先",
+    "android_permission_calendar": "カレンダー",
+    "android_permission_activity_recognition": "身体活動",
+    "android_permission_sensors": "デバイスセンサー",
+    "android_permission_sensors_body": "ボディセンサー",
+    "android_permission_nearby_devices": "近くのデバイスを探す"
+}

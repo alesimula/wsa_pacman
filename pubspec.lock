@@ -6,10 +6,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "89f196befc8590ff00b968ab20656772f8cfa975"
+      resolved-ref: dc323145cd3440995c7d1512ac4ee39f381adb22
       url: "https://github.com/brendan-duncan/archive.git"
     source: git
-    version: "3.1.11"
+    version: "3.3.0"
   args:
     dependency: transitive
     description:
@@ -168,7 +168,7 @@ packages:
       name: flutter_acrylic
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0+1"
+    version: "1.0.0+2"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -218,14 +218,14 @@ packages:
       name: jovial_misc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.3"
+    version: "0.8.4"
   jovial_svg:
     dependency: "direct main"
     description:
       name: jovial_svg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.8"
+    version: "1.1.1"
   js:
     dependency: transitive
     description:
@@ -330,7 +330,7 @@ packages:
       name: pointycastle
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.5.1"
+    version: "3.5.2"
   process:
     dependency: transitive
     description:
@@ -393,7 +393,7 @@ packages:
       name: shared_preferences_ios
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.10"
+    version: "2.1.0"
   shared_preferences_linux:
     dependency: transitive
     description:
@@ -475,7 +475,7 @@ packages:
       name: synchronized
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.0+2"
   system_theme:
     dependency: "direct main"
     description:
@@ -531,7 +531,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.11"
+    version: "2.4.4"
   xdg_directories:
     dependency: transitive
     description:

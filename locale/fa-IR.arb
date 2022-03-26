@@ -1,5 +1,4 @@
 {
-
     "@@locale": "fa",
     "@locale_desc": {"description": "Farsi (Persian) [fa_IR]"},
     "locale_desc": "فارسی",
@@ -12,15 +11,12 @@
     "btn_switch_off": "خاموش",
 
 
-    "@status_subtext_winver_10": {"description": "Only used inside 'status_unsupported_desc', modify taking this in consideration"},
     "status_subtext_winver_10": "ویندوز 10",
-    "@status_subtext_winver_older": {"description": "Only used inside 'status_unsupported_desc', modify taking this in consideration"},
     "status_subtext_winver_older": "نسخه قدیمی ویندوز",
 
 
     "status_unsupported": "WSA نصب نشده",
     "status_unsupported_desc": "{windowsVersion} شناسایی شد و یافت نشد. این برنامه به WSA وابسته است که به طور رسمی فقط  در ویندوز 11 پشتیبانی می شود",
-    "@status_unsupported_desc" : {"placeholders": {"windowsVersion": {"type": "String"}}},
     "status_missing": "WSA نصب نشده",
     "status_missing_desc": "WSA یافت نشد. این برنامه وابسته به WSA است، لطفا زیرسیستم ویندوز را برای اندروید (یا اپ استور آمازون) از Microsoft Store را نصب کنید",
     "status_unknown": "در حال اتصال",
@@ -68,17 +64,11 @@
 
     "installer_message": "آیا از نصب این برنامه اطمینان دارید؟",
     "installer_info_version": "تسخه: {appVersion}",
-    "@installer_info_version" : {"placeholders": {"appVersion": {"type": "String"}}},
     "installer_info_version_change": "نسخه: {appVersionOld} => {appVersionNew}",
-    "@installer_info_version_change" : {"placeholders": {"appVersionOld": {"type": "String"}, "appVersionNew": {"type": "String"}}},
     "installer_info_package": "بسته: {appPackage}",
-    "@installer_info_package" : {"placeholders": {"appPackage": {"type": "String"}}},
     "installer_installing": "در حال نصب {appTitle}...",
-    "@installer_installing" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_installed": "برنامه {appTitle} نصب شد",
-    "@installer_installed" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_fail": "برنامه {appTitle} نصب نشد.",
-    "@installer_fail" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_error_nomsg": "نصب انجام نشد، اما خطایی هم رخ نداد",
     "installer_btn_starting": "شروع...",
     "installer_btn_loading": "بارگذاری...",
