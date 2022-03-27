@@ -11,33 +11,33 @@
     "btn_switch_off": "オフ",
 
 
-    "status_subtext_winver_10": "ウィンドウズ 10",
-    "status_subtext_winver_older": "古いウィンドウのバージョン",
+    "status_subtext_winver_10": "Windows 10",
+    "status_subtext_winver_older": "古い Windows のバージョン",
 
 
     "status_unsupported": "WSA がインストールされていません",
     "status_unsupported_desc": "{windowsVersion} が検出され、WSA が見つかりません。このアプリケーションは WSA に依存しており、ウィンドウズ 11 でのみ正式にサポートされています",
     "status_missing": "WSA がインストールされていません",
-    "status_missing_desc": "WSA が見つかりません。このアプリケーションはWSAに依存、マイクロソフトストアからアンドロイド(またはアマゾンアプリストア)用の ウィンドウズ サブシステムをインストールしてください",
+    "status_missing_desc": "WSA が見つかりません。このアプリケーションはWSAに依存、Microsoft StoreからAndroid™️ 用 Windows サブシステムをインストールしてください",
     "status_unknown": "接続中",
     "status_unknown_desc": "WSA 接続が確立されるのを待っています……",
     "status_starting": "起動中",
     "status_starting_desc": "WSA が起動しています。しばらくお待ちください……",
-    "status_arrested": "逮捕",
-    "status_arrested_desc": "WSA がオフになっている",
+    "status_arrested": "停止",
+    "status_arrested_desc": "WSA がオフになっています",
     "status_offline": "オフライン",
     "status_offline_desc": "WSA との接続を確立できませんでした：開発者モードと USB デバッグが無効になっているか、間違ったポートが指定されています",
     "status_disconnected": "切断",
     "status_disconnected_desc": "WSA 接続を不明な理由で確立できませんでした",
     "status_connected": "接続",
-    "status_connected_desc": "WSA への接続に成功し、に進む準備できています",
+    "status_connected_desc": "WSA への接続に成功し、準備完了です",
 
 
     "screen_wsa": "WSA パッケージ マネージャ",
     "screen_settings": "設定",
 
 
-    "wsa_manage": "アンドロイド管理",
+    "wsa_manage": "Androidの管理",
     "wsa_manage_app": "アプリケーションの管理",
     "wsa_manage_settings": "設定の管理",
 
@@ -69,9 +69,9 @@
     "installer_installing": "アプリケーション「{appTitle}」のインストール……",
     "installer_installed": "アプリケーション「{appTitle}」が正常にインストールされました",
     "installer_fail": "アプリケーション「{appTitle}」をインストールできませんでした",
-    "installer_error_nomsg": "インストールは失敗しましたが、エラーはスローされませんでした",
-    "installer_btn_starting": "起動……",
-    "installer_btn_loading": "積載……",
+    "installer_error_nomsg": "インストールに失敗しましたが、エラーは発生しませんでした。",
+    "installer_btn_starting": "起動しています……",
+    "installer_btn_loading": "読み込み中です……",
     "installer_btn_cancel": "キャンセル",
     "installer_btn_install": "インストール",
     "installer_btn_reinstall": "再インストール",
