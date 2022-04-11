@@ -73,7 +73,7 @@
     "installer_installed": "האפליקציה {appTitle} הותקנה בהצלחה",
     "installer_fail": "האפליקציה {appTitle} לא הותקנה",
     "installer_error_nomsg": "ההתקנה נכשלה, אבל לא זוהתה השגיאה.",
-    "installer_btn_starting": "מפעיל...",
+    "installer_btn_starting": "WSA מפעיל את...",
     "installer_btn_loading": "טוען...",
     "installer_btn_cancel": "ביטול",
     "installer_btn_install": "התקן",
