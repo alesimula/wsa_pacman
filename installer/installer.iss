@@ -6,7 +6,7 @@
 #define instbuilddir "..\build\installer"
 #define toolsdir "..\"+tools_dir_name
 
-#define vcredist_version "14.29.30135.00"
+#define vcredist_version "14.31.31103.00"
 
 #define executable "WSA-pacman.exe"
 #define app_name "WSA Package Manager"
