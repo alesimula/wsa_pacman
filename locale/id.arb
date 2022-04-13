@@ -1,0 +1,116 @@
+{
+    "@@README_1": "The en.arb file is a template for other files",
+    "@@README_2": "For other languages, entries starting with @ and @@ are not needed, except @@locale",
+    "@@README_3": "Country-specific locales (eg. 'en_GB') need a fallback locale (eg. 'en') to exist",
+
+
+    "@@locale": "id",
+    "@locale_desc": {"description": "Bahasa Indonesia (Indonesian) [id_ID]"},
+    "locale_desc": "Indonesian",
+    "@locale_system": {"description": "Menjelaskan lokal sistem"},
+    "locale_system": "Sistem",
+
+
+    "btn_boot": "Nyalakan",
+    "btn_switch_on": "Nyala",
+    "btn_switch_off": "Mati",
+
+
+    "@status_subtext_winver_10": {"description": "Hanya digunakan di dalam 'status_unsupported_desc', modifikasi dengan mempertimbangkan ini"},
+    "status_subtext_winver_10": "Windows 10",
+    "@status_subtext_winver_older": {"description": "Hanya digunakan di dalam 'status_unsupported_desc', modifikasi dengan mempertimbangkan ini"},
+    "status_subtext_winver_older": "Versi Lama Windows",
+
+
+    "status_unsupported": "WSA belum terinstal",
+    "status_unsupported_desc": "{windowsVersion} terdeteksi dan WSA tidak ditemukan; aplikasi ini tergantung pada WSA, yang hanya didukung secara resmi di Windows 11",
+    "@status_unsupported_desc" : {"placeholders": {"windowsVersion": {"type": "String"}}},
+    "status_missing": "WSA tidak ditemukan",
+    "status_missing_desc": "WSA tidak ditemukan; aplikasi ini bergantung pada WSA, silakan instal Subsistem Windows untuk Android (atau Amazon Appstore) dari Microsoft Store",
+    "status_unknown": "Menghubungkan",
+    "status_unknown_desc": "Menunggu koneksi WSA dibuat...",
+    "status_starting": "Memulai",
+    "status_starting_desc": "WSA dimulai, harap bersiap-siap...",
+    "status_arrested": "Ditangkap",
+    "status_arrested_desc": "WSA dimatikan",
+    "status_offline": "Luring",
+    "status_offline_desc": "Tidak dapat membuat koneksi dengan WSA: mode pengembang dan debugging USB dinonaktifkan atau port yang salah ditentukan",
+    "status_disconnected": "Terputus",
+    "status_disconnected_desc": "Koneksi WSA tidak dapat dibuat karena alasan yang tidak diketahui",
+    "status_connected": "Terhubung",
+    "status_connected_desc": "Berhasil terhubung ke WSA, semua sistem berjalan",
+
+
+    "screen_wsa": "Manajer Paket WSA",
+    "screen_settings": "Pengaturan",
+
+
+    "wsa_manage": "Manajemen Android",
+    "wsa_manage_app": "Kelola Aplikasi",
+    "wsa_manage_settings": "Kelola Pengaturan",
+
+    
+    "settings_port": "Port WSA",
+    "settings_ip": "Alamat IP WSA",
+    "settings_autostart": "Otomatis mulai WSA sebelum instalasi",
+    "settings_language": "Bahasa",
+    "settings_option_generic_system": "Sistem",
+    "settings_option_generic_disabled": "Dimatikan",
+
+
+    "theme_mode": "Mode tema",
+    "theme_mode_dark": "Gelap",
+    "theme_mode_light": "Terang",
+    "theme_mica": "Transparan Windows",
+    "theme_mica_full": "Penuh",
+    "theme_mica_partial": "Sebagian",
+    "theme_icon_adaptive": "Ikon adaptif Bentuk",
+    "theme_icon_adaptive_squircle": "Squircle",
+    "theme_icon_adaptive_circle": "Circle",
+    "theme_icon_adaptive_rounded_square": "Rounded Square",
+
+
+    "installer_message": "Apakah Anda ingin menginstal aplikasi ini?",
+    "installer_info_version": "Versi: {appVersion}",
+    "@installer_info_version" : {"placeholders": {"appVersion": {"type": "String"}}},
+    "installer_info_version_change": "Versi: {appVersionOld} => {appVersionNew}",
+    "@installer_info_version_change" : {"placeholders": {"appVersionOld": {"type": "String"}, "appVersionNew": {"type": "String"}}},
+    "installer_info_package": "Paket: {appPackage}",
+    "@installer_info_package" : {"placeholders": {"appPackage": {"type": "String"}}},
+    "installer_installing": "Menginstal aplikasi {appTitle}...",
+    "@installer_installing" : {"placeholders": {"appTitle": {"type": "String"}}},
+    "installer_installed": "Aplikasi {appTitle} berhasil diinstal",
+    "@installer_installed" : {"placeholders": {"appTitle": {"type": "String"}}},
+    "installer_fail": "Aplikasi {appTitle} tidak dipasang",
+    "@installer_fail" : {"placeholders": {"appTitle": {"type": "String"}}},
+    "installer_error_nomsg": "Instalasi telah gagal, tetapi tidak ada kesalahan yang terjadi",
+    "installer_btn_starting": "Memulai...",
+    "installer_btn_loading": "Memuat...",
+    "installer_btn_cancel": "Batal",
+    "installer_btn_install": "Instal",
+    "installer_btn_reinstall": "Instal ulang",
+    "installer_btn_update": "Perbarui",
+    "installer_btn_downgrade": "Turunkan versi (tidak aman)",
+    "installer_btn_dismiss": "Memberhentikan",
+    "installer_btn_open": "Buka aplikasi",
+    "installer_btn_checkbox_shortcut": "Buat pintasan desktop",
+
+
+    "android_permission_none": "Tidak diperlukan izin",
+    "android_permission_admin": "Atur perangkat sebagai administrator",
+    "android_permission_admin_brick": "Nonaktifkan atau setel ulang perangkat dari jarak jauh",
+    "android_permission_admin_lock": "Mengunci perangkat dari jarak jauh",
+    "android_permission_storage": "File dan media",
+    "android_permission_microphone": "Mikropon",
+    "android_permission_camera": "Kamera",
+    "android_permission_location": "Lokasi",
+    "android_permission_phone": "Telepon",
+    "android_permission_call_log": "Log panggilan",
+    "android_permission_sms": "Pesan",
+    "android_permission_contacts": "Kontak",
+    "android_permission_calendar": "Kalender",
+    "android_permission_activity_recognition": "Aktivitas fisik",
+    "android_permission_sensors": "Sensor perangkat",
+    "android_permission_sensors_body": "Sensor tubuh",
+    "android_permission_nearby_devices": "Temukan perangkat terdekat"
+}
