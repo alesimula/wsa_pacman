@@ -26,7 +26,7 @@
     "status_arrested": "停止",
     "status_arrested_desc": "WSA が停止しています。",
     "status_offline": "オフライン",
-    "status_offline_desc": "WSA の接続を確立できませんでした: 開発者モードか USB デバッグが無効になっているか、間違ったポートが指定されています。",
+    "status_offline_desc": "WSA の接続を確立できませんでした: 開発者モードや USB デバッグが無効になっているか、間違ったポートが指定されています。",
     "status_disconnected": "切断",
     "status_disconnected_desc": "WSA の接続が不明な理由で確率できませんでした。",
     "status_connected": "接続完了",
