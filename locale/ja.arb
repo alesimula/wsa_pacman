@@ -18,7 +18,7 @@
     "status_unsupported": "WSA がインストールされていません。",
     "status_unsupported_desc": "{windowsVersion} を使用しています。Windows にWSA がインストールされていません。このアプリケーションを使用するには WSA が必要で、Windows 11 のみ正式にサポートされています。",
     "status_missing": "WSA がインストールされていません。",
-    "status_missing_desc": "WSA が見つかりません。このアプリケーションはWSAが必要です。Microsoft StoreからAndroid™️ 用 Windows サブシステムをインストールしてください。",
+    "status_missing_desc": "WSA が見つかりません。このアプリケーションを使用するにはWSAが必要です。Microsoft StoreからAndroid™️ 用 Windows サブシステムをインストールしてください。",
     "status_unknown": "接続中",
     "status_unknown_desc": "WSA との接続が確立されるのを待っています...",
     "status_starting": "起動中",
