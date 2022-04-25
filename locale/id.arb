@@ -6,7 +6,7 @@
 
     "@@locale": "id",
     "@locale_desc": {"description": "Bahasa Indonesia (Indonesian) [id_ID]"},
-    "locale_desc": "Indonesian",
+    "locale_desc": "Bahasa Indonesia",
     "@locale_system": {"description": "Menjelaskan lokal sistem"},
     "locale_system": "Sistem",
 
