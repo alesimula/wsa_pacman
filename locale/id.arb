@@ -65,9 +65,9 @@
     "theme_mica_full": "Penuh",
     "theme_mica_partial": "Sebagian",
     "theme_icon_adaptive": "Ikon adaptif Bentuk",
-    "theme_icon_adaptive_squircle": "Squircle",
-    "theme_icon_adaptive_circle": "Circle",
-    "theme_icon_adaptive_rounded_square": "Rounded Square",
+    "theme_icon_adaptive_squircle": "Kerucut",
+    "theme_icon_adaptive_circle": "Lingkaran",
+    "theme_icon_adaptive_rounded_square": "Persegi Bulat",
 
 
     "installer_message": "Apakah Anda ingin menginstal aplikasi ini?",
