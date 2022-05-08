@@ -91,7 +91,7 @@
     "installer_btn_reinstall": "重新安裝",
     "installer_btn_update": "更新",
     "installer_btn_downgrade": "降級（不安全）",
-    "installer_btn_dismiss": "解除",
+    "installer_btn_dismiss": "完成",
     "installer_btn_open": "開啟應用程式",
     "installer_btn_checkbox_shortcut": "建立桌面快捷方式",
 
@@ -104,7 +104,7 @@
     "android_permission_microphone": "麥克風",
     "android_permission_camera": "相機",
     "android_permission_location": "位置",
-    "android_permission_phone": "手機",
+    "android_permission_phone": "電話",
     "android_permission_call_log": "通訊記錄",
     "android_permission_sms": "訊息",
     "android_permission_contacts": "聯絡人",
