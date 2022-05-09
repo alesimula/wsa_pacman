@@ -84,7 +84,7 @@
     "installer_btn_reinstall": "重新安装",
     "installer_btn_update": "更新",
     "installer_btn_downgrade": "降级（不安全）",
-    "installer_btn_dismiss": "解除",
+    "installer_btn_dismiss": "完成",
     "installer_btn_open": "打开应用程序",
     "installer_btn_checkbox_shortcut": "创建桌面快捷方式",
 
