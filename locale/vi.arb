@@ -53,12 +53,12 @@
     "settings_port": "Cổng WSA (Port)",
     "settings_ip": "Địa chỉ IP WSA",
     "settings_autostart": "Tự động khởi động WSA trước khi cài đặt",
-    "settings_language": "Ngôn Ngữ",
-    "settings_option_generic_system": "Hệ Thống",
+    "settings_language": "Ngôn ngữ",
+    "settings_option_generic_system": "Hệ thống",
     "settings_option_generic_disabled": "Vô hiệu hóa",
 
 
-    "theme_mode": "Giao Diện",
+    "theme_mode": "Giao diện",
     "theme_mode_dark": "Tối",
     "theme_mode_light": "Sáng",
     "theme_mica": "Độ trong suốt của cửa sổ",
