@@ -1,0 +1,116 @@
+{
+    "@@README_1": "The en.arb file is a template for other files",
+    "@@README_2": "For other languages, entries starting with @ and @@ are not needed, except @@locale",
+    "@@README_3": "Country-specific locales (eg. 'en_GB') need a fallback locale (eg. 'en') to exist",
+
+
+    "@@locale": "vi",
+    "@locale_desc": {"description": "English (US) [en_US]"},
+    "locale_desc": "Tiếng Việt",
+    "@locale_system": {"description": "Describes the system locale"},
+    "locale_system": "Hệ thống",
+
+
+    "btn_boot": "Chế độ",
+    "btn_switch_on": "Bật",
+    "btn_switch_off": "Tắt",
+
+
+    "@status_subtext_winver_10": {"description": "Only used inside 'status_unsupported_desc', modify taking this in consideration"},
+    "status_subtext_winver_10": "Windows 10",
+    "@status_subtext_winver_older": {"description": "Only used inside 'status_unsupported_desc', modify taking this in consideration"},
+    "status_subtext_winver_older": "Phiên bản Windows cũ hơn",
+
+
+    "status_unsupported": "WSA chưa được cài đặt",
+    "status_unsupported_desc": "{windowsVersion} phát hiện và không tìm thấy WSA; ứng dụng này phụ thuộc vào WSA, chỉ được hỗ trợ chính thức trên Windows 11",
+    "@status_unsupported_desc" : {"placeholders": {"windowsVersion": {"type": "String"}}},
+    "status_missing": "WSA chưa được cài đặt",
+    "status_missing_desc": "Không tìm thấy WSA; ứng dụng này phụ thuộc vào WSA, vui lòng cài đặt Windows Subsystem for Android (hoặc Amazon Appstore) từ Microsoft Store",
+    "status_unknown": "Đang kết nối",
+    "status_unknown_desc": "Đang đợi kết nối WSA được thiết lập...",
+    "status_starting": "Bắt đầu",
+    "status_starting_desc": "WSA đang bắt đầu, vui lòng chờ...",
+    "status_arrested": "Tắt",
+    "status_arrested_desc": "WSA đã bị tắt",
+    "status_offline": "Ngoại tuyến",
+    "status_offline_desc": "Không thể thiết lập kết nối với WSA: Chế độ nhà phát triển và gỡ lỗi USB đã bị tắt hoặc sai cổng (Port) được chỉ định",
+    "status_disconnected": "Đã ngắt kết nối",
+    "status_disconnected_desc": "Kết nối WSA không thể được thiết lập vì những lý do không xác định",
+    "status_connected": "Đã kết nối",
+    "status_connected_desc": "Kết nối thành công với WSA, tất cả các hệ thống đều hoạt động",
+
+
+    "screen_wsa": "Trình Quản Lý Cài Đặt - WSA",
+    "screen_settings": "Cài Đặt",
+
+
+    "wsa_manage": "Quản Lý Android",
+    "wsa_manage_app": "Quản lý ứng dụng",
+    "wsa_manage_settings": "Quản lý cài đặt",
+
+    
+    "settings_port": "Cổng WSA (Port)",
+    "settings_ip": "Địa chỉ IP WSA",
+    "settings_autostart": "Tự động khởi động WSA trước khi cài đặt",
+    "settings_language": "Ngôn Ngữ",
+    "settings_option_generic_system": "Hệ Thống",
+    "settings_option_generic_disabled": "Vô hiệu hóa",
+
+
+    "theme_mode": "Giao Diện",
+    "theme_mode_dark": "Tối",
+    "theme_mode_light": "Sáng",
+    "theme_mica": "Độ trong suốt của cửa sổ",
+    "theme_mica_full": "Tất cả",
+    "theme_mica_partial": "Một phần nào đó",
+    "theme_icon_adaptive": "Biểu tượng icon",
+    "theme_icon_adaptive_squircle": "Hình vuông",
+    "theme_icon_adaptive_circle": "Vòng tròn",
+    "theme_icon_adaptive_rounded_square": "Hình vuông (góc tròn)",
+
+
+    "installer_message": "Bạn có muốn cài đặt ứng dụng này không?",
+    "installer_info_version": "Phiên bản: {appVersion}",
+    "@installer_info_version" : {"placeholders": {"appVersion": {"type": "String"}}},
+    "installer_info_version_change": "Phiên bản: {appVersionOld} => {appVersionNew}",
+    "@installer_info_version_change" : {"placeholders": {"appVersionOld": {"type": "String"}, "appVersionNew": {"type": "String"}}},
+    "installer_info_package": "Gói: {appPackage}",
+    "@installer_info_package" : {"placeholders": {"appPackage": {"type": "String"}}},
+    "installer_installing": "Cài đặt ứng dụng {appTitle}...",
+    "@installer_installing" : {"placeholders": {"appTitle": {"type": "String"}}},
+    "installer_installed": "Ứng dụng {appTitle} đã được cài đặt thành công",
+    "@installer_installed" : {"placeholders": {"appTitle": {"type": "String"}}},
+    "installer_fail": "Ứng dụng {appTitle} chưa được cài đặt",
+    "@installer_fail" : {"placeholders": {"appTitle": {"type": "String"}}},
+    "installer_error_nomsg": "Cài đặt không thành công, nhưng không có lỗi nào được đưa ra",
+    "installer_btn_starting": "Đang bắt đầu...",
+    "installer_btn_loading": "Đang tải...",
+    "installer_btn_cancel": "Hủy bỏ",
+    "installer_btn_install": "Cài đặt",
+    "installer_btn_reinstall": "Cài đặt lại",
+    "installer_btn_update": "Cập nhật",
+    "installer_btn_downgrade": "Hạ cấp (không an toàn)",
+    "installer_btn_dismiss": "Bỏ qua",
+    "installer_btn_open": "Chạy ứng dụng",
+    "installer_btn_checkbox_shortcut": "Tạo lối tắt trên màn hình",
+
+
+    "android_permission_none": "Không cần quyền",
+    "android_permission_admin": "Quản lý thiết bị với tư cách Quản Trị Viên",
+    "android_permission_admin_brick": "Vô hiệu hóa hoặc đặt lại thiết bị từ xa",
+    "android_permission_admin_lock": "Khóa thiết bị từ xa",
+    "android_permission_storage": "Tập tin và phương tiện",
+    "android_permission_microphone": "Microphone",
+    "android_permission_camera": "Máy ảnh",
+    "android_permission_location": "Vị trí",
+    "android_permission_phone": "Điện thoại",
+    "android_permission_call_log": "Nhật ký cuộc gọi",
+    "android_permission_sms": "Tin nhắn",
+    "android_permission_contacts": "Danh bạn",
+    "android_permission_calendar": "Lịch",
+    "android_permission_activity_recognition": "Hoạt động thể chất",
+    "android_permission_sensors": "Cảm biến thiết bị",
+    "android_permission_sensors_body": "Cảm biến cơ thể",
+    "android_permission_nearby_devices": "Xác định vị trí các thiết bị lân cận"
+}
