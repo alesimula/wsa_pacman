@@ -1,0 +1,116 @@
+{
+    "@@README_1": "The en.arb file is a template for other files",
+    "@@README_2": "For other languages, entries starting with @ and @@ are not needed, except @@locale",
+    "@@README_3": "Country-specific locales (eg. 'en_GB') need a fallback locale (eg. 'en') to exist",
+
+
+    "@@locale": "ca",
+    "@locale_desc": {"description": "Català [ca]"},
+    "locale_desc": "Català",
+    "@locale_system": {"description": "Describes the system locale"},
+    "locale_system": "Sistema",
+
+
+    "btn_boot": "Engegar",
+    "btn_switch_on": "Encès",
+    "btn_switch_off": "Apagat",
+
+
+    "@status_subtext_winver_10": {"description": "Only used inside 'status_unsupported_desc', modify taking this in consideration"},
+    "status_subtext_winver_10": "Windows 10",
+    "@status_subtext_winver_older": {"description": "Only used inside 'status_unsupported_desc', modify taking this in consideration"},
+    "status_subtext_winver_older": "Versions de Windows més antigues",
+
+
+    "status_unsupported": "WSA no està suportat",
+    "status_unsupported_desc": "Estàs executant {windowsVersion} però no s'ha trobat WSA; aquesta aplicació necessita WSA, que sols està suportada en Windows 11",
+    "@status_unsupported_desc" : {"placeholders": {"windowsVersion": {"type": "String"}}},
+    "status_missing": "WSA no està instal·lat",
+    "status_missing_desc": "No s'ha trobat WSA; aquesta aplicació depèn en WSA, per favor, instal·la el Subsistema de Windows per a Android (Windows Subsystem for Android) o la Appstore de Amazon des de la tenda de Microsoft",
+    "status_unknown": "Connectant",
+    "status_unknown_desc": "Esperant a establir la connexió amb WSA...",
+    "status_starting": "Iniciant",
+    "status_starting_desc": "WSA s'està iniciant, per favor espera...",
+    "status_arrested": "Cancel·lat",
+    "status_arrested_desc": "WSA està desconnectat",
+    "status_offline": "Desconnectat",
+    "status_offline_desc": "No s'ha pogut establir una connexió amb WSA: o l'USB debugging està desconnectat, o ho està el mode de desenvolupador, o el port indicat és incorrecte",
+    "status_disconnected": "Desconnectat",
+    "status_disconnected_desc": "No s'ha pogut establir una connexió amb WSA per motius desconeguts",
+    "status_connected": "Connectat",
+    "status_connected_desc": "S'ha connectat a WSA amb èxit, tots els serveis funcionant correctament",
+
+
+    "screen_wsa": "Administrador de Paquets de WSA",
+    "screen_settings": "Configuració",
+
+
+    "wsa_manage": "Administració d'Android",
+    "wsa_manage_app": "Administrar aplicacions",
+    "wsa_manage_settings": "Administrar configuració",
+
+    
+    "settings_port": "Port WSA",
+    "settings_ip": "Direcció IP de WSA",
+    "settings_autostart": "Iniciar WSA abans d'instal·lar",
+    "settings_language": "Idioma",
+    "settings_option_generic_system": "Sistema",
+    "settings_option_generic_disabled": "Deshabilitat",
+
+
+    "theme_mode": "Mode del tema",
+    "theme_mode_dark": "Obscur",
+    "theme_mode_light": "Clar",
+    "theme_mica": "Transparència de la finestra",
+    "theme_mica_full": "Completa",
+    "theme_mica_partial": "Parcial",
+    "theme_icon_adaptive": "Forma de les icones adaptives",
+    "theme_icon_adaptive_squircle": "Squircle",
+    "theme_icon_adaptive_circle": "Cercle",
+    "theme_icon_adaptive_rounded_square": "Quadrat rodonejat",
+
+
+    "installer_message": "Vols instal·lar aquesta aplicació?",
+    "installer_info_version": "Versió: {appVersion}",
+    "@installer_info_version" : {"placeholders": {"appVersion": {"type": "String"}}},
+    "installer_info_version_change": "Versió: {appVersionOld} => {appVersionNew}",
+    "@installer_info_version_change" : {"placeholders": {"appVersionOld": {"type": "String"}, "appVersionNew": {"type": "String"}}},
+    "installer_info_package": "Paquet: {appPackage}",
+    "@installer_info_package" : {"placeholders": {"appPackage": {"type": "String"}}},
+    "installer_installing": "Instal·lant {appTitle}...",
+    "@installer_installing" : {"placeholders": {"appTitle": {"type": "String"}}},
+    "installer_installed": "{appTitle} s'ha instal·lat correctament",
+    "@installer_installed" : {"placeholders": {"appTitle": {"type": "String"}}},
+    "installer_fail": "{appTitle} no s'ha pogut instal·lar",
+    "@installer_fail" : {"placeholders": {"appTitle": {"type": "String"}}},
+    "installer_error_nomsg": "La instal·lació ha fallat, però no s'ha detectat cap error",
+    "installer_btn_starting": "Iniciant...",
+    "installer_btn_loading": "Carregant...",
+    "installer_btn_cancel": "Cancel·lar",
+    "installer_btn_install": "Instal·lar",
+    "installer_btn_reinstall": "Reinstal·lar",
+    "installer_btn_update": "Actualitzar",
+    "installer_btn_downgrade": "Baixar versió (insegur)",
+    "installer_btn_dismiss": "Tancar",
+    "installer_btn_open": "Obri app",
+    "installer_btn_checkbox_shortcut": "Crea una drecera a l'escriptori",
+
+
+    "android_permission_none": "No calen permisos",
+    "android_permission_admin": "Administrar dispositiu com a administrador",
+    "android_permission_admin_brick": "Deshabilita o reinicia dispositiu remot",
+    "android_permission_admin_lock": "Bloqueja el dispositiu remot",
+    "android_permission_storage": "Fitxers i mitjans",
+    "android_permission_microphone": "Micròfon",
+    "android_permission_camera": "Càmera",
+    "android_permission_location": "Ubicació",
+    "android_permission_phone": "Telèfon",
+    "android_permission_call_log": "Registres de cridades",
+    "android_permission_sms": "Missatges",
+    "android_permission_contacts": "Contactes",
+    "android_permission_calendar": "Calendari",
+    "android_permission_activity_recognition": "Activitat física",
+    "android_permission_sensors": "Sensors del dispositiu",
+    "android_permission_sensors_body": "Sensors corporals",
+    "android_permission_nearby_devices": "Localitzar dispositius propers"
+}
