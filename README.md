@@ -34,6 +34,27 @@ The app additionally provides a button to open Android settings and one to open 
   <summary>
   <ruby><p></ruby>
   
+## FAQ
+  </p>
+  </summary>
+
+  **Q:** WSA PacMan is always showing the Offline status, why is that?
+
+  **A:** First things first make sure WSA is installed (duh); Open the 'Windows Subsystem for Android™️ Settings' app, in the Developer tab and make sure the 'Developer mode' switch is enabled; inside manage developer settings, make sure the 'USB debugging' option is enabled.
+
+  Should all of the above fail, [try following this procedure]([sds](https://github.com/alesimula/wsa_pacman/issues/99#issuecomment-1288141314)); make sure to check the 'always allow' option.
+  ##
+
+  **Q:** Can i install the Play Store?
+
+  **A:** The play store is not _officially_ supported on WSA, and at the moment it is only possible to install it using an unofficial WSA build. I recommend installing the [Aurora Store](https://auroraoss.com/) instead, which is an unofficial Play Store client; but if you really want the Play Store and other Google apps, [check out this project](https://github.com/LSPosed/MagiskOnWSALocal).
+
+</details>
+
+<details>
+  <summary>
+  <ruby><p></ruby>
+  
 ## More screenshots
   </p>
   </summary>
