@@ -2,16 +2,16 @@
     "@@locale": "pl",
     "@locale_desc": {"description": "Polish (PL) [pl_PL]"},
     "locale_desc": "Polski",
-    "locale_system": "System",
+    "locale_system": "Systemowy",
 
 
     "btn_boot": "Włącz",
-    "btn_switch_on": "On",
-    "btn_switch_off": "Off",
+    "btn_switch_on": "Wł.",
+    "btn_switch_off": "Wył.",
 
     
     "status_subtext_winver_10": "Windows 10",
-    "status_subtext_winver_older": "Starsza Wersja Systemu Windows",
+    "status_subtext_winver_older": "Starsza wersja systemu Windows",
 
 
     "status_unsupported": "WSA nie jest zainstalowany",
@@ -20,7 +20,7 @@
     "status_missing_desc": "Nie znaleziono WSA; ta aplikacja jest zależna od WSA, zainstaluj Podsystem Windows dla systemu Android (lub Amazon Appstore) ze sklepu Microsoft Store",
     "status_unknown": "Łączenie",
     "status_unknown_desc": "Oczekiwanie na nawiązanie połączenia z WSA...",
-    "status_starting": "Uruchamiania",
+    "status_starting": "Uruchamianie",
     "status_starting_desc": "WSA uruchamia się, proszę czekać...",
     "status_arrested": "Zatrzymany",
     "status_arrested_desc": "WSA jest wyłączony",
@@ -32,7 +32,7 @@
     "status_connected_desc": "Pomyślnie połączono z WSA, wszystkie systemy działają",
 
 
-    "screen_wsa": "Menedżer Pakietów WSA",
+    "screen_wsa": "Menedżer pakietów WSA",
     "screen_settings": "Ustawienia",
 
 
@@ -45,7 +45,7 @@
     "settings_ip": "Adres IP WSA",
     "settings_autostart": "Autostart WSA przed instalacją",
     "settings_language": "Język",
-    "settings_option_generic_system": "System",
+    "settings_option_generic_system": "Systemowy",
     "settings_option_generic_disabled": "Wyłączone",
 
 
@@ -55,10 +55,10 @@
     "theme_mica": "Przezroczystość okna",
     "theme_mica_full": "Pełna",
     "theme_mica_partial": "Częściowa",
-    "theme_icon_adaptive": "Adaptacyjny kształt Ikon",
+    "theme_icon_adaptive": "Adaptacyjny kształt ikon",
     "theme_icon_adaptive_squircle": "Domyślny",
     "theme_icon_adaptive_circle": "Okrągły",
-    "theme_icon_adaptive_rounded_square": "Zaokrąglony Kwadrat",
+    "theme_icon_adaptive_rounded_square": "Zaokrąglony kwadrat",
 
 
     "installer_message": "Czy chcesz zainstalować tą aplikację?",
@@ -73,7 +73,7 @@
     "installer_btn_loading": "Wczytywanie...",
     "installer_btn_cancel": "Anuluj",
     "installer_btn_install": "Zainstaluj",
-    "installer_btn_reinstall": "Zainstaluj Ponownie",
+    "installer_btn_reinstall": "Zainstaluj ponownie",
     "installer_btn_update": "Aktualizuj",
     "installer_btn_downgrade": "Downgrade (niebezpieczny)",
     "installer_btn_dismiss": "Gotowe",

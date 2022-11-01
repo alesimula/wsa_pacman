@@ -79,7 +79,7 @@
     "@installer_info_package" : {"placeholders": {"appPackage": {"type": "String"}}},
     "installer_installing": "Installing application {appTitle}...",
     "@installer_installing" : {"placeholders": {"appTitle": {"type": "String"}}},
-    "installer_installed": "The application {appTitle} was successifully installed",
+    "installer_installed": "The application {appTitle} was successfully installed",
     "@installer_installed" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_fail": "The application {appTitle} was not installed",
     "@installer_fail" : {"placeholders": {"appTitle": {"type": "String"}}},
