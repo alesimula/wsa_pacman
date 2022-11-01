@@ -39,7 +39,7 @@ The app additionally provides a button to open Android settings and one to open 
 
   **A:** First things first make sure WSA is installed (duh); Open the 'Windows Subsystem for Android™️ Settings' app, in the Developer tab and make sure the 'Developer mode' switch is enabled; inside manage developer settings, make sure the 'USB debugging' option is enabled.
 
-  Should all of the above fail, [try following this procedure]([sds](https://github.com/alesimula/wsa_pacman/issues/99#issuecomment-1288141314)); make sure to check the 'always allow' option.
+  Should all of the above fail, [try following this procedure](https://github.com/alesimula/wsa_pacman/issues/99#issuecomment-1288141314); make sure to check the 'always allow' option.
   ##
 
   **Q:** Can i install the Play Store?
