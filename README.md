@@ -32,7 +32,8 @@ The app additionally provides a button to open Android settings and one to open 
 
 <details><summary><ruby><p></ruby>
 
-## FAQ </p></summary>
+## FAQ 
+</p></summary>
 
   **Q:** WSA PacMan is always showing the Offline status, why is that?
 
@@ -45,11 +46,12 @@ The app additionally provides a button to open Android settings and one to open 
 
   **A:** The play store is not _officially_ supported on WSA, and at the moment it is only possible to install it using an unofficial WSA build. I recommend installing the [Aurora Store](https://auroraoss.com/) instead, which is an unofficial Play Store client; but if you really want the Play Store and other Google apps, [check out this project](https://github.com/LSPosed/MagiskOnWSALocal).
 
-</details><details><summary><ruby><p></ruby>
+</details>
+
+<details><summary><ruby><p></ruby>
   
 ## More screenshots
-  </p>
-  </summary>
+  </p></summary>
 
   ![Installing](README/screenshots/installing.png?raw=true "Installing")
   ![Installed](README/screenshots/installed.png?raw=true "Installed")
