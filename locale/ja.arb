@@ -23,14 +23,14 @@
     "status_unknown_desc": "WSA との接続が確立されるのを待っています...",
     "status_starting": "起動中",
     "status_starting_desc": "WSA が起動しています。しばらくお待ちください...",
-    "status_arrested": "停止",
+    "status_arrested": "停止中",
     "status_arrested_desc": "WSA が停止しています。",
     "status_offline": "オフライン",
-    "status_offline_desc": "WSA の接続を確立できませんでした: 開発者モードや USB デバッグが無効になっているか、間違ったポートが指定されています。",
+    "status_offline_desc": "WSA との接続を確立できませんでした: 開発者モードや USB デバッグが無効になっているか、間違ったポートが指定されている可能性があります。",
     "status_disconnected": "切断",
-    "status_disconnected_desc": "WSA の接続が不明な理由で確率できませんでした。",
+    "status_disconnected_desc": "WSA との接続が不明な理由で確立できませんでした。",
     "status_connected": "接続完了",
-    "status_connected_desc": "WSA の接続ができました。現在、待機中です。",
+    "status_connected_desc": "WSA との接続ができました。現在、待機中です。",
 
 
     "screen_wsa": "WSA Package Manager",
