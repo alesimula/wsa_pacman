@@ -57,7 +57,7 @@ class WSAStatusAlert {
 }
 
 enum ConnectionStatus {
-  UNSUPPORTED, MISSING, UNKNOWN, ARRESTED, STARTING, OFFLINE, DISCONNECTED, CONNECTED
+  UNSUPPORTED, MISSING, UNKNOWN, ARRESTED, STARTING, OFFLINE, DISCONNECTED, CONNECTED, UNAUTHORIZED
 }
 extension on ConnectionStatus {
   static final Map<ConnectionStatus, WSAStatusAlert> _statusAlers = {
@@ -70,6 +70,7 @@ extension on ConnectionStatus {
     ConnectionStatus.OFFLINE: WSAStatusAlert(ConnectionStatus.OFFLINE, InfoBarSeverity.warning, (l)=>l.status_offline, (l)=>l.status_offline_desc),
     ConnectionStatus.DISCONNECTED: WSAStatusAlert(ConnectionStatus.DISCONNECTED, InfoBarSeverity.error, (l)=>l.status_disconnected, (l)=>l.status_disconnected_desc),
     ConnectionStatus.CONNECTED: WSAStatusAlert(ConnectionStatus.CONNECTED, InfoBarSeverity.success, (l)=>l.status_connected, (l)=>l.status_connected_desc),
+    ConnectionStatus.UNAUTHORIZED: WSAStatusAlert(ConnectionStatus.UNAUTHORIZED, InfoBarSeverity.warning, (l)=>l.status_unauthorized, (l)=>l.status_unauthorized_desc),
   };
 
   WSAStatusAlert get statusAlert => _statusAlers[this] ?? WSAStatusAlert(this, InfoBarSeverity.error, (l)=>"Unmapped status",
@@ -137,8 +138,11 @@ class WSAPeriodicConnector {
         status = (status == ConnectionStatus.ARRESTED || status == ConnectionStatus.STARTING) && shouldWaitStart ? 
             ConnectionStatus.STARTING : ConnectionStatus.OFFLINE;
       else if (output.contains(RegExp('(^|\\n)(localhost|127.0.0.1):${GState.androidPort.$}\\s+host(\$|\\n|\\s)'))) {
-        await Process.run('${Env.TOOLS_DIR}\\adb.exe', ['disconnect', '127.0.0.1:${GState.androidPort.$}']);
-        _tryConnect();
+        reconnect();
+      }
+      else if (output.contains(RegExp('(^|\\n)(localhost|127.0.0.1):${GState.androidPort.$}\\s+unauthorized(\$|\\n|\\s)'))) {
+        status = ConnectionStatus.UNAUTHORIZED;
+        if (prevStatus != ConnectionStatus.UNAUTHORIZED) reconnect();
       }
       else {
         status = ConnectionStatus.CONNECTED;
@@ -158,12 +162,19 @@ class WSAPeriodicConnector {
     log("Connection status: ${status.name()}");
   }
 
+  static Future<void> reconnect() async {
+    await Process.run('${Env.TOOLS_DIR}\\adb.exe', ['disconnect', '127.0.0.1:${GState.androidPort.$}']);
+    await _tryConnect();
+  }
+
   static Future<void> _tryConnect() async {
     ProcessResult? process = await Process.run('${Env.TOOLS_DIR}\\adb.exe', ['connect', '127.0.0.1:${GState.androidPort.$}'])
       .timeout(const Duration(milliseconds:200), onTimeout: () => Future.value(ProcessResult(-1, -1, null, null)));
     if (process.stdout?.toString().contains(RegExp(r'(^|\n)(cannot|failed to) connect\s.*')) ?? true) 
       status = Env.WSA_INSTALLED ? (status == ConnectionStatus.ARRESTED || status == ConnectionStatus.STARTING) && shouldWaitStart ? 
           ConnectionStatus.STARTING : ConnectionStatus.OFFLINE : ConnectionStatus.DISCONNECTED;
+    else if (process.stdout?.toString().contains(RegExp(r'(^|\n)(cannot|failed to) authenticate\s.*')) ?? true) 
+      status = ConnectionStatus.UNAUTHORIZED;
     else status = ConnectionStatus.CONNECTED;
   }
 }

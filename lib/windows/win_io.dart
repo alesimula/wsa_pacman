@@ -188,7 +188,7 @@ class WinIO {
     LPWSTR lpFile = file.toNativeUtf16();
     LPWSTR lpParameters = param != null && param.isNotEmpty ? param.toNativeUtf16() : nullptr;
     try {
-      return ShellExecute(0, lpOperation, lpFile, lpParameters, nullptr, SW_HIDE) > 32;
+      return ShellExecute(0, lpOperation, lpFile, lpParameters, nullptr, SW_SHOWDEFAULT) > 32;
     } 
     finally {
       free(lpOperation);

@@ -71,6 +71,7 @@ class _ScreenWSAState extends State<ScreenWSA> {
                 Text(connectionStatus.desc(lang)),
                 const SizedBox(width: 15.0),
                 if (connectionStatus.type == ConnectionStatus.ARRESTED) Button(child: Text(lang.btn_boot), onPressed: () => WSAUtils.launch())
+                else if (connectionStatus.type == ConnectionStatus.UNAUTHORIZED) Button(child: Text(lang.btn_auth), onPressed: () => WSAPeriodicConnector.reconnect())
               ]),
               isLong: true,
               severity: connectionStatus.severity,
@@ -88,7 +89,7 @@ class _ScreenWSAState extends State<ScreenWSA> {
             isButton: true,
             onPressed: connectionStatus.isDisconnected ? 
                 null : () => Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '${GState.ipAddress.of(context)}:${GState.androidPort.of(context)}', 
-                  'shell', r'am start com.android.settings/.Settings\$ManageApplicationsActivity']),
+                  'shell', r'am start -n com.android.settings/.Settings\$ManageApplicationsActivity']),
           ),
           smallSpacer,
           FluentCard(
