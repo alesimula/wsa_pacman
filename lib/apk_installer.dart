@@ -36,8 +36,8 @@ class ApkInstaller extends StatefulWidget {
 
   static void installApk(String apkFile, String ipAddress, int port, AppLocalizations lang, [bool downgrade = false]) async {
     log("INSTALLING \"$apkFile\" on on $ipAddress:$port...");
-    var installation = Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'install', if (downgrade) '-r', if (downgrade) '-d', apkFile])
-      .timeout(const Duration(seconds: 30)).onError((error, stackTrace) => ProcessResult(-1, -1, null, null));
+    var installation = ADBUtils.installToAddress(ipAddress, port, apkFile, downgrade: downgrade)
+      .timeout(const Duration(seconds: 30)).defaultError();
     GState.apkInstallState.update((_) => InstallState.INSTALLING);
     var result = await installation;
     log("EXIT CODE: ${result.exitCode}");

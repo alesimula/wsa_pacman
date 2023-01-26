@@ -8,6 +8,7 @@ import 'dart:typed_data';
 import 'package:archive/archive_io.dart';
 import 'package:shared_value/shared_value.dart';
 import 'package:wsa_pacman/io/isolate_runner.dart';
+import 'package:wsa_pacman/utils/wsa_utils.dart';
 import 'package:wsa_pacman/windows/nt_io.dart';
 import 'package:wsa_pacman/windows/win_io.dart';
 import 'package:wsa_pacman/windows/win_path.dart';
@@ -198,7 +199,7 @@ class ApkReader extends IsolateRunner<String, APK_READER_FLAGS> {
     String ipAddress = await GState.ipAddress.whenReady();
     int port = await GState.androidPort.whenReady();
 
-    return await Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'shell', 'dumpsys package $package']).then((result) {
+    return await ADBUtils.shellToAddress(ipAddress, port, 'dumpsys package $package').then((result) {
       //cmd package dump
       var verMatch = RegExp(r'(\n|\s|^)versionCode=([0-9]*)[^\n]*(\n([^\s\n]*\s)*versionName=([^\n\s_$]*))?').firstMatch(result.stdout.toString());
       int? oldVersionCode = int.tryParse(verMatch?.group(2) ?? "");

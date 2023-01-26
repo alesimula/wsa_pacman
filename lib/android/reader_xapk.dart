@@ -16,6 +16,7 @@ import 'package:wsa_pacman/io/isolate_runner.dart';
 import 'package:wsa_pacman/main.dart';
 import 'package:wsa_pacman/utils/misc_utils.dart';
 import 'package:wsa_pacman/proto/manifest_xapk.pb.dart';
+import 'package:wsa_pacman/utils/wsa_utils.dart';
 import 'package:wsa_pacman/windows/win_io.dart';
 import 'package:wsa_pacman/windows/win_path.dart';
 import 'package:path/path.dart' as path;
@@ -59,10 +60,9 @@ class XapkReader extends IsolateRunner<String, APK_READER_FLAGS> {
       final tempName = '${path.basename(workingDir)}@${index++}';
       final resourceName = path.basename(exp.installPath);
       final resourceDir = '${exp.installPath.startsWith('/') ? '' : '/sdcard/'}${path.dirname(exp.installPath)}';
-      yield Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'push', exp.file, '/sdcard/$tempName'], workingDirectory: workingDir)
+      yield ADBUtils.pushToAddress(ipAddress, port, exp.file, '/sdcard/$tempName', workDir: workingDir)
           .timeout(const Duration(seconds: 30)).then((_) =>
-          Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'shell',
-              'mkdir -p "$resourceDir"; cd "$resourceDir"; mv /sdcard/$tempName ./$resourceName'], workingDirectory: workingDir)
+          ADBUtils.shellToAddress(ipAddress, port, 'mkdir -p "$resourceDir"; cd "$resourceDir"; mv /sdcard/$tempName ./$resourceName')
               .timeout(const Duration(seconds: 30)));
     }
   }());
@@ -70,8 +70,8 @@ class XapkReader extends IsolateRunner<String, APK_READER_FLAGS> {
   static void installXApk(String workingDir /* tempDir */, List<String> apkFiles, List<ManifestXapk_ApkExpansion> expansions, String ipAddress, int port, AppLocalizations lang, FileDisposeQueue disposeLock, [bool downgrade = false]) async {
     if (apkFiles.isNotEmpty) log("INSTALLING \"${apkFiles.first}\" on on $ipAddress:$port...");
     disposeLock.clear();
-    var installation = Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '$ipAddress:$port', 'install-multiple', if (downgrade) '-r', if (downgrade) '-d', ...apkFiles], workingDirectory: workingDir)
-      .timeout(const Duration(seconds: 30)).onError((error, stackTrace) => ProcessResult(-1, -1, null, null));
+    var installation = ADBUtils.installMultipleToAddress(ipAddress, port, apkFiles, downgrade: downgrade, workDir: workingDir)
+      .processTimeout(const Duration(seconds: 30));
     final resources = copyApkResources(expansions, workingDir, ipAddress, port);
     GState.apkInstallState.update((_) => InstallState.INSTALLING);
 

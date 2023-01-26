@@ -88,8 +88,8 @@ class _ScreenWSAState extends State<ScreenWSA> {
             content: Text(lang.wsa_manage_app),
             isButton: true,
             onPressed: connectionStatus.isDisconnected ? 
-                null : () => Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '${GState.ipAddress.of(context)}:${GState.androidPort.of(context)}', 
-                  'shell', r'am start -n com.android.settings/.Settings\$ManageApplicationsActivity']),
+                null : () => ADBUtils.shellToAddress(GState.ipAddress.of(context), GState.androidPort.of(context), 
+                  r'am start -n com.android.settings/.Settings\$ManageApplicationsActivity'),
           ),
           smallSpacer,
           FluentCard(
@@ -97,8 +97,8 @@ class _ScreenWSAState extends State<ScreenWSA> {
             content: Text(lang.wsa_manage_settings),
             isButton: true,
             onPressed: connectionStatus.isDisconnected ?
-                null : () => Process.run('${Env.TOOLS_DIR}\\adb.exe', ['-s', '${GState.ipAddress.of(context)}:${GState.androidPort.of(context)}', 
-                  'shell', r'am start com.android.settings/.Settings']),
+                null : () => ADBUtils.shellToAddress(GState.ipAddress.of(context), GState.androidPort.of(context), 
+                  r'am start com.android.settings/.Settings'),
           )
 
         ],

@@ -131,7 +131,7 @@ class WSAPeriodicConnector {
     }
 
     final prevStatus = status;
-    final process = await Process.run('${Env.TOOLS_DIR}\\adb.exe', ['devices']);
+    final process = await ADBUtils.devices();
     final output = process.stdout.toString();
     if (output.contains(RegExp('(^|\\n)(localhost|127.0.0.1):${GState.androidPort.$}\\s+'))) {
       if (output.contains(RegExp('(^|\\n)(localhost|127.0.0.1):${GState.androidPort.$}\\s+offline(\$|\\n|\\s)')))
@@ -163,13 +163,12 @@ class WSAPeriodicConnector {
   }
 
   static Future<void> reconnect() async {
-    await Process.run('${Env.TOOLS_DIR}\\adb.exe', ['disconnect', '127.0.0.1:${GState.androidPort.$}']);
+    await ADBUtils.disconnectWSA();
     await _tryConnect();
   }
 
   static Future<void> _tryConnect() async {
-    ProcessResult? process = await Process.run('${Env.TOOLS_DIR}\\adb.exe', ['connect', '127.0.0.1:${GState.androidPort.$}'])
-      .timeout(const Duration(milliseconds:200), onTimeout: () => Future.value(ProcessResult(-1, -1, null, null)));
+    ProcessResult? process = await ADBUtils.connectWSA().processTimeout(const Duration(milliseconds: 200));
     if (process.stdout?.toString().contains(RegExp(r'(^|\n)(cannot|failed to) connect\s.*')) ?? true) 
       status = Env.WSA_INSTALLED ? (status == ConnectionStatus.ARRESTED || status == ConnectionStatus.STARTING) && shouldWaitStart ? 
           ConnectionStatus.STARTING : ConnectionStatus.OFFLINE : ConnectionStatus.DISCONNECTED;
