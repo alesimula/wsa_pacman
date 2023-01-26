@@ -13,6 +13,7 @@
 
     "btn_boot": "Turn on",
     "btn_auth": "Reauthenticate",
+    "btn_dev_settings": "Developer options",
     "btn_switch_on": "On",
     "btn_switch_off": "Off",
 
@@ -27,7 +28,7 @@
     "status_unsupported_desc": "{windowsVersion} detected and WSA not found; this application depends on WSA, which is only officially supported on Windows 11",
     "@status_unsupported_desc" : {"placeholders": {"windowsVersion": {"type": "String"}}},
     "status_unauthorized": "Unauthorized",
-    "status_unauthorized_desc": "Debugging authorization was refused or revoked",
+    "status_unauthorized_desc": "Debugging authorization was dismissed or revoked; press the first button, select 'always allow', then click on 'allow'; If no popup appears, open developer options and disable and re-enable 'USB debugging'",
     "status_missing": "WSA not installed",
     "status_missing_desc": "WSA not found; this application depends on WSA, please install Windows Subsystem for Android (or the Amazon Appstore) from the Microsoft Store",
     "status_unknown": "Connecting",

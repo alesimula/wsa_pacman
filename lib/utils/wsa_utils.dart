@@ -10,6 +10,8 @@ import '../utils/regexp_utils.dart';
 class WSAUtils {
   static bool launch([String? param]) => WinIO.run(ShellOp.OPEN, "shell:appsFolder\\${Env.WSA_INFO.familyName}!${Env.WSA_INFO.clientID}", param);
   static bool launchApp(String package) => launch("/launch wsa://$package");
+  static bool launchSettings() => launchApp("com.android.settings");
+  static bool launchDeveloperSettings() => launch("/deeplink wsa-client://developer-settings");
   static bool launchSystem() => launchApp("android.system");
 }
 

@@ -54,6 +54,8 @@ class WSAStatusAlert {
 
   bool get isConnected => type == ConnectionStatus.CONNECTED;
   bool get isDisconnected => type != ConnectionStatus.CONNECTED;
+  bool get isPoweredOn => isConnected || type == ConnectionStatus.DISCONNECTED 
+    || type == ConnectionStatus.OFFLINE || type == ConnectionStatus.UNAUTHORIZED;
 }
 
 enum ConnectionStatus {
@@ -70,7 +72,7 @@ extension on ConnectionStatus {
     ConnectionStatus.OFFLINE: WSAStatusAlert(ConnectionStatus.OFFLINE, InfoBarSeverity.warning, (l)=>l.status_offline, (l)=>l.status_offline_desc),
     ConnectionStatus.DISCONNECTED: WSAStatusAlert(ConnectionStatus.DISCONNECTED, InfoBarSeverity.error, (l)=>l.status_disconnected, (l)=>l.status_disconnected_desc),
     ConnectionStatus.CONNECTED: WSAStatusAlert(ConnectionStatus.CONNECTED, InfoBarSeverity.success, (l)=>l.status_connected, (l)=>l.status_connected_desc),
-    ConnectionStatus.UNAUTHORIZED: WSAStatusAlert(ConnectionStatus.UNAUTHORIZED, InfoBarSeverity.warning, (l)=>l.status_unauthorized, (l)=>l.status_unauthorized_desc),
+    ConnectionStatus.UNAUTHORIZED: WSAStatusAlert(ConnectionStatus.UNAUTHORIZED, InfoBarSeverity.warning, (l)=>l.status_unauthorized, (l)=>'${l.status_unauthorized_desc}\n'),
   };
 
   WSAStatusAlert get statusAlert => _statusAlers[this] ?? WSAStatusAlert(this, InfoBarSeverity.error, (l)=>"Unmapped status",
@@ -142,7 +144,7 @@ class WSAPeriodicConnector {
       }
       else if (output.contains(RegExp('(^|\\n)(localhost|127.0.0.1):${GState.androidPort.$}\\s+unauthorized(\$|\\n|\\s)'))) {
         status = ConnectionStatus.UNAUTHORIZED;
-        if (prevStatus != ConnectionStatus.UNAUTHORIZED) reconnect();
+        if (prevStatus == ConnectionStatus.UNKNOWN) reconnect();
       }
       else {
         status = ConnectionStatus.CONNECTED;

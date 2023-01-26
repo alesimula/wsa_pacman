@@ -69,9 +69,15 @@ class _ScreenWSAState extends State<ScreenWSA> {
               title: Text(connectionStatus.title(lang)),
               content: Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
                 Text(connectionStatus.desc(lang)),
-                const SizedBox(width: 15.0),
-                if (connectionStatus.type == ConnectionStatus.ARRESTED) Button(child: Text(lang.btn_boot), onPressed: () => WSAUtils.launch())
-                else if (connectionStatus.type == ConnectionStatus.UNAUTHORIZED) Button(child: Text(lang.btn_auth), onPressed: () => WSAPeriodicConnector.reconnect())
+                if (connectionStatus.type == ConnectionStatus.ARRESTED) ...[
+                  const SizedBox(width: 15.0),
+                  Button(child: Text(lang.btn_boot), onPressed: () => WSAUtils.launch())
+                ]
+                else if (connectionStatus.type == ConnectionStatus.UNAUTHORIZED) ...[
+                  Button(child: Text(lang.btn_auth), onPressed: () => WSAPeriodicConnector.reconnect()),
+                  const SizedBox(width: 15.0),
+                  Button(child: Text(lang.btn_dev_settings), onPressed: () => WSAUtils.launchDeveloperSettings())
+                ],
               ]),
               isLong: true,
               severity: connectionStatus.severity,
@@ -97,7 +103,8 @@ class _ScreenWSAState extends State<ScreenWSA> {
             content: Text(lang.wsa_manage_settings),
             isButton: true,
             onPressed: connectionStatus.isDisconnected ?
-                null : () => ADBUtils.shellToAddress(GState.ipAddress.of(context), GState.androidPort.of(context), 
+                connectionStatus.isPoweredOn ? () => WSAUtils.launchSettings() : null : 
+                () => ADBUtils.shellToAddress(GState.ipAddress.of(context), GState.androidPort.of(context), 
                   r'am start com.android.settings/.Settings'),
           )
 
