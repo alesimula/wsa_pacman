@@ -6,6 +6,8 @@
 
 
     "btn_boot": "Włącz",
+    "btn_auth": "Ponownie uwierzytelnij",
+    "btn_dev_settings": "Opcje dla programistów",
     "btn_switch_on": "Wł.",
     "btn_switch_off": "Wył.",
 
@@ -16,6 +18,8 @@
 
     "status_unsupported": "WSA nie jest zainstalowany",
     "status_unsupported_desc": "Wykryto {windowsVersion} i nie znaleziono WSA; ta aplikacja jest zależna od WSA, który jest oficjalnie wspierany tylko w systemie Windows 11",
+    "status_unauthorized": "Nieupoważniony",
+    "status_unauthorized_desc": "Autoryzacja debugowania została odrzucona lub cofnięta; naciśnij pierwszy przycisk, wybierz 'zawsze zezwalaj' i kliknij 'zezwól'; jeśli nie pojawi się okno dialogowe, otwórz opcje dla programistów i wyłącz i włącz ponownie 'debugowanie USB'",
     "status_missing": "WSA nie jest zainstalowany",
     "status_missing_desc": "Nie znaleziono WSA; ta aplikacja jest zależna od WSA, zainstaluj Podsystem Windows dla systemu Android (lub Amazon Appstore) ze sklepu Microsoft Store",
     "status_unknown": "Łączenie",

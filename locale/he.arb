@@ -11,6 +11,8 @@
 
 
     "btn_boot": "הפעל",
+    "btn_auth": "אימות מחדש",
+    "btn_dev_settings": "אפשרויות מפתח",
     "btn_switch_on": "פועל",
     "btn_switch_off": "כבוי",
 
@@ -20,6 +22,8 @@
 
     "status_unsupported": "WSA לא מותקן",
     "status_unsupported_desc": "זוהתה מערכת הפעלה {windowsVersion} WSA ולא נמצא; תוכנה זו תלויה ב WSA, אשר נתמך רשמית רק ב-Windows 11.",
+    "status_unauthorized": "לא מאושר",
+    "status_unauthorized_desc": "האימות לפיתוח נדחה או בוטל; לחץ על הכפתור הראשון, בחר תמיד מאשר ולחץ על מאשר; אם לא מופיע חלון קופץ, פתח אפשרויות מפתח וכבה ואפס הפעלה של ניפוי USB",
     "status_missing": "WSA לא מותקן",
     "status_missing_desc": "WSA לא נמצא; תוכנה זו תלויה ב-WSA, התקן את תת-המערכת של וינדוס עבור Android (לדוגמה מ-Microsoft Store)",
     "status_unknown": "מתחבר",

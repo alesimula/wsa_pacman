@@ -7,6 +7,8 @@
 
 
     "btn_boot": "オンにする",
+    "btn_auth": "再認証",
+    "btn_dev_settings": "開発者オプション",
     "btn_switch_on": "オン",
     "btn_switch_off": "オフ",
 
@@ -17,6 +19,8 @@
 
     "status_unsupported": "WSA がインストールされていません。",
     "status_unsupported_desc": "{windowsVersion} を使用しています。Windows にWSA がインストールされていません。このアプリケーションを使用するには WSA が必要で、Windows 11 のみ正式にサポートされています。",
+    "status_unauthorized": "未認証",
+    "status_unauthorized_desc": "デバッグ認証は拒否されたか、取り消されました。最初のボタンを押し、「常に許可」を選択し、「許可」をクリックしてください。ポップアップが表示されない場合は、開発者オプションを開き、「USBデバッグ」を無効にして再度有効にしてください。",
     "status_missing": "WSA がインストールされていません。",
     "status_missing_desc": "WSA が見つかりません。このアプリケーションを使用するにはWSAが必要です。Microsoft StoreからAndroid™️ 用 Windows サブシステムをインストールしてください。",
     "status_unknown": "接続中",

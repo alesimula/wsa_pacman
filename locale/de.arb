@@ -11,6 +11,8 @@
 
 
     "btn_boot": "Starten",
+    "btn_auth": "Erneut authentifizieren",
+    "btn_dev_settings": "Entwickleroptionen",
     "btn_switch_on": "An",
     "btn_switch_off": "Aus",
 
@@ -21,6 +23,8 @@
 
     "status_unsupported": "WSA ist nicht installiert.",
     "status_unsupported_desc": "{windowsVersion} wurde erkannt und WSA nicht gefunden; diese Anwendung benötigt WSA welche nur auf Windows 11 offiziell verfügbar ist.",
+    "status_unauthorized": "Nicht autorisiert",
+    "status_unauthorized_desc": "Die Debugging-Autorisierung wurde abgelehnt oder widerrufen; drücken Sie die erste Schaltfläche, wählen Sie 'Immer zulassen' und klicken Sie dann auf 'Zulassen'; Wenn kein Popup angezeigt wird, öffnen Sie die Entwickleroptionen und deaktivieren und reaktivieren Sie die 'USB-Debugging'",
     "status_missing": "WSA ist nicht installiert.",
     "status_missing_desc": "WSA wurde nicht gefunden; diese Anwendung benötigt WSA, Windows Subsystem für Android (oder der Amazon AppStore) kann vom Microsoft Store bezogen werden.",
     "status_unknown": "Verbinde",

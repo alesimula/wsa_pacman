@@ -12,6 +12,8 @@
 
 
     "btn_boot": "Démarrer",
+    "btn_auth": "Réauthentifier",
+    "btn_dev_settings": "Options de développeur",
     "btn_switch_on": "On",
     "btn_switch_off": "Off",
 
@@ -22,6 +24,8 @@
 
     "status_unsupported": "WSA pas installé",
     "status_unsupported_desc": "{windowsVersion} détectée et WSA non trouvé; cette application dépend de WSA, qui n'est officiellement pris en charge que sur Windows 11",
+    "status_unauthorized": "Non autorisé",
+    "status_unauthorized_desc": "L'autorisation de débogage a été refusée ou révoquée; appuyez sur le premier bouton, sélectionnez 'toujours autoriser' et cliquez sur 'autoriser'; Si aucune fenêtre contextuelle n'apparaît, ouvrez les options de développeur et désactivez et réactivez le débogage USB",
     "status_missing": "WSA pas installé",
     "status_missing_desc": "WSA non trouvé; cette application dépend de WSA, veuillez installer Windows Subsystem pour Android (ou l'Amazon Appstore) à partir du Microsoft Store",
     "status_unknown": "Connecting",

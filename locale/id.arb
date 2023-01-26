@@ -12,6 +12,8 @@
 
 
     "btn_boot": "Nyalakan",
+    "btn_auth": "Otentikasi ulang",
+    "btn_dev_settings": "Opsi pengembang",
     "btn_switch_on": "Nyala",
     "btn_switch_off": "Mati",
 
@@ -24,6 +26,8 @@
 
     "status_unsupported": "WSA belum terinstal",
     "status_unsupported_desc": "{windowsVersion} terdeteksi dan WSA tidak ditemukan; aplikasi ini tergantung pada WSA, yang hanya didukung secara resmi di Windows 11",
+    "status_unauthorized": "Tidak sah",
+    "status_unauthorized_desc": "Otorisasi debugging ditolak atau dicabut; tekan tombol pertama, pilih 'selalu izinkan' lalu klik 'izinkan'; Jika tidak muncul pop-up, buka opsi pengembang dan nonaktifkan dan aktifkan kembali 'debugging USB'",
     "@status_unsupported_desc" : {"placeholders": {"windowsVersion": {"type": "String"}}},
     "status_missing": "WSA tidak ditemukan",
     "status_missing_desc": "WSA tidak ditemukan; aplikasi ini bergantung pada WSA, silakan instal Subsistem Windows untuk Android (atau Amazon Appstore) dari Microsoft Store",

@@ -11,6 +11,8 @@
 
 
     "btn_boot": "Encender",
+    "btn_auth": "Reautenticar",
+    "btn_dev_settings": "Opciones de desarrollador",
     "btn_switch_on": "On",
     "btn_switch_off": "Off",
 
@@ -21,6 +23,8 @@
 
     "status_unsupported": "WSA no instalado",
     "status_unsupported_desc": "{windowsVersion} y WSA no encontrado; esta aplicación depende de WSA, que solo es oficialmente compatible con Windows 11",
+    "status_unauthorized": "No autorizado",
+    "status_unauthorized_desc": "La autorización de depuración se ha negado o revocado; presione el primer botón, seleccione 'siempre permitir' y luego haga clic en 'permitir'; Si no aparece una ventana emergente, abra las opciones de desarrollador y desactive y vuelva a activar 'depuración USB'",
     "status_missing": "WSA no instalado",
     "status_missing_desc": "WSA no encontrado; esta aplicación depende de WSA, instale Windows Subsystem para Android (o Amazon Appstore) desde Microsoft Store",
     "status_unknown": "Conectando",

@@ -6,6 +6,8 @@
 
 
     "btn_boot": "Avvia",
+    "btn_auth": "Riautentica",
+    "btn_dev_settings": "Opzioni sviluppatore",
     "btn_switch_on": "On",
     "btn_switch_off": "Off",
 
@@ -16,6 +18,8 @@
 
     "status_unsupported": "WSA non installato",
     "status_unsupported_desc": "WSA non trovato e {windowsVersion}; l'applicazione necessita WSA, che è ufficialmente supportato soltanto su Windows 11",
+    "status_unauthorized": "Non autorizzato",
+    "status_unauthorized_desc": "L'autorizzazione per il debug è stata negata o revocata; premere il primo pulsante, selezionare 'consenti sempre' e quindi fare clic su 'consenti'; Se non compare alcuna finestra pop-up, aprire le opzioni sviluppatore e disattivare e riattivare l'opzione 'Debug USB'",
     "status_missing": "WSA non installato",
     "status_missing_desc": "WSA non trovato; l'applicazione necessita WSA, per favore installa il Sottosistema Windows per Android (o l'Amazon Appstore) dallo Store di Microsoft",
     "status_unknown": "Connessione",

@@ -12,6 +12,8 @@
 
 
     "btn_boot": "启动",
+    "btn_auth": "重新认证",
+    "btn_dev_settings": "开发者选项",  
     "btn_switch_on": "打开",
     "btn_switch_off": "关闭",
 
@@ -24,6 +26,8 @@
 
     "status_unsupported": "WSA 未安装",
     "status_unsupported_desc": "{windowsVersion} 检测到但未找到 WSA； 此应用程序依赖于 WSA，仅在 Windows 11 上正式支持",
+    "status_unauthorized": "未授权",
+    "status_unauthorized_desc": "调试授权被拒绝或撤销；点击第一个按钮，选择“始终允许”，然后点击“允许”；如果没有弹出窗口，请打开开发者选项并禁用和重新启用“USB调试”",
     "status_missing": "WSA 未安装",
     "status_missing_desc": "未找到 WSA； 此应用程序依赖 WSA，请从 Microsoft Store 安装适用于 Android 的 Windows 子系统（或 Amazon Appstore）",
     "status_unknown": "正在连接",

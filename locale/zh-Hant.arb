@@ -12,6 +12,8 @@
 
 
     "btn_boot": "啟動",
+    "btn_auth": "重新驗證",
+    "btn_dev_settings": "開發者選項",
     "btn_switch_on": "開",
     "btn_switch_off": "關",
 
@@ -24,6 +26,8 @@
 
     "status_unsupported": "尚未安裝 WSA ",
     "status_unsupported_desc": "檢測到 {windowsVersion} 但未找到 Android 子系統；此應用程式僅在 Windows 11 正式支援。",
+    "status_unauthorized": "未授權",
+    "status_unauthorized_desc": "調試授權被拒絕或撤銷；按一下第一個按鈕，選擇“總是允許”，然後點擊“允許”；如果沒有彈出窗口，請打開開發人員選項並禁用和重新啟用“USB調試”",
     "@status_unsupported_desc" : {"placeholders": {"windowsVersion": {"type": "String"}}},
     "status_missing": "未安裝 Android 子系統",
     "status_missing_desc": "未找到 Android 子系統；請從 Microsoft Store 安裝適用於 Windows 的 Android 子系統（或 Amazon Appstore）。",

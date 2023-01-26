@@ -6,6 +6,8 @@
 
 
     "btn_boot": "Запустить",
+    "btn_auth": "Повторная аутентификация",
+    "btn_dev_settings": "Настройки разработчика",
     "btn_switch_on": "Вкл.",
     "btn_switch_off": "Выкл.",
 
@@ -16,6 +18,8 @@
 
     "status_unsupported": "Подсистема Windows под Android не поддерживается",
     "status_unsupported_desc": "{windowsVersion} detected and WSA not found; this application depends on WSA, which is only officially supported on Windows 11",
+    "status_unauthorized": "Неавторизованный",
+    "status_unauthorized_desc": "Авторизация для отладки была отклонена или отозвана; нажмите первую кнопку, выберите 'всегда разрешать' и нажмите 'разрешить'; если не отображается всплывающее окно, откройте настройки разработчика и отключите и снова включите 'отладку USB'",
     "status_missing": "Подсистема Windows под Android не установлена",
     "status_missing_desc": "Подсистема Windows под Android не найдена: это приложение зависит от WSA, установите подсистему Windows для Android (или Магазин приложений Amazon) из магазина Microsoft Store",
     "status_unknown": "Подключение",
