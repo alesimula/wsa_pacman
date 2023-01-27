@@ -13,6 +13,10 @@ class WSAUtils {
   static bool launchSettings() => launchApp("com.android.settings");
   static bool launchDeveloperSettings() => launch("/deeplink wsa-client://developer-settings");
   static bool launchSystem() => launchApp("android.system");
+  static bool shutdown() => launch("/shutdown");
+  static bool modifyApp(String package) => launch("/modify $package");
+  //launch("/jump");    // No idea what this does
+  //launch("/deeplink wsa-client://legal-settings");    // Legal settings, pretty useless stuff
 }
 
 class WSAPkgInfo extends WinPkgInfo {
