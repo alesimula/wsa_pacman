@@ -37,7 +37,7 @@ class ApkInstaller extends StatefulWidget {
   static void installApk(String apkFile, String ipAddress, int port, AppLocalizations lang, [bool downgrade = false]) async {
     log("INSTALLING \"$apkFile\" on on $ipAddress:$port...");
     var installation = ADBUtils.installToAddress(ipAddress, port, apkFile, downgrade: downgrade)
-      .timeout(const Duration(seconds: 30)).defaultError();
+      .processTimeout(const Duration(seconds: 30)).defaultError();
     GState.apkInstallState.update((_) => InstallState.INSTALLING);
     var result = await installation;
     log("EXIT CODE: ${result.exitCode}");
@@ -45,7 +45,11 @@ class ApkInstaller extends StatefulWidget {
     log("OUTPUT: ${result.stdout}");
     log("ERROR: ${error}");
     if (result.exitCode == 0) GState.apkInstallState.update((_) => InstallState.SUCCESS);
-    else {
+    else if (result.isTimeout) {
+      GState.apkInstallState.update((_) => InstallState.TIMEOUT);
+      GState.errorCode.update((_) => "TIMEOUT");
+      GState.errorDesc.update((_) => lang.installer_error_timeout);
+    } else {
       GState.apkInstallState.update((_) => InstallState.ERROR);
       //TODO add cause
       RegExpMatch? errorMatch = RegExp(r'(^|\n)\s*adb:\s+failed\s+to\s+install\s+.*:\s+Failure\s+\[([^:]*):\s*([^\s].*[^\s])\s*\]').firstMatch(error);
@@ -227,7 +231,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
             ]
           )
         ];
-        case InstallState.ERROR: return [
+        case InstallState.ERROR: case InstallState.TIMEOUT: return [
           titleWidget,
           const SizedBox(height: 10),
           Text(lang.installer_fail(appTitle)),
@@ -235,7 +239,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
           FlexibleInfoBar(
             title: noMoveWindow(material.SelectableText(GState.errorCode.of(context))),
             content: noMoveWindow(material.SelectableText(GState.errorDesc.of(context))),
-            severity: InfoBarSeverity.error
+            severity: installState == InstallState.ERROR ? InfoBarSeverity.error : InfoBarSeverity.warning
           ),
           const SizedBox(height: 20),
           Row(

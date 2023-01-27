@@ -40,7 +40,7 @@ import 'dart:async';
 import 'theme.dart';
 
 const String appTitle = 'WSA Package Manager';
-const String appVersion = '1.3.6';
+const String appVersion = '1.4.0';
 
 late bool darkMode;
 
@@ -200,8 +200,8 @@ class Constants {
 
 void main(List<String> arguments) async {
   //int prevTime = DateTime.now().millisecondsSinceEpoch;
-  //arguments = [r'C:\Users\Alex\Downloads\com.google.android.googlequicksearchbox_12.41.16.23.x86_64-301172250_minAPI23(x86_64)(nodpi)_apkmirror.com.apk'];
-  //arguments = [r'C:\Users\Alex\Downloads\PUBG MOBILE Aftermath_v1.8.0_apkpure.com.xapk'];
+  //arguments = [r'C:\Users\Alex\Downloads\AuroraStore_4.1.1.apk'];
+  //arguments = [r'C:\Users\Alex\Downloads\Chrome.xapk'];
   
 
   WidgetsFlutterBinding.ensureInitialized();

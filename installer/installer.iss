@@ -22,7 +22,7 @@
 #define path_assoc_default ".DEFAULT\"+path_assoc_user 
 
 [Setup]
-AppVersion=1.3.6
+AppVersion=1.4.0
 PrivilegesRequired=admin
 AppName=WSA PacMan
 AppPublisher=alesimula

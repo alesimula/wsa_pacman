@@ -78,13 +78,17 @@ class XapkReader extends IsolateRunner<String, APK_READER_FLAGS> {
     final result = await installation;
     await resources;
 
-    Directory(workingDir).deleteSync(recursive: true);
+    if (!result.isTimeout) Directory(workingDir).deleteSync(recursive: true);
     log("EXIT CODE: ${result.exitCode}");
     String error = result.stderr.toString();
     log("OUTPUT: ${result.stdout}");
     log("ERROR: $error");
     if (result.exitCode == 0) GState.apkInstallState.update((_) => InstallState.SUCCESS);
-    else {
+    else if (result.isTimeout) {
+      GState.apkInstallState.update((_) => InstallState.TIMEOUT);
+      GState.errorCode.update((_) => "TIMEOUT");
+      GState.errorDesc.update((_) => '${lang.installer_error_timeout}\n\n${lang.installer_warning_dirty(workingDir)}');
+    } else {
       GState.apkInstallState.update((_) => InstallState.ERROR);
       //TODO add cause
       RegExpMatch? errorMatch = RegExp(r'(^|\n)\s*adb:\s+failed\s+to\s+install\s+.*:\s+Failure\s+\[([^:]*):\s*([^\s].*[^\s])\s*\]').firstMatch(error);
