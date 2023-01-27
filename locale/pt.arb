@@ -73,6 +73,8 @@
     "installer_installed": "O aplicativo {appTitle} foi instalado com sucesso",
     "installer_fail": "O aplicativo {appTitle} não foi instalado",
     "installer_error_nomsg": "A instalação falhou, mas nenhum erro foi emitido",
+    "installer_error_timeout": "A instalação excedeu o tempo limite, o cliente parou de esperar, mas pode ainda estar em progresso em segundo plano...",
+    "installer_warning_dirty": "É necessário uma limpeza manual de arquivos no diretório “{tempDir}”",
     "installer_btn_starting": "Iniciando...",
     "installer_btn_loading": "Carregando...",
     "installer_btn_cancel": "Cancelar",

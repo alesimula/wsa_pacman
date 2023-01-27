@@ -73,6 +73,8 @@
     "installer_installed": "Приложение {appTitle} было успешно установлено",
     "installer_fail": "Приложение {appTitle} не было установлено",
     "installer_error_nomsg": "Установка не удалась, но ошибок не было обнаружено",
+    "installer_error_timeout": "Установка превысила время ожидания, клиент перестал ждать, но она может продолжаться в фоновом режиме...",
+    "installer_warning_dirty": "Требуется ручная очистка файлов в каталоге «{tempDir}»",
     "installer_btn_starting": "Запуск...",
     "installer_btn_loading": "Загрузка...",
     "installer_btn_cancel": "Отмена",

@@ -74,6 +74,8 @@
     "installer_installed": "برنامه {appTitle} نصب شد",
     "installer_fail": "برنامه {appTitle} نصب نشد.",
     "installer_error_nomsg": "نصب انجام نشد، اما خطایی هم رخ نداد",
+    "installer_error_timeout": "زمان نصب تمام شد، مشتری نیازی به صبر ندارد، اما فرایند هنوز ممکن است در پسزمینه داشته باشد...",
+    "installer_warning_dirty": "شاید نیاز به پاک کردن دستی فایل‌ها در پوشه ‌«{tempDir}» باشد",
     "installer_btn_starting": "شروع...",
     "installer_btn_loading": "بارگذاری...",
     "installer_btn_cancel": "لغو",

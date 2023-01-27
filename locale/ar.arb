@@ -74,6 +74,8 @@
     "installer_installed": "تم تثبيت {appTitle} بنجاح",
     "installer_fail": "لم يتم تثبيت {appTitle}",
     "installer_error_nomsg": "فشل التثبيت, لكن بلا أخطاء",
+    "installer_error_timeout": "انتهت مهلة التثبيت، لقد توقف العميل عن الانتظار، لكن قد يظل التثبيت قيد التقدم في الخلفية...",
+    "installer_warning_dirty": "يلزم تنظيف يدوي للملفات في الدليل ‹{tempDir}›",
     "installer_btn_starting": "يتم التشغيل...",
     "installer_btn_loading": "تحميل...",
     "installer_btn_cancel": "إلغاء",

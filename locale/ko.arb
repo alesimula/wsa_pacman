@@ -79,6 +79,8 @@
     "installer_installed": "{appTitle} 앱이 성공적으로 설치되었습니다",
     "installer_fail": "{appTitle} 앱이 설치되지 않았습니다",
     "installer_error_nomsg": "설치에 실패하였으나, 오류를 확인할 수 없습니다",
+    "installer_error_timeout": "설치가 시간 초과되었습니다. 클라이언트는 더 이상 기다리지 않지만 백그라운드에서는 아직 진행 중일 수 있습니다...",
+    "installer_warning_dirty": "디렉터리 “{tempDir}” 에서 수동 파일 정리가 필요합니다",
     "installer_btn_starting": "시작하는 중...",
     "installer_btn_loading": "불러오는 중...",
     "installer_btn_cancel": "취소",

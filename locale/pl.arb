@@ -73,6 +73,8 @@
     "installer_installed": "Aplikacja {appTitle} została pomyślnie zainstalowana",
     "installer_fail": "Aplikacja {appTitle} nie została zainstalowana",
     "installer_error_nomsg": "Instalacja nie powiodła się, ale nie zgłoszono żadnego błędu",
+    "installer_error_timeout": "Instalacja przekroczyła czas oczekiwania, klient przestał czekać, ale może nadal trwać w tle...",
+    "installer_warning_dirty": "Wymagane jest ręczne czyszczenie plików w katalogu „{tempDir}”",
     "installer_btn_starting": "Rozpoczynanie...",
     "installer_btn_loading": "Wczytywanie...",
     "installer_btn_cancel": "Anuluj",

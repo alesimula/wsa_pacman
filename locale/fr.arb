@@ -79,6 +79,8 @@
     "installer_installed": "L'application {appTitle} a été installée avec succès",
     "installer_fail": "The application {appTitle} n'a pas été installée",
     "installer_error_nomsg": "L'installation a échoué, mais aucune erreur n'a été renvoyée",
+    "installer_error_timeout": "Installation expirée, le client a arrêté d'attendre, mais le processus peut encore être en cours en arrière-plan...",
+    "installer_warning_dirty": "Un nettoyage manuel des fichiers est nécessaire dans le répertoire “{tempDir}”",
     "installer_btn_starting": "Démarrage...",
     "installer_btn_loading": "Chargement...",
     "installer_btn_cancel": "Annuler",

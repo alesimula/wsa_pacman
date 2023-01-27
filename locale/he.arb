@@ -77,6 +77,8 @@
     "installer_installed": "האפליקציה {appTitle} הותקנה בהצלחה",
     "installer_fail": "האפליקציה {appTitle} לא הותקנה",
     "installer_error_nomsg": "ההתקנה נכשלה, אבל לא זוהתה השגיאה.",
+    "installer_error_timeout": "התקנה עברה את הזמן המוקצב, הלקוח לא מחכה עוד, אבל היא עדיין עשויה להיערך ברקע...",
+    "installer_warning_dirty": "נדרשת ניקוי ידני של קבצים בספרייה “{tempDir}”",
     "installer_btn_starting": "WSA מפעיל את...",
     "installer_btn_loading": "טוען...",
     "installer_btn_cancel": "ביטול",

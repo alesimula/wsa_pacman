@@ -81,6 +81,8 @@
     "installer_installed": "应用程序 {appTitle} 已成功安装",
     "installer_fail": "应用程序 {appTitle} 未安装",
     "installer_error_nomsg": "安装失败，但没有抛出错误",
+    "installer_error_timeout": "安装已超时，客户端已停止等待，但可能仍在后台执行...",
+    "installer_warning_dirty": "目录「{tempDir}」需要手动清理文件",
     "installer_btn_starting": "正在启动...",
     "installer_btn_loading": "加载中...",
     "installer_btn_cancel": "取消",

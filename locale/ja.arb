@@ -74,6 +74,8 @@
     "installer_installed": "アプリ「{appTitle}」がインストールされました。",
     "installer_fail": "アプリ「{appTitle}」をインストールできませんでした。",
     "installer_error_nomsg": "インストールに失敗しました。",
+    "installer_error_timeout": "インストールがタイムアウトしました。クライアントはもう待っていませんが、バックグラウンドではまだ実行されている可能性があります...",
+    "installer_warning_dirty": "「{tempDir}」ディレクトリでの手動ファイルクリーンアップが必要です",
     "installer_btn_starting": "起動中です...",
     "installer_btn_loading": "読み込んでいます...",
     "installer_btn_cancel": "キャンセル",

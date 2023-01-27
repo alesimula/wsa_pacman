@@ -78,6 +78,8 @@
     "installer_installed": "{appTitle} wurde erfolgreich installiert.",
     "installer_fail": "{appTitle} wurde nicht installiert.",
     "installer_error_nomsg": "Installation ohne Angabe von Gründen fehlgeschlagen.",
+    "installer_error_timeout": "Installation abgelaufen, der Client wartet nicht mehr, aber der Vorgang könnte im Hintergrund noch laufen...",
+    "installer_warning_dirty": "Eine manuelle Dateibereinigung ist in Verzeichnis „{tempDir}“ erforderlich",
     "installer_btn_starting": "Starte WSA...",
     "installer_btn_loading": "Lade App...",
     "installer_btn_cancel": "Abbrechen",

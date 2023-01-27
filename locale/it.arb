@@ -73,6 +73,8 @@
     "installer_installed": "Applicazione {appTitle} installata correttamente",
     "installer_fail": "L'applicazione {appTitle} non è stata installata",
     "installer_error_nomsg": "Installazione fallita senza lanciare alcun errore",
+    "installer_error_timeout": "L'installazione ha superato il tempo limite, il client ha smesso di attendere, ma potrebbe essere ancora in esecuzione in background...",
+    "installer_warning_dirty": "È necessaria una pulizia manuale dei file della directory “{tempDir}”",
     "installer_btn_starting": "Avvio...",
     "installer_btn_loading": "Caricamento...",
     "installer_btn_cancel": "Annulla",
