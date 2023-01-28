@@ -14,6 +14,7 @@ class FluentCard extends StatefulWidget {
     this.onPressed,
     this.onStateChanged,
     this.isButton = false,
+    this.isInner = false,
     this.headerHeight = 68.5,
     this.headerBackgroundColor,
     this.contentBackgroundColor,
@@ -35,14 +36,14 @@ class FluentCard extends StatefulWidget {
     }
   }
 
-  static Color borderColor(ThemeData style, Set<ButtonStates> states, [bool isClickable = true]) {
+  static Color borderColor(ThemeData style, Set<ButtonStates> states, [bool isInner = false, bool isClickable = true]) {
     if (style.brightness == Brightness.light) {
       if (isClickable && states.isHovering && !states.isPressing) return const Color(0xFF212121).withOpacity(0.22);
-      return const Color(0xFF212121).withOpacity(0.17);
+      return const Color(0xFF212121).withOpacity(isInner ? 0.25 : 0.17);
     } else {
       if (isClickable && states.isPressing) return Colors.white.withOpacity(0.062);
       if (isClickable && states.isHovering) return Colors.white.withOpacity(0.02);
-      return Colors.black.withOpacity(0.52);
+      return isInner ? Colors.white.withOpacity(0.02) : Colors.black.withOpacity(0.52);
     }
   }
 
@@ -65,6 +66,9 @@ class FluentCard extends StatefulWidget {
 
   /// Disable when onPressed is null, always show chevron icon in the right
   final bool isButton;
+
+  /// Enable when the card should be viewed inside another card; changes border colors
+  final bool isInner;
 
   /// The trailing widget. It's positioned at the right of [content]
   /// and at the left of [icon].
@@ -151,7 +155,7 @@ class FluentCardState extends State<FluentCard>
             color: FluentCard.backgroundColor(theme, states, widget.onPressed != null),
             border: Border.all(
               width: borderSize,
-              color: FluentCard.borderColor(theme, states, widget.onPressed != null),
+              color: FluentCard.borderColor(theme, states, widget.isInner, widget.onPressed != null),
             ),
             borderRadius: const BorderRadius.all(Radius.circular(4.0)),
           ),
@@ -162,7 +166,10 @@ class FluentCardState extends State<FluentCard>
               padding: const EdgeInsetsDirectional.only(end: 17.0),
               child: widget.leading!,
             ),
-            Expanded(child: widget.content),
+            Expanded(child: (widget.trailing == null && !widget.isButton) ? Padding(
+              padding: const EdgeInsets.only(right: 17),
+              child: widget.content,
+            ): widget.content),
             if (widget.trailing != null) Padding(
               padding: const EdgeInsetsDirectional.only(start: 20.0, end: 13.5),
               child: widget.trailing!,

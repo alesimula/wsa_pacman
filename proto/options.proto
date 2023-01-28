@@ -8,6 +8,7 @@ message Options {
     optional uint32 ipAddress = 1 [default = 2130706433];
     optional uint32 port = 2 [default = 58526];
     optional bool autostart = 8;
+    optional uint32 timeout = 10 [default = 30];
     // Interface options
     optional uint32 locale = 9;
     // Theme options

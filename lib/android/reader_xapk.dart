@@ -67,11 +67,11 @@ class XapkReader extends IsolateRunner<String, APK_READER_FLAGS> {
     }
   }());
 
-  static void installXApk(String workingDir /* tempDir */, List<String> apkFiles, List<ManifestXapk_ApkExpansion> expansions, String ipAddress, int port, AppLocalizations lang, FileDisposeQueue disposeLock, [bool downgrade = false]) async {
+  static void installXApk(String workingDir /* tempDir */, List<String> apkFiles, List<ManifestXapk_ApkExpansion> expansions, String ipAddress, int port, AppLocalizations lang, int timeout, FileDisposeQueue disposeLock, [bool downgrade = false]) async {
     if (apkFiles.isNotEmpty) log("INSTALLING \"${apkFiles.first}\" on on $ipAddress:$port...");
     disposeLock.clear();
-    var installation = ADBUtils.installMultipleToAddress(ipAddress, port, apkFiles, downgrade: downgrade, workDir: workingDir)
-      .processTimeout(const Duration(seconds: 30));
+    var installation = ADBUtils.installMultipleToAddress(ipAddress, port, apkFiles, downgrade: downgrade, workDir: workingDir);
+    if (timeout > 0) installation = installation.processTimeout(Duration(seconds: timeout));
     final resources = copyApkResources(expansions, workingDir, ipAddress, port);
     GState.apkInstallState.update((_) => InstallState.INSTALLING);
 
@@ -149,7 +149,7 @@ class XapkReader extends IsolateRunner<String, APK_READER_FLAGS> {
   void updateInstallInfo(ManifestXapk manifest, String installDir, List<String> apkList, FileDisposeQueue disposeLock) {
     executeInUi(() {
       if (manifest.packageName.isNotEmpty) ApkReader.loadInstallType(manifest.packageName, manifest.versionCode);
-      GState.installCallback.$ = (ipAddress, port, lang, [downgrade = false]) => installXApk(installDir, apkList, manifest.expansions, ipAddress, port, lang, disposeLock, downgrade);
+      GState.installCallback.$ = (ipAddress, port, lang, timeout, [downgrade = false]) => installXApk(installDir, apkList, manifest.expansions, ipAddress, port, lang, timeout, disposeLock, downgrade);
     });
   }
 

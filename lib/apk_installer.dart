@@ -34,10 +34,11 @@ class ApkInstaller extends StatefulWidget {
       icon: '%LOCALAPPDATA%\\Packages\\${Env.WSA_INFO.familyName}\\LocalState\\$package.ico');
   }
 
-  static void installApk(String apkFile, String ipAddress, int port, AppLocalizations lang, [bool downgrade = false]) async {
+  static void installApk(String apkFile, String ipAddress, int port, AppLocalizations lang, int timeout, [bool downgrade = false]) async {
     log("INSTALLING \"$apkFile\" on on $ipAddress:$port...");
-    var installation = ADBUtils.installToAddress(ipAddress, port, apkFile, downgrade: downgrade)
-      .processTimeout(const Duration(seconds: 30)).defaultError();
+    var installation = ADBUtils.installToAddress(ipAddress, port, apkFile, downgrade: downgrade);
+    if (timeout > 0) installation = installation.processTimeout(Duration(seconds: timeout));
+    installation = installation.defaultError();
     GState.apkInstallState.update((_) => InstallState.INSTALLING);
     var result = await installation;
     log("EXIT CODE: ${result.exitCode}");
@@ -99,6 +100,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
     String package = GState.package.of(context);
     String version = GState.version.of(context);
     String activity = GState.activity.of(context);
+    int installTimeout  = GState.installTimeout.of(context);
     bool isLaunchable = package.isNotEmpty && activity.isNotEmpty;
 
     String oldVersion = GState.oldVersion.of(context);
@@ -184,8 +186,8 @@ class _ApkInstallerState extends State<ApkInstaller> {
                 checked: true,
                 style: installType == InstallType.DOWNGRADE ? warningButtonTheme : null,
                 onChanged: !canInstall ? null : (_){
-                  if (Constants.packageType.directInstall) ApkInstaller.installApk(Constants.packageFile, ipAddress, port, lang, installType == InstallType.DOWNGRADE);
-                  else GState.installCallback.$?.call(ipAddress, port, lang, installType == InstallType.DOWNGRADE);
+                  if (Constants.packageType.directInstall) ApkInstaller.installApk(Constants.packageFile, ipAddress, port, lang, installTimeout, installType == InstallType.DOWNGRADE);
+                  else GState.installCallback.$?.call(ipAddress, port, lang, installTimeout, installType == InstallType.DOWNGRADE);
                 },
               )),
               /*const SizedBox(width: 15),noMoveWindow(ToggleButton(

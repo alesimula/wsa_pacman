@@ -215,7 +215,7 @@ class ExpanderWin11State extends State<ExpanderWin11>
           width: double.infinity,
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
-            border: Border.all(width: borderSize, color: FluentCard.borderColor(theme, {ButtonStates.none}, false)),
+            border: Border.all(width: borderSize, color: FluentCard.borderColor(theme, {ButtonStates.none}, false, false)),
             color: FluentCard.backgroundColor(theme, {ButtonStates.none}, false),
             borderRadius: const BorderRadius.vertical(bottom: Radius.circular(4.0)),
           ),

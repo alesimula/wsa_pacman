@@ -152,6 +152,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
     final mica = GState.mica.of(context);
     final legacyIcons = GState.legacyIcons.of(context);
     final autostartWSA = GState.autostartWSA.of(context);
+    final installTimeout = GState.installTimeout.of(context);
     final locale = AppLocalizations.of(context);
 
     final OFF = lang.btn_switch_off;
@@ -209,6 +210,22 @@ class ScreenSettingsState extends State<ScreenSettings> {
               checked: autostartWSA,
               onChanged: (v) => GState.autostartWSA..$ = v..persist()
             )]),
+          ),
+          smallSpacer,
+          FluentCard(
+            leading: const Icon(Mdi.timerOutline, size: 23),
+            content: Text(lang.settings_timeout),
+            trailing: SizedBox(width: 300, height: 32, child: FluentCard(isInner: true, content: Slider(
+              min: 0,
+              max: 105, 
+              value: (installTimeout == 0 ? 105 : installTimeout < 15 ? 15 : installTimeout > 105 ? 105 : installTimeout).toDouble(),
+              divisions: 7,
+              label: installTimeout == 0 ? '∞' : '$installTimeout',
+              style: SliderThemeData(
+                labelBackgroundColor: theme.brightness == Brightness.dark ? const Color(0x22DDDDDD) : const Color(0x33000000)
+              ),
+              onChanged: (l){l = (l == 0) ? 15 : (l == 105) ? 0 : l; GState.installTimeout..$=l.toInt()..persist();},
+            ))),
           ),
           smallSpacer,
           FluentCard(

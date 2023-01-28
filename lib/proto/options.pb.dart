@@ -24,6 +24,7 @@ class Options extends $pb.GeneratedMessage {
     ..e<Options_Mica>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mica', $pb.PbFieldType.OE, defaultOrMaker: Options_Mica.FULL, valueOf: Options_Mica.valueOf, enumValues: Options_Mica.values)
     ..aOB(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'autostart')
     ..a<$core.int>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'locale', $pb.PbFieldType.OU3)
+    ..a<$core.int>(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'timeout', $pb.PbFieldType.OU3, defaultOrMaker: 30)
     ..hasRequiredFields = false
   ;
 
@@ -38,6 +39,7 @@ class Options extends $pb.GeneratedMessage {
     Options_Mica? mica,
     $core.bool? autostart,
     $core.int? locale,
+    $core.int? timeout,
   }) {
     final _result = create();
     if (ipAddress != null) {
@@ -66,6 +68,9 @@ class Options extends $pb.GeneratedMessage {
     }
     if (locale != null) {
       _result.locale = locale;
+    }
+    if (timeout != null) {
+      _result.timeout = timeout;
     }
     return _result;
   }
@@ -170,5 +175,14 @@ class Options extends $pb.GeneratedMessage {
   $core.bool hasLocale() => $_has(8);
   @$pb.TagNumber(9)
   void clearLocale() => clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.int get timeout => $_getI(9, 30);
+  @$pb.TagNumber(10)
+  set timeout($core.int v) { $_setUnsignedInt32(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasTimeout() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearTimeout() => clearField(10);
 }
 

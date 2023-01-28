@@ -39,6 +39,7 @@ class GState {
   static final legacyIcons = PersistableValue(value: false, loader: (o)=>o.legacyIcons, setter: (o,e)=> o.legacyIcons = e);
   static final mica = PersistableValue(value: Options_Mica.FULL, loader: (o)=>o.mica, setter: (o,e)=> o.mica = e);
   static final autostartWSA = PersistableValue(value: false, loader: (o)=>o.autostart, setter: (o,e)=> o.autostart = e);
+  static final installTimeout = PersistableValue(value: 30, loader: (o)=>o.timeout, setter: (o,e)=> o.timeout = e);
   // APK Info
   static final apkTitle = SharedValue<String>(value: "");
   static final package = SharedValue<String>(value: "");
@@ -53,7 +54,7 @@ class GState {
   static final apkForegroundIcon = SharedValue<Widget?>(value: null);
   static final apkAdaptiveNoScale = SharedValue<bool>(value: false);
   static final apkBackgroundColor = SharedValue<Color?>(value: null);
-  static final installCallback = SharedValue<Function(String ipAddress, int port, AppLocalizations lang, [bool downgrade])?>(value: null);
+  static final installCallback = SharedValue<Function(String ipAddress, int port, AppLocalizations lang, int timeout, [bool downgrade])?>(value: null);
   // Installation info
   static final errorCode = SharedValue<String>(value: "");
   static final errorDesc = SharedValue<String>(value: "");
