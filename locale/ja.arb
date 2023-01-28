@@ -49,6 +49,7 @@
     "settings_port": "WSA ポート",
     "settings_ip": "WSA IP アドレス",
     "settings_autostart": "インストール前に WSA を自動起動する",
+    "settings_timeout": "タイムアウト ({seconds} 秒)",
     "settings_language": "言語",
     "settings_option_generic_system": "システム",
     "settings_option_generic_disabled": "非アクティブ",

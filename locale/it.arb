@@ -48,6 +48,7 @@
     "settings_port": "Porta WSA",
     "settings_ip": "Indirizzo IP WSA",
     "settings_autostart": "Avvia WSA automaticamente prima di un'installazione",
+    "settings_timeout": "Timeout ({seconds} secondi)",
     "settings_language": "Lingua",
     "settings_option_generic_system": "Sistema",
     "settings_option_generic_disabled": "Disabilitato",

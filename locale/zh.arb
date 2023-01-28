@@ -56,6 +56,7 @@
     "settings_port": "WSA 端口",
     "settings_ip": "WSA IP 地址",
     "settings_autostart": "在安装之前自动启动 WSA",
+    "settings_timeout": "超时 ({seconds} 秒)",
     "settings_language": "语言",
     "settings_option_generic_system": "系统",
     "settings_option_generic_disabled": "已禁用",

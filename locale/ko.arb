@@ -54,6 +54,7 @@
     "settings_port": "WSA 포트",
     "settings_ip": "WSA IP 주소",
     "settings_autostart": "설치 전 WSA 자동 실행",
+    "settings_timeout": "시간 초과 ({seconds} 초)",
     "settings_language": "언어",
     "settings_option_generic_system": "시스템",
     "settings_option_generic_disabled": "꺼짐",

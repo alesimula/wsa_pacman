@@ -52,6 +52,7 @@
     "settings_port": "WSA Port",
     "settings_ip": "כתובת ה-IP של ה-WSA",
     "settings_autostart": "הפעל אוטומטית את WSA לפני ההתקנה",
+    "settings_timeout": "זמן מינימלי ({seconds} שניות)",
     "settings_language": "שפה",
     "settings_option_generic_system": "מערכת",
     "settings_option_generic_disabled": "כבוי",

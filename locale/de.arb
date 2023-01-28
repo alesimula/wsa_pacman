@@ -53,6 +53,7 @@
     "settings_port": "WSA-Debugging Port",
     "settings_ip": "WSA IP Adresse",
     "settings_autostart": "Starte WSA automatisch",
+    "settings_timeout": "Zeitüberschreitung ({seconds} Sekunden)",
     "settings_language": "Sprache",
     "settings_option_generic_system": "System",
     "settings_option_generic_disabled": "Deaktiviert",

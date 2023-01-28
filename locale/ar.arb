@@ -49,6 +49,7 @@
     "settings_port": "مدخل الWSA",
     "settings_ip": "عنوان الIP الخاص بWSA",
     "settings_autostart": "تفعبل تلقائي لWSA قبل التثبيت",
+    "settings_timeout": "مهلة ({seconds} ثواني)",
     "settings_language": "اللغة",
     "settings_option_generic_system": "النظام",
     "settings_option_generic_disabled": "غير مفعل",

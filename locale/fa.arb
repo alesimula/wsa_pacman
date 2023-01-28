@@ -49,6 +49,7 @@
     "settings_port": "پورت WSA",
     "settings_ip": "آدری آی پی WSA",
     "settings_autostart": "قبل از نصب WSA را به صورت خودکار راه اندازی شود",
+    "settings_timeout": "زمان مجاز ({seconds} ثانیه)",
     "settings_language": "زبان",
     "settings_option_generic_system": "سیستم",
     "settings_option_generic_disabled": "غیرفعال",

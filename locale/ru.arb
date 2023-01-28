@@ -48,6 +48,7 @@
     "settings_port": "Порт",
     "settings_ip": "IP-адрес",
     "settings_autostart": "Автоматически запускать подсистему Windows под Android перед установкой",
+    "settings_timeout": "Тайм-аут ({seconds} секунд)",
     "settings_language": "Язык",
     "settings_option_generic_system": "Как в системе",
     "settings_option_generic_disabled": "Отключено",

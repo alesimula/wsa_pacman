@@ -56,6 +56,7 @@
     "settings_port": "Port WSA",
     "settings_ip": "Alamat IP WSA",
     "settings_autostart": "Otomatis mulai WSA sebelum instalasi",
+    "settings_timeout": "Batas waktu ({seconds} detik)",
     "settings_language": "Bahasa",
     "settings_option_generic_system": "Sistem",
     "settings_option_generic_disabled": "Dimatikan",
