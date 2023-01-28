@@ -156,7 +156,7 @@ class ExpanderWin11State extends State<ExpanderWin11>
               color: FluentCard.backgroundColor(theme, states, true),
               border: Border.all(
                 width: borderSize,
-                color: FluentCard.borderColor(theme, states, true),
+                color: FluentCard.borderColor(theme, states, false, true),
               ),
               borderRadius: BorderRadius.vertical(
                 top: const Radius.circular(4.0),
