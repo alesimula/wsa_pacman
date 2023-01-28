@@ -92,7 +92,11 @@ class ApkReader extends IsolateRunner<String, APK_READER_FLAGS> {
   /// Returns the gradient as an aapt xml element
   static Future<String> getGradient(String gradientId) async {
     Resource? gradientRes = await getResources(gradientId);
-    if (gradientRes == null || !gradientRes.values.first.endsWith(".xml")) return "";
+    if (gradientRes == null) return "";
+    String resValue = gradientRes.values.first;
+    // TODO this is a dirty hack because I did not foresee the 'type1' resource to refer to plain color resources and not just gradients
+    if (!resValue.endsWith(".xml")) return gradientRes.type == ResType.COLOR ?
+      '<aapt:attr name="android:fillColor"><gradient android:type="linear" android:startX="0" android:startY="0" android:endX="1" android:endY="1"><item android:color="#$resValue" android:offset="0"/></gradient></aapt:attr>' : '';
     Archive apkFile = await _apkArchive;
     ArchiveFile? gradientFile = apkFile.findFile(gradientRes.values.first);
     if (gradientFile == null) return "";
@@ -185,7 +189,7 @@ class ApkReader extends IsolateRunner<String, APK_READER_FLAGS> {
 
     String backXmlData = isBackXml && backXml != null ? await backXml : "";
     String foreXmlData = isForeXml ? await foreXml! : "";
-
+    
     if (isBackColor) {
       final color = Color(int.parse(background!.values.first, radix: 16));
       updateState(()=>GState.apkBackgroundColor, color);
