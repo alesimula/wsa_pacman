@@ -167,7 +167,7 @@ class FluentCardState extends State<FluentCard>
               child: widget.leading!,
             ),
             Expanded(child: (widget.trailing == null && !widget.isButton) ? Padding(
-              padding: const EdgeInsets.only(right: 17),
+              padding: const EdgeInsetsDirectional.only(end: 17),
               child: widget.content,
             ): widget.content),
             if (widget.trailing != null) Padding(
