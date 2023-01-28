@@ -214,7 +214,7 @@ class ScreenSettingsState extends State<ScreenSettings> {
           smallSpacer,
           FluentCard(
             leading: const Icon(Mdi.timerOutline, size: 23),
-            content: Text(lang.settings_timeout),
+            content: Text(lang.settings_timeout(installTimeout == 0 ? '∞' : '$installTimeout')),
             trailing: SizedBox(width: 300, height: 32, child: FluentCard(isInner: true, content: Slider(
               min: 0,
               max: 105, 
