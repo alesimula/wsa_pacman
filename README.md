@@ -44,7 +44,7 @@ The app additionally provides a button to open Android settings and one to open 
   
   **Q:** Can I use WSA PacMan on older versions of Windows (eg. Windows 10)?
 
-  **A:** WSA PacMan depends on Windows Subsistem for Linux, which is only ***officially*** supported on Windows 11.
+  **A:** WSA PacMan depends on Windows Subsystem for Linux, which is only ***officially*** supported on Windows 11.
 
   However, you may be able to install WSA on Windows 10 [using this project](https://github.com/JimDude7404/WSA-Windows-10) by JimDude7404 and following the step-by-step guide on the GitHub page.
   ##
