@@ -66,8 +66,9 @@ class ApkReader extends IsolateRunner<String, APK_READER_FLAGS> {
   });
 
   static Future<Archive> _initArchiveFile(File file) async {
-    //var stream = InputFileStream(file.absolute.path);
-    return ZipDecoder().decodeBytes(file.readAsBytesSync());
+    // This fixes issues when loading huge files (over 1Gb)
+    return ZipDecoder().decodeBuffer(InputFileStream(file.absolute.path));
+    //return ZipDecoder().decodeBytes(file.readAsBytesSync());
   }
   static void _initArchive() {
     //Maintain a lock on the file
