@@ -51,22 +51,6 @@ class _DEVICE_SEEK_PENALTY_DESCRIPTOR extends Struct {
   @BOOLEAN() external int incursSeekPenalty;
 }
 
-class _STORAGE_DEVICE_DESCRIPTOR extends Struct {
-    @DWORD() external int version;
-    @DWORD() external int size;
-    @BYTE() external int deviceType;
-    @BYTE() external int deviceTypeModifier;
-    @BOOL() external int removableMedia;
-    @BOOL() external int commandQueueing;
-    @DWORD() external int vendorIdOffset;
-    @DWORD() external int productIdOffset;
-    @DWORD() external int productRevisionOffset;
-    @DWORD() external int serialNumberOffset;
-    @DWORD() external int busType; // Enum STORAGE_BUS_TYPE
-    @DWORD() external int rawPropertiesLength;
-    external Pointer<BYTE> rawDeviceProperties;
-}
-
 enum DRIVE_TYPE {
     DRIVE_UNKNOWN, DRIVE_NO_ROOT_DIR, DRIVE_REMOVABLE, DRIVE_FIXED, DRIVE_REMOTE, DRIVE_CDROM, DRIVE_RAMDISK
 }
@@ -241,26 +225,6 @@ extension WinFile on File {
       if (driveType != DRIVE_TYPE.DRIVE_FIXED) return false;
       volumeHandle = _getVolumeHandle(lpVolumePath);
       if (volumeHandle == null) return false;
-      // First check if it is a removable media
-      /*Pointer<STORAGE_PROPERTY_QUERY> lpStorageDeviceQuery = calloc<STORAGE_PROPERTY_QUERY>();
-      STORAGE_PROPERTY_QUERY storageDeviceQuery = lpStorageDeviceQuery.ref;
-      storageDeviceQuery.propertyId = 0; // StorageDeviceProperty
-      storageDeviceQuery.queryType = 0; // PropertyStandardQuery
-      
-      Pointer<STORAGE_DEVICE_DESCRIPTOR> lpDeviceDescriptor = calloc<STORAGE_DEVICE_DESCRIPTOR>();
-      final lpDeviceDescLen = calloc<Uint32>();
-      final deviceResult = DeviceIoControl(
-        volumeHandle,
-        IOCTL_STORAGE_QUERY_PROPERTY,
-        lpStorageDeviceQuery,
-        sizeOf<STORAGE_PROPERTY_QUERY>(),
-        lpDeviceDescriptor,
-        sizeOf<STORAGE_DEVICE_DESCRIPTOR>(),
-        lpDeviceDescLen,
-        nullptr);
-      if (deviceResult == 0) return false;
-      log("INFO RECEIVED");
-      STORAGE_DEVICE_DESCRIPTOR deviceDescriptor = lpDeviceDescriptor.ref;*/
 
       // Then check if it has a seek penalty
       lpSeekPenaltyQuery = calloc<_STORAGE_PROPERTY_QUERY>();
