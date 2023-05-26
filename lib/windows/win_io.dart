@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures, constant_identifier_names
 
+import 'dart:developer';
 import 'dart:ffi';
 import 'dart:io';
 import 'package:ffi/ffi.dart';
@@ -22,6 +23,9 @@ final _ReleaseMutex = kernel32.lookupFunction<
 final _GetShortPathName = kernel32.lookupFunction<
       Uint32 Function(Pointer<Utf16> lpszLongPath, Pointer<Utf16> lpszShortPath, Uint32 cchBuffer),
       int Function(Pointer<Utf16> lpszLongPath, Pointer<Utf16> lpszShortPath, int cchBuffer)>('GetShortPathNameW');
+final _GetVolumeNameForVolumeMountPoint = kernel32.lookupFunction<
+      Uint32 Function(Pointer<Utf16> lpszVolumeMountPoint, Pointer<Utf16> lpszVolumeName, Uint32 cchBufferLength),
+      int Function(Pointer<Utf16> lpszVolumeMountPoint, Pointer<Utf16> lpszVolumeName, int cchBufferLength)>('GetVolumeNameForVolumeMountPointW');
 final _SetFileInformationByHandle = kernel32.lookupFunction<
       Uint32 Function(Uint32 hFile, Uint32 fileInformationClass,Pointer lpFileInformation, DWORD dwBufferSize),
       int Function(int hFile, int fileInformationClass, Pointer lpFileInformation, int dwBufferSize)>('SetFileInformationByHandle');
@@ -33,6 +37,38 @@ enum _FILE_INFO_BY_HANDLE_CLASS {
   FileFullDirectoryRestartInfo, FileStorageInfo, FileAlignmentInfo, FileIdInfo, FileIdExtdDirectoryInfo,
   FileIdExtdDirectoryRestartInfo, FileDispositionInfoEx, FileRenameInfoEx, FileCaseSensitiveInfo,
   FileNormalizedNameInfo, MaximumFileInfoByHandleClass
+}
+
+class _STORAGE_PROPERTY_QUERY extends Struct {
+  @ULONG() external int propertyId;
+  @ULONG() external int queryType;
+  external Pointer<BYTE> additionalParameters;
+}
+
+class _DEVICE_SEEK_PENALTY_DESCRIPTOR extends Struct {
+  @DWORD() external int version;
+  @DWORD() external int size;
+  @BOOLEAN() external int incursSeekPenalty;
+}
+
+class _STORAGE_DEVICE_DESCRIPTOR extends Struct {
+    @DWORD() external int version;
+    @DWORD() external int size;
+    @BYTE() external int deviceType;
+    @BYTE() external int deviceTypeModifier;
+    @BOOL() external int removableMedia;
+    @BOOL() external int commandQueueing;
+    @DWORD() external int vendorIdOffset;
+    @DWORD() external int productIdOffset;
+    @DWORD() external int productRevisionOffset;
+    @DWORD() external int serialNumberOffset;
+    @DWORD() external int busType; // Enum STORAGE_BUS_TYPE
+    @DWORD() external int rawPropertiesLength;
+    external Pointer<BYTE> rawDeviceProperties;
+}
+
+enum DRIVE_TYPE {
+    DRIVE_UNKNOWN, DRIVE_NO_ROOT_DIR, DRIVE_REMOVABLE, DRIVE_FIXED, DRIVE_REMOTE, DRIVE_CDROM, DRIVE_RAMDISK
 }
 
 class RegistryKeyValuePair {
@@ -120,6 +156,132 @@ extension WinFile on File {
     finally {
       free(lpFilePath);
       if (lpShortFilePath != null) free(lpShortFilePath);
+    }
+  }
+
+  static int? _getVolumeHandle(LPWSTR lpVolumePath) {
+    Pointer<WCHAR>? lpVolumeName16;
+    LPWSTR? lpVolumeName;
+    int result = _GetVolumeNameForVolumeMountPoint(lpVolumePath, lpVolumeName = (lpVolumeName16 = malloc<WCHAR>(MAX_PATH)).cast<Utf16>(), MAX_PATH);
+    if (result == 0) return null;
+
+    int wcsVolumeLen = lpVolumeName.length;
+    Pointer<WCHAR> lastCharacter = lpVolumeName16.elementAt(wcsVolumeLen - 1);
+    // Remove ending backslash
+    if (wcsVolumeLen > 0 && lastCharacter.value == 92) lastCharacter.value = 0;
+
+    try {
+      int handle = CreateFile(lpVolumeName, 0 /*GENERIC_READ*/, FILE_SHARE_READ /* | FILE_SHARE_WRITE | FILE_SHARE_DELETE*/, nullptr, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, 0);
+      return handle == INVALID_HANDLE_VALUE ? null : handle;
+    }
+    finally {
+      free(lpVolumeName);
+    }
+  }
+
+  int? getVolumeHandle() {
+    LPWSTR? lpVolumePath;
+    try {
+      lpVolumePath = _getVolumePath();
+      return lpVolumePath == null ? null : _getVolumeHandle(lpVolumePath);
+    }
+    finally {
+      if (lpVolumePath != null) free(lpVolumePath);
+    }
+  }
+
+  LPWSTR? _getVolumePath() {
+    LPWSTR lpFilePath = absolute.path.toNativeUtf16();
+    LPWSTR? lpVolumePath;
+    try {
+      int result = GetVolumePathName(lpFilePath, lpVolumePath = malloc<WCHAR>(MAX_PATH).cast<Utf16>(), MAX_PATH);
+      if (result == 0) return null;
+      return lpVolumePath;
+    }
+    finally {
+      free(lpFilePath);
+    }
+  }
+
+  String? getVolumePath() {
+    LPWSTR? lpVolumePath;
+    try {
+      return (lpVolumePath = _getVolumePath())?.toDartString();
+    } finally {
+      if (lpVolumePath != null) free(lpVolumePath);
+    }
+  }
+
+  static DRIVE_TYPE _getDriveType(LPWSTR? lpVolumePath) {
+    if (lpVolumePath == null) return DRIVE_TYPE.DRIVE_UNKNOWN;
+    int type = GetDriveType(lpVolumePath);
+    return (type >= DRIVE_TYPE.values.length) ? DRIVE_TYPE.DRIVE_UNKNOWN : DRIVE_TYPE.values[type];
+  }
+
+  DRIVE_TYPE getDriveType() {
+    LPWSTR? lpVolumePath;
+    try {
+      return _getDriveType(lpVolumePath = _getVolumePath());
+    } finally {
+      if (lpVolumePath != null) free(lpVolumePath);
+    }
+  }
+
+  bool isInSSD() {
+    // Check if fixed device
+    LPWSTR? lpVolumePath;
+    int? volumeHandle;
+    Pointer<_STORAGE_PROPERTY_QUERY>? lpSeekPenaltyQuery;
+    Pointer<_DEVICE_SEEK_PENALTY_DESCRIPTOR>? lpPenaltyDescriptor;
+    Pointer<Uint32>? lpPenaltyDescLen;
+    try {
+      lpVolumePath = _getVolumePath();
+      if (lpVolumePath == null) return false;
+      DRIVE_TYPE driveType = _getDriveType(lpVolumePath);
+      if (driveType != DRIVE_TYPE.DRIVE_FIXED) return false;
+      volumeHandle = _getVolumeHandle(lpVolumePath);
+      if (volumeHandle == null) return false;
+      // First check if it is a removable media
+      /*Pointer<STORAGE_PROPERTY_QUERY> lpStorageDeviceQuery = calloc<STORAGE_PROPERTY_QUERY>();
+      STORAGE_PROPERTY_QUERY storageDeviceQuery = lpStorageDeviceQuery.ref;
+      storageDeviceQuery.propertyId = 0; // StorageDeviceProperty
+      storageDeviceQuery.queryType = 0; // PropertyStandardQuery
+      
+      Pointer<STORAGE_DEVICE_DESCRIPTOR> lpDeviceDescriptor = calloc<STORAGE_DEVICE_DESCRIPTOR>();
+      final lpDeviceDescLen = calloc<Uint32>();
+      final deviceResult = DeviceIoControl(
+        volumeHandle,
+        IOCTL_STORAGE_QUERY_PROPERTY,
+        lpStorageDeviceQuery,
+        sizeOf<STORAGE_PROPERTY_QUERY>(),
+        lpDeviceDescriptor,
+        sizeOf<STORAGE_DEVICE_DESCRIPTOR>(),
+        lpDeviceDescLen,
+        nullptr);
+      if (deviceResult == 0) return false;
+      log("INFO RECEIVED");
+      STORAGE_DEVICE_DESCRIPTOR deviceDescriptor = lpDeviceDescriptor.ref;*/
+
+      // Then check if it has a seek penalty
+      lpSeekPenaltyQuery = calloc<_STORAGE_PROPERTY_QUERY>();
+      _STORAGE_PROPERTY_QUERY seekPenaltyQuery = lpSeekPenaltyQuery.ref;
+      seekPenaltyQuery.propertyId = 7; // StorageDeviceSeekPenaltyProperty
+      seekPenaltyQuery.queryType = 0; // PropertyStandardQuery
+
+      lpPenaltyDescriptor = calloc<_DEVICE_SEEK_PENALTY_DESCRIPTOR>();
+      lpPenaltyDescLen = calloc<Uint32>();
+      final int penaltyResult = DeviceIoControl(volumeHandle, IOCTL_STORAGE_QUERY_PROPERTY, lpSeekPenaltyQuery, sizeOf<_STORAGE_PROPERTY_QUERY>(),
+          lpPenaltyDescriptor, sizeOf<_DEVICE_SEEK_PENALTY_DESCRIPTOR>(), lpPenaltyDescLen, nullptr);
+      if (penaltyResult == 0) return false;
+      _DEVICE_SEEK_PENALTY_DESCRIPTOR penaltyDescriptor = lpPenaltyDescriptor.ref;
+      return penaltyDescriptor.incursSeekPenalty == 0;
+    }
+    finally {
+      if (lpVolumePath != null) free(lpVolumePath);
+      if (lpSeekPenaltyQuery != null) free(lpSeekPenaltyQuery);
+      if (lpPenaltyDescriptor != null) free(lpPenaltyDescriptor);
+      if (lpPenaltyDescLen != null) free(lpPenaltyDescLen);
+      if (volumeHandle != null) CloseHandle(volumeHandle);
     }
   }
 
