@@ -5,26 +5,26 @@
 
 
     "@@locale": "ca",
-    "@locale_desc": {"description": "Català [ca]"},
+    "@locale_desc": {"description": "Catalan [ca]"},
     "locale_desc": "Català",
-    "@locale_system": {"description": "Describes the system locale"},
     "locale_system": "Sistema",
 
 
     "btn_boot": "Engegar",
+    "btn_auth": "Torna a autenticar",
+    "btn_dev_settings": "Opcions de desenvolupador",
     "btn_switch_on": "Encès",
     "btn_switch_off": "Apagat",
 
 
-    "@status_subtext_winver_10": {"description": "Only used inside 'status_unsupported_desc', modify taking this in consideration"},
     "status_subtext_winver_10": "Windows 10",
-    "@status_subtext_winver_older": {"description": "Only used inside 'status_unsupported_desc', modify taking this in consideration"},
     "status_subtext_winver_older": "Versions de Windows més antigues",
 
 
     "status_unsupported": "WSA no està suportat",
     "status_unsupported_desc": "Estàs executant {windowsVersion} però no s'ha trobat WSA; aquesta aplicació necessita WSA, que sols està suportada en Windows 11",
-    "@status_unsupported_desc" : {"placeholders": {"windowsVersion": {"type": "String"}}},
+    "status_unauthorized": "No autoritzat",
+    "status_unauthorized_desc": "S'ha denegat o revocat l'autorització de depuració; prem el primer botó, selecciona 'sempre permet', després fes clic a 'permet'; Si no apareix cap finestra emergent, obre les opcions de desenvolupador i desactiva i torna a activar 'depuració USB'",
     "status_missing": "WSA no està instal·lat",
     "status_missing_desc": "No s'ha trobat WSA; aquesta aplicació depèn en WSA, per favor, instal·la el Subsistema de Windows per a Android (Windows Subsystem for Android) o la Appstore de Amazon des de la tenda de Microsoft",
     "status_unknown": "Connectant",
@@ -53,6 +53,7 @@
     "settings_port": "Port WSA",
     "settings_ip": "Direcció IP de WSA",
     "settings_autostart": "Iniciar WSA abans d'instal·lar",
+    "settings_timeout": "Temps de caducitat ({seconds} segons)",
     "settings_language": "Idioma",
     "settings_option_generic_system": "Sistema",
     "settings_option_generic_disabled": "Deshabilitat",
@@ -72,18 +73,14 @@
 
     "installer_message": "Vols instal·lar aquesta aplicació?",
     "installer_info_version": "Versió: {appVersion}",
-    "@installer_info_version" : {"placeholders": {"appVersion": {"type": "String"}}},
     "installer_info_version_change": "Versió: {appVersionOld} => {appVersionNew}",
-    "@installer_info_version_change" : {"placeholders": {"appVersionOld": {"type": "String"}, "appVersionNew": {"type": "String"}}},
     "installer_info_package": "Paquet: {appPackage}",
-    "@installer_info_package" : {"placeholders": {"appPackage": {"type": "String"}}},
     "installer_installing": "Instal·lant {appTitle}...",
-    "@installer_installing" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_installed": "{appTitle} s'ha instal·lat correctament",
-    "@installer_installed" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_fail": "{appTitle} no s'ha pogut instal·lar",
-    "@installer_fail" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_error_nomsg": "La instal·lació ha fallat, però no s'ha detectat cap error",
+    "installer_error_timeout": "S'ha acabat el temps d'instal·lació, el client ha deixat d'esperar, però potser encara està en curs en segon pla...",
+    "installer_warning_dirty": "Cal realitzar una neteja manual del fitxer al directori “{tempDir}”",
     "installer_btn_starting": "Iniciant...",
     "installer_btn_loading": "Carregant...",
     "installer_btn_cancel": "Cancel·lar",
