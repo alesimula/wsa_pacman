@@ -67,11 +67,11 @@ extension LocaleUtils on Locale {
 }
 
 // Only used to add extra missing RTL languages
-class _WidgetsLocalizationsDelegateOverrides extends widgets.LocalizationsDelegate<widgets.WidgetsLocalizations> {
-  const _WidgetsLocalizationsDelegateOverrides();
+class _WidgetsLocalizationsOverridesDelegate extends widgets.LocalizationsDelegate<widgets.WidgetsLocalizations> {
+  const _WidgetsLocalizationsOverridesDelegate();
   @override bool isSupported(Locale locale) => true;
   @override Future<widgets.WidgetsLocalizations> load(Locale locale) => WidgetLocalizationOverrides.load(locale);
-  @override bool shouldReload(_WidgetsLocalizationsDelegateOverrides old) => false;
+  @override bool shouldReload(_WidgetsLocalizationsOverridesDelegate old) => false;
   @override String toString() => 'WidgetLocalizationOverrides.delegate(all locales)';
 }
 
@@ -85,7 +85,7 @@ class WidgetLocalizationOverrides extends locale.GlobalWidgetsLocalizations {
   }
   
   late TextDirection _textDirection;
-  static const widgets.LocalizationsDelegate<widgets.WidgetsLocalizations> delegate = _WidgetsLocalizationsDelegateOverrides();
+  static const widgets.LocalizationsDelegate<widgets.WidgetsLocalizations> delegate = _WidgetsLocalizationsOverridesDelegate();
   @override TextDirection get textDirection => _textDirection;
   static Future<widgets.WidgetsLocalizations> load(Locale locale) {
     return SynchronousFuture<widgets.WidgetsLocalizations>(WidgetLocalizationOverrides(locale));
