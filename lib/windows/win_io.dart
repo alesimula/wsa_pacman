@@ -222,6 +222,7 @@ extension WinFile on File {
       lpVolumePath = _getVolumePath();
       if (lpVolumePath == null) return false;
       DRIVE_TYPE driveType = _getDriveType(lpVolumePath);
+      if (driveType == DRIVE_TYPE.DRIVE_RAMDISK) return true;
       if (driveType != DRIVE_TYPE.DRIVE_FIXED) return false;
       volumeHandle = _getVolumeHandle(lpVolumePath);
       if (volumeHandle == null) return false;
