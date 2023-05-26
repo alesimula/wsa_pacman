@@ -4,8 +4,8 @@
     "@@README_3": "Country-specific locales (eg. 'en_GB') need a fallback locale (eg. 'en') to exist",
 
 
-    "@@locale": "ck",
-    "@locale_desc": {"description": "کوردی (ناوەندی) [ck_IQ]"},
+    "@@locale": "ku",
+    "@locale_desc": {"description": "کوردی (ناوەندی) [ckb_IQ]"},
     "locale_desc": "کوردی",
     "@locale_system": {"description": "وەسفی زمانی سیستەم دەکات"},
     "locale_system": "سیستەم",
@@ -17,16 +17,12 @@
     "btn_switch_on": "ھەڵبوو",
     "btn_switch_off": "کوژاوە",
 
-
-    "@status_subtext_winver_10": {"description": "Only used inside 'status_unsupported_desc', modify taking this in consideration"},
     "status_subtext_winver_10": "ویندۆزی ١٠",
-    "@status_subtext_winver_older": {"description": "Only used inside 'status_unsupported_desc', modify taking this in consideration"},
     "status_subtext_winver_older": "وەشانێکی ویندۆزی کۆنتر",
 
 
     "status_unsupported": "WSA دانەمەزێندراوە",
     "status_unsupported_desc": "{windowsVersion} ناسرایەوە و WSA نەدۆزرایەوە؛ ئەم بەرنامەیە لەسەر WSA بەندە، کە بە فەرمی تەنیا لەسەر ویندۆزی ١١ پاڵپشتیی دەکرێت",
-    "@status_unsupported_desc" : {"placeholders": {"windowsVersion": {"type": "String"}}},
     "status_unauthorized": "ڕێگەپێنەدراو",
     "status_unauthorized_desc": "Debugging authorization was dismissed or revoked; press the first button, select 'always allow', then click on 'allow'; If no popup appears, open developer options and disable and re-enable 'USB debugging'",
     "status_missing": "WSA دانەبەزێندراوە",
@@ -57,7 +53,6 @@
     "settings_port": "پۆڕتی WSA",
     "settings_ip": "ناونیشانی ئای پیی WSA",
     "settings_autostart": "خۆگەڕانە WSA کارپێبکە پێش دامەزراندن",
-    "@settings_timeout" : {"placeholders": {"seconds": {"type": "String"}}},
     "settings_timeout": "کات تەواو بوو ({seconds} چرکە)",
     "settings_language": "زمان",
     "settings_option_generic_system": "سیستەم",
@@ -78,20 +73,13 @@
 
     "installer_message": "دەتەوێت ئەم بەرنامەیە داببەزێنیت؟",
     "installer_info_version": "وەشان: {appVersion}",
-    "@installer_info_version" : {"placeholders": {"appVersion": {"type": "String"}}},
     "installer_info_version_change": "وەشان: {appVersionOld} => {appVersionNew}",
-    "@installer_info_version_change" : {"placeholders": {"appVersionOld": {"type": "String"}, "appVersionNew": {"type": "String"}}},
     "installer_info_package": "پاکێج: {appPackage}",
-    "@installer_info_package" : {"placeholders": {"appPackage": {"type": "String"}}},
     "installer_installing": "{appTitle} دادەبەزێت...",
-    "@installer_installing" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_installed": "{appTitle} بە سەرکەوتوویی دابەزێندرا",
-    "@installer_installed" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_fail": "{appTitle} دانەبەزێندرا",
-    "@installer_fail" : {"placeholders": {"appTitle": {"type": "String"}}},
     "installer_error_nomsg": "دابەزینەکە شکستی ھێنا، بەڵام ھیچ ھەڵەیەک نەدۆرایەوە",
     "installer_error_timeout": "کاتی دابەزین تەواو بوو، ڕاژەخواز وەستا لە چاوەڕوانی، بەڵام لەوانەیە لە پشتەوە ھەر بەردەوام بێت...",
-    "@installer_warning_dirty" : {"placeholders": {"tempDir": {"type": "String"}}},
     "installer_warning_dirty": "سڕینەوەی فایل پێویستە لە “{tempDir}” بە شێوەیەکی دەستی",
     "installer_btn_starting": "دەستپێکردن...",
     "installer_btn_loading": "بارکردن...",

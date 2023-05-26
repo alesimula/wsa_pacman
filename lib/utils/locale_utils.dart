@@ -5,12 +5,20 @@ import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
 import 'package:ffi/ffi.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart' as widgets;
 import 'package:win32/win32.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 export 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:flutter_localizations/flutter_localizations.dart' as locale;
 import 'package:wsa_pacman/windows/win_io.dart';
 import 'string_utils.dart';
+
+// Extra RTL language definitions in case they are missing from [widget.WidgetsLocalizations._rtlLanguages]
+const List<String> _RTL_LANGUAGE_OVERRIDES = <String>[
+  'ku', // Kurdish
+];
 
 extension LocaleUtils on Locale {
   _NamedLocale _asNamedLocale([int? lcid]) => lcid == null ? _NamedLocale(languageCode, countryCode, scriptCode) : _NamedLocaleLCID(lcid, languageCode, countryCode);
@@ -55,6 +63,32 @@ extension LocaleUtils on Locale {
     }
     bestMatch = bestMatch ?? const Locale("en");
     return (locale is _SystemLocale) ? _SYSTEM_MATCH ??= bestMatch : bestMatch;
+  }
+}
+
+// Only used to add extra missing RTL languages
+class _WidgetsLocalizationsDelegateOverrides extends widgets.LocalizationsDelegate<widgets.WidgetsLocalizations> {
+  const _WidgetsLocalizationsDelegateOverrides();
+  @override bool isSupported(Locale locale) => true;
+  @override Future<widgets.WidgetsLocalizations> load(Locale locale) => WidgetLocalizationOverrides.load(locale);
+  @override bool shouldReload(_WidgetsLocalizationsDelegateOverrides old) => false;
+  @override String toString() => 'WidgetLocalizationOverrides.delegate(all locales)';
+}
+
+// Only used to add extra missing RTL languages
+class WidgetLocalizationOverrides extends locale.GlobalWidgetsLocalizations {
+  WidgetLocalizationOverrides(Locale locale) : super(locale) {
+    final String language = locale.languageCode.toLowerCase();
+    TextDirection defaultDirection = super.textDirection;
+    _textDirection = defaultDirection == TextDirection.rtl ? defaultDirection : 
+        _RTL_LANGUAGE_OVERRIDES.contains(language) ? TextDirection.rtl : TextDirection.ltr;
+  }
+  
+  late TextDirection _textDirection;
+  static const widgets.LocalizationsDelegate<widgets.WidgetsLocalizations> delegate = _WidgetsLocalizationsDelegateOverrides();
+  @override TextDirection get textDirection => _textDirection;
+  static Future<widgets.WidgetsLocalizations> load(Locale locale) {
+    return SynchronousFuture<widgets.WidgetsLocalizations>(WidgetLocalizationOverrides(locale));
   }
 }
 
