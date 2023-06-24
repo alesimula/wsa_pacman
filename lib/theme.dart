@@ -59,13 +59,13 @@ AccentColor get systemAccentColor {
       defaultTargetPlatform == TargetPlatform.android ||
       kIsWeb) {
     return AccentColor('normal', {
-      'darkest': SystemTheme.accentInstance.darkest,
-      'darker': SystemTheme.accentInstance.darker,
-      'dark': SystemTheme.accentInstance.dark,
-      'normal': SystemTheme.accentInstance.accent,
-      'light': SystemTheme.accentInstance.light,
-      'lighter': SystemTheme.accentInstance.lighter,
-      'lightest': SystemTheme.accentInstance.lightest,
+      'darkest': SystemTheme.accentColor.darkest,
+      'darker': SystemTheme.accentColor.darker,
+      'dark': SystemTheme.accentColor.dark,
+      'normal': SystemTheme.accentColor.accent,
+      'light': SystemTheme.accentColor.light,
+      'lighter': SystemTheme.accentColor.lighter,
+      'lightest': SystemTheme.accentColor.lightest,
     });
   }
   return Colors.blue;

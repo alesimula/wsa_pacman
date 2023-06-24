@@ -205,10 +205,9 @@ void main(List<String> arguments) async {
   
 
   WidgetsFlutterBinding.ensureInitialized();
-  final darkModeFuture = SystemTheme.darkMode;
   const app = MyApp();
   final wrappedApp = SharedValue.wrapApp(app);
-  darkMode = await darkModeFuture;
+  darkMode = SystemTheme.isDarkMode;
   runApp(wrappedApp);
 
   AppOptions.init();
