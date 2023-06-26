@@ -7,6 +7,7 @@ import 'package:mdi/mdi.dart';
 import 'package:wsa_pacman/utils/wsa_utils.dart';
 import 'package:wsa_pacman/widget/fluent_card.dart';
 import 'package:wsa_pacman/widget/fluent_info_bar.dart';
+import 'package:wsa_pacman/widget/smooth_list_view.dart';
 import '../main.dart';
 import '../global_state.dart';
 
@@ -56,7 +57,7 @@ class _ScreenWSAState extends State<ScreenWSA> {
 
     return ScaffoldPage(
       header: PageHeader(title: Text(lang.screen_wsa)),
-      content: ListView(
+      content: SmoothListView(
         padding: EdgeInsets.only(
           bottom: kPageDefaultVerticalPadding,
           left: PageHeader.horizontalPadding(context),

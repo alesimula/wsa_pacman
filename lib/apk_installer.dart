@@ -9,6 +9,7 @@ import 'package:wsa_pacman/android/reader_apk.dart';
 import 'package:wsa_pacman/global_state.dart';
 import 'package:wsa_pacman/main.dart';
 import 'package:wsa_pacman/utils/wsa_utils.dart';
+import 'package:wsa_pacman/widget/smooth_list_view.dart';
 import 'package:wsa_pacman/widget/themed_pane_item.dart';
 import 'package:wsa_pacman/windows/win_io.dart';
 import 'package:wsa_pacman/widget/adaptive_icon.dart';
@@ -134,7 +135,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
               const SizedBox(height: 10),
               Text((oldVersion.isNotEmpty ? lang.installer_info_version_change(oldVersion, version) : lang.installer_info_version(version)).replaceAll(' ', '\u00A0'), style: TextStyle(color: theme.disabledColor), overflow: TextOverflow.ellipsis, maxLines: 1),
               Text(lang.installer_info_package(package).replaceAll(' ', '\u00A0'), style: TextStyle(color: theme.disabledColor), overflow: TextOverflow.ellipsis, maxLines: 1),
-              /*ListView(
+              /*SmoothListView(
                 padding: EdgeInsets.only(
                   bottom: kPageDefaultVerticalPadding,
                   left: PageHeader.horizontalPadding(context),
@@ -152,7 +153,7 @@ class _ApkInstallerState extends State<ApkInstaller> {
               : theme.scaffoldBackgroundColor.lerpWith(theme.inactiveBackgroundColor, 0.038),
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
             //color: Colors.red, 
-            child: ListView(
+            child: SmoothListView(
             //padding: const EdgeInsets.all(5),
             children: [
               for (var permission in GState.permissions.of(context)) Container(

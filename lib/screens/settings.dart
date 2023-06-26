@@ -14,6 +14,7 @@ import 'package:wsa_pacman/widget/fluent_card.dart';
 import 'package:wsa_pacman/widget/fluent_combo_box.dart';
 import 'package:wsa_pacman/widget/fluent_expander.dart';
 import 'package:wsa_pacman/widget/fluent_text_box.dart';
+import 'package:wsa_pacman/widget/smooth_list_view.dart';
 import 'package:wsa_pacman/windows/win_info.dart';
 
 import '/utils/string_utils.dart';
@@ -165,13 +166,12 @@ class ScreenSettingsState extends State<ScreenSettings> {
 
     return ScaffoldPage(
       header: PageHeader(title: Text(lang.screen_settings)),
-      content: ListView(
+      content: SmoothListView(
         padding: EdgeInsets.only(
           bottom: kPageDefaultVerticalPadding,
           left: PageHeader.horizontalPadding(context),
           right: PageHeader.horizontalPadding(context),
         ),
-        controller: controller,
         children: [
           spacer,
           FluentCard(

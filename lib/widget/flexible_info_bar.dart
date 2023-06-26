@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:wsa_pacman/widget/fluent_info_bar.dart';
+import 'package:wsa_pacman/widget/smooth_list_view.dart';
 
 class FlexibleInfoBar extends StatelessWidget {
 
@@ -34,7 +35,7 @@ class FlexibleInfoBar extends StatelessWidget {
                 style: FluentTheme.of(context).typography.bodyStrong ?? const TextStyle(),
                 child: title,
               )),
-              body: (content != null) ? ListView(children: [DefaultTextStyle(
+              body: (content != null) ? SmoothListView(children: [DefaultTextStyle(
                 style: FluentTheme.of(context).typography.body ?? const TextStyle(),
                 child: content!,
                 softWrap: true,

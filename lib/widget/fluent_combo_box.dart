@@ -11,6 +11,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 // ignore: implementation_imports
 import 'package:fluent_ui/src/controls/form/pickers/pickers.dart';
 import 'package:wsa_pacman/utils/misc_utils.dart';
+import 'package:wsa_pacman/widget/smooth_list_view.dart';
 
 const Duration _kComboboxMenuDuration = Duration(milliseconds: 300);
 const double _kMenuItemHeight = kPickerHeight;
@@ -306,7 +307,7 @@ class _ComboboxMenuState<T> extends State<_ComboboxMenu<T>> {
                       return Scrollbar(
                         timeToFade: (isScrollable) ? const Duration(milliseconds: 600) : const Duration(days: 9007199254740991),
                         //sAlwaysShown: isScrollable,
-                        child: ListView(
+                        child: SmoothListView(
                           padding: _kListPadding,
                           shrinkWrap: true,
                           children: children,
