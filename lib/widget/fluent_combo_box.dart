@@ -304,7 +304,8 @@ class _ComboboxMenuState<T> extends State<_ComboboxMenu<T>> {
                           _kListPadding.vertical + menuTotalHeight >
                               constraints.maxHeight;
                       return Scrollbar(
-                        isAlwaysShown: isScrollable,
+                        timeToFade: (isScrollable) ? const Duration(milliseconds: 600) : const Duration(days: 9007199254740991),
+                        //sAlwaysShown: isScrollable,
                         child: ListView(
                           padding: _kListPadding,
                           shrinkWrap: true,
@@ -708,16 +709,16 @@ class _FluentComboboxState<T> extends State<FluentCombobox<T>> with WidgetsBindi
       ),
     };
     focusNode!.addListener(_handleFocusChanged);
-    final FocusManager focusManager = WidgetsBinding.instance!.focusManager;
+    final FocusManager focusManager = WidgetsBinding.instance.focusManager;
     _focusHighlightMode = focusManager.highlightMode;
     focusManager.addHighlightModeListener(_handleFocusHighlightModeChange);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     _removeComboboxRoute();
-    WidgetsBinding.instance!.focusManager
+    WidgetsBinding.instance.focusManager
         .removeHighlightModeListener(_handleFocusHighlightModeChange);
     focusNode!.removeListener(_handleFocusChanged);
     _internalNode?.dispose();

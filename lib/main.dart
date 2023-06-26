@@ -200,7 +200,7 @@ class Constants {
 
 void main(List<String> arguments) async {
   //int prevTime = DateTime.now().millisecondsSinceEpoch;
-  //arguments = [r'C:\Users\Alex\Downloads\caab_585.apk'];
+  //arguments = [r'C:\Users\Alex\Downloads\firefox-114-1-0.apk'];
   //arguments = [r'C:\Users\Alex\Downloads\Chrome.xapk'];
   
 
@@ -435,48 +435,15 @@ class _MyHomePageState extends State<MyHomePage> {
           ), const SizedBox(width: 10), Text("WSA PacMan", style: theme.typography.bodyLarge)]),
         ),
         displayMode: appTheme.displayMode,
-        indicatorBuilder: ({
-          required BuildContext context,
-          required NavigationPane pane,
-          Axis? axis,
-          required Widget child,
-        }) {
-          if (pane.selected == null) return child;
-          axis ??= Axis.horizontal;
-          assert(debugCheckHasFluentTheme(context));
-          final theme = NavigationPaneTheme.of(context);
+        indicator: () {
           switch (appTheme.indicator) {
             case NavigationIndicators.end:
-              return EndNavigationIndicator(
-                index: pane.selected!,
-                offsets: () =>
-                    pane.effectiveItems.getPaneItemsOffsets(pane.paneKey),
-                sizes: pane.effectiveItems.getPaneItemsSizes,
-                child: child,
-                color: theme.highlightColor,
-                curve: theme.animationCurve ?? Curves.linear,
-                axis: axis,
-              );
+              return const EndNavigationIndicator();
             case NavigationIndicators.sticky:
-              return NavigationPane.defaultNavigationIndicator(
-                context: context,
-                axis: axis,
-                pane: pane,
-                child: child,
-              );
             default:
-              return NavigationIndicator(
-                index: pane.selected!,
-                offsets: () =>
-                    pane.effectiveItems.getPaneItemsOffsets(pane.paneKey),
-                sizes: pane.effectiveItems.getPaneItemsSizes,
-                child: child,
-                color: theme.highlightColor,
-                curve: theme.animationCurve ?? Curves.linear,
-                axis: axis,
-              );
+              return const StickyNavigationIndicator();
           }
-        },
+        }(),
         items: [
           // It doesn't look good when resizing from compact to open
           // PaneItemHeader(header: Text('User Interaction')),

@@ -1,6 +1,4 @@
-import 'dart:ui' as ui;
 import 'package:fluent_ui/fluent_ui.dart';
-import '../utils/misc_utils.dart';
 
 const double _kCompactNavigationPanelWidth = 50.0;
 
@@ -39,6 +37,79 @@ class ThemablePaneItem extends PaneItem {
       return Colors.transparent;
     }
   }
+
+  T? _getPropertyFromTitle<T>([dynamic def]) {
+    if (title is Text) {
+      final title = this.title as Text;
+      switch (T) {
+        case String:
+          return (title.data ?? title.textSpan?.toPlainText()) as T?;
+        case InlineSpan:
+          return (title.textSpan ??
+              TextSpan(
+                text: title.data ?? '',
+                style: _getPropertyFromTitle<TextStyle>()
+                        ?.merge(def as TextStyle?) ??
+                    def as TextStyle?,
+              )) as T?;
+        case TextStyle:
+          return title.style as T?;
+        case TextAlign:
+          return title.textAlign as T?;
+        case TextHeightBehavior:
+          return title.textHeightBehavior as T?;
+        case TextWidthBasis:
+          return title.textWidthBasis as T?;
+      }
+    } else if (title is RichText) {
+      final title = this.title as RichText;
+      switch (T) {
+        case String:
+          return title.text.toPlainText() as T?;
+        case InlineSpan:
+          if (T is InlineSpan) {
+            final span = title.text;
+            span.style?.merge(def as TextStyle?);
+            return span as T;
+          }
+          return title.text as T;
+        case TextStyle:
+          return (title.text.style as T?) ?? def as T?;
+        case TextAlign:
+          return title.textAlign as T?;
+        case TextHeightBehavior:
+          return title.textHeightBehavior as T?;
+        case TextWidthBasis:
+          return title.textWidthBasis as T?;
+      }
+    } else if (title is Icon) {
+      final title = this.title as Icon;
+      switch (T) {
+        case String:
+          if (title.icon?.codePoint == null) return null;
+          return String.fromCharCode(title.icon!.codePoint) as T?;
+        case InlineSpan:
+          return TextSpan(
+            text: String.fromCharCode(title.icon!.codePoint),
+            style: _getPropertyFromTitle<TextStyle>(),
+          ) as T?;
+        case TextStyle:
+          return TextStyle(
+            color: title.color,
+            fontSize: title.size,
+            fontFamily: title.icon?.fontFamily,
+            package: title.icon?.fontPackage,
+          ) as T?;
+        case TextAlign:
+          return null;
+        case TextHeightBehavior:
+          return null;
+        case TextWidthBasis:
+          return null;
+      }
+    }
+    return null;
+  }
   
   @override
   Widget build(
@@ -49,134 +120,254 @@ class ThemablePaneItem extends PaneItem {
     bool showTextOnTop = true,
     bool? autofocus,
   }) {
-    final PaneDisplayMode mode = forceDisplayMode ?? displayMode ??
-        //_NavigationBody.maybeOf(context)?.displayMode ??
+    final maybeBody = InheritedNavigationView.maybeOf(context);
+    final PaneDisplayMode mode = forceDisplayMode ??  displayMode ??
         PaneDisplayMode.minimal;
-    assert(displayMode != PaneDisplayMode.auto);
+    assert(mode != PaneDisplayMode.auto);
+
+    assert(debugCheckHasFluentTheme(context));
+    assert(debugCheckHasDirectionality(context));
+
+    final direction = Directionality.of(context);
+
+    final NavigationPaneThemeData theme = NavigationPaneTheme.of(context);
+    final String titleText = _getPropertyFromTitle<String>() ?? '';
+
+    final TextStyle baseStyle =
+        _getPropertyFromTitle<TextStyle>() ?? const TextStyle();
+
     final bool isTop = mode == PaneDisplayMode.top;
     final bool isCompact = mode == PaneDisplayMode.compact;
-    final bool isOpen =
-        [PaneDisplayMode.open, PaneDisplayMode.minimal].contains(mode);
-    final NavigationPaneThemeData theme = NavigationPaneTheme.of(context);
 
-    final String titleText =
-        title != null && title is Text ? (title! as Text).data ?? '' : '';
-
-    return Container(
-      key: itemKey,
-      height: !isTop ? 36.0 : null,
-      width: isCompact ? _kCompactNavigationPanelWidth : null,
-      margin: const EdgeInsets.only(right: 6.0, left: 6.0, bottom: 4.0),
-      alignment: Alignment.center,
-      child: HoverButton(
-        autofocus: autofocus ?? this.autofocus,
-        focusNode: focusNode,
-        onPressed: onPressed,
-        cursor: mouseCursor,
-        builder: (context, states) {
-          final isLtr = Directionality.of(context) == TextDirection.ltr;
-          final textStyle = selected
+    final button = HoverButton(
+      autofocus: autofocus ?? this.autofocus,
+      focusNode: focusNode,
+      onPressed: onPressed,
+      cursor: mouseCursor,
+      builder: (context, states) {
+        TextStyle textStyle = baseStyle.merge(
+          selected
               ? theme.selectedTextStyle?.resolve(states)
-              : theme.unselectedTextStyle?.resolve(states);
-          final textResult = titleText.isNotEmpty
-              ? Padding(
-                  padding: theme.labelPadding?.directional() ?? EdgeInsets.zero,
-                  child: Text(titleText, style: textStyle),
-                )
-              : const SizedBox.shrink();
-          
-          final icon = Padding(
-            padding: theme.iconPadding?.directional() ?? EdgeInsets.zero,
-            child: IconTheme.merge(
-              data: IconThemeData(
-                color: (selected ? theme.selectedIconColor?.resolve(states) : theme.unselectedIconColor?.resolve(states)) ?? textStyle?.color,
-                size: 16.0,
-              ),
-              child: Center(
-                child: Stack(clipBehavior: Clip.none, children: [
-                  this.icon,
-                  // Show here if it's not on top and not open
-                  if (infoBadge != null && !isTop && !isOpen) Positioned(right: -8, top: -8, child: infoBadge!),
+              : theme.unselectedTextStyle?.resolve(states),
+        );
+        if (isTop && states.isPressing) {
+          textStyle = textStyle.copyWith(
+            color: textStyle.color?.withOpacity(0.75),
+          );
+        }
+        final textResult = titleText.isNotEmpty
+            ? Padding(
+                padding: theme.labelPadding ?? EdgeInsets.zero,
+                child: RichText(
+                  text: _getPropertyFromTitle<InlineSpan>(textStyle)!,
+                  maxLines: 1,
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                  textAlign:
+                      _getPropertyFromTitle<TextAlign>() ?? TextAlign.start,
+                  textHeightBehavior:
+                      _getPropertyFromTitle<TextHeightBehavior>(),
+                  textWidthBasis: _getPropertyFromTitle<TextWidthBasis>() ??
+                      TextWidthBasis.parent,
+                ),
+              )
+            : const SizedBox.shrink();
+        Widget result() {
+          switch (mode) {
+            case PaneDisplayMode.compact:
+              return Container(
+                key: itemKey,
+                height: 36.0,
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: theme.iconPadding ?? EdgeInsets.zero,
+                  child: IconTheme.merge(
+                    data: IconThemeData(
+                      color: (selected
+                              ? theme.selectedIconColor?.resolve(states)
+                              : theme.unselectedIconColor?.resolve(states)) ??
+                          textStyle.color,
+                      size: 16.0,
+                    ),
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: () {
+                          if (infoBadge != null) {
+                            return Stack(
+                              alignment: Alignment.center,
+                              clipBehavior: Clip.none,
+                              children: [
+                                icon,
+                                Positioned(
+                                  right: -8,
+                                  top: -8,
+                                  child: infoBadge!,
+                                ),
+                              ],
+                            );
+                          }
+                          return icon;
+                        }()),
+                  ),
+                ),
+              );
+            case PaneDisplayMode.minimal:
+            case PaneDisplayMode.open:
+              return SizedBox(
+                key: itemKey,
+                height: 36.0,
+                child: Row(children: [
+                  Padding(
+                    padding: theme.iconPadding ?? EdgeInsets.zero,
+                    child: IconTheme.merge(
+                      data: IconThemeData(
+                        color: (selected
+                                ? theme.selectedIconColor?.resolve(states)
+                                : theme.unselectedIconColor?.resolve(states)) ??
+                            textStyle.color,
+                        size: 16.0,
+                      ),
+                      child: Center(child: icon),
+                    ),
+                  ),
+                  Expanded(child: textResult),
+                  if (infoBadge != null)
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(end: 8.0),
+                      child: infoBadge!,
+                    ),
                 ]),
-              ),
-            ),
-          );
-          
-          Widget child = Flex(
-            direction: isTop ? Axis.vertical : Axis.horizontal,
-            textDirection: isTop ? ui.TextDirection.ltr : ui.TextDirection.rtl,
-            mainAxisAlignment: isTop || !isOpen
-                ? MainAxisAlignment.center
-                : MainAxisAlignment.end,
-            children: [
-              if (isOpen && infoBadge != null) Padding(
-                padding: const EdgeInsetsDirectional.only(end: 6.0),
-                child: infoBadge!,
-              ),
-              if (!isLtr) icon,
-              if (isOpen) Expanded(child: textResult),
-              if (isLtr) icon,
-            ],
-          );
-          if (isTop && showTextOnTop) {
-            child = Row(mainAxisSize: MainAxisSize.min, children: [
-              child,
-              textResult,
-            ]);
+              );
+            case PaneDisplayMode.top:
+              Widget result = Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: theme.iconPadding ?? EdgeInsets.zero,
+                    child: IconTheme.merge(
+                      data: IconThemeData(
+                        color: (selected
+                                ? theme.selectedIconColor?.resolve(states)
+                                : theme.unselectedIconColor?.resolve(states)) ??
+                            textStyle.color,
+                        size: 16.0,
+                      ),
+                      child: Center(child: icon),
+                    ),
+                  ),
+                  if (showTextOnTop) textResult,
+                ],
+              );
+              if (infoBadge != null) {
+                return Stack(
+                  key: itemKey,
+                  clipBehavior: Clip.none,
+                  children: [
+                    result,
+                    if (infoBadge != null)
+                      Positioned.directional(
+                        textDirection: direction,
+                        end: -3,
+                        top: 3,
+                        child: infoBadge!,
+                      ),
+                  ],
+                );
+              }
+              return KeyedSubtree(key: itemKey, child: result);
+            default:
+              throw '$mode is not a supported type';
           }
-          if (isTop && infoBadge != null) {
-            child = Stack(children: [
-              child,
-              Positioned(
-                top: 0,
-                right: 0,
-                child: infoBadge!,
-              ),
-            ]);
-          }
-          child = AnimatedContainer(
-            duration: theme.animationDuration ?? Duration.zero,
-            curve: theme.animationCurve ?? standartCurve,
+        }
+
+        return Semantics(
+          label: titleText.isEmpty ? null : titleText,
+          selected: selected,
+          child: AnimatedContainer(
+            duration: theme.animationDuration ?? Duration(seconds: 2),
+            curve: theme.animationCurve ?? standardCurve,
+            margin: const EdgeInsets.only(right: 6.0, left: 6.0),
             decoration: BoxDecoration(
               color: () {
-                final ButtonState<Color?> tileColor = theme.tileColor ??
+                final ButtonState<Color?> tileColor = this.tileColor ??
+                    theme.tileColor ??
                     ButtonState.resolveWith((states) {
                       if (isTop && !topHoverEffect) return Colors.transparent;
                       return translucent ? uncheckedInputAlphaColor(FluentTheme.of(context), states) :
                         ButtonThemeData.uncheckedInputColor(FluentTheme.of(context), states);
                     });
                 final newStates = states.toSet()..remove(ButtonStates.disabled);
+                if (selected && selectedTileColor != null) {
+                  return selectedTileColor!.resolve(newStates);
+                }
                 return tileColor.resolve(
-                  (selected && !isTop) ? {ButtonStates.hovering} : newStates,
+                  (selected && !isTop) ? {states.isHovering ? ButtonStates.pressing : ButtonStates.hovering} : newStates,
                 );
               }(),
               borderRadius: BorderRadius.circular(4.0),
             ),
-            child: child,
-          );
-          child = Semantics(
-            label: title == null ? null : titleText,
-            selected: selected,
             child: FocusBorder(
-              child: child,
               focused: states.isFocused,
               renderOutside: false,
+              child: () {
+                final showTooltip = ((isTop && !showTextOnTop) || isCompact) &&
+                    titleText.isNotEmpty &&
+                    !states.isDisabled;
+
+                if (showTooltip) {
+                  return Tooltip(
+                    richMessage: _getPropertyFromTitle<InlineSpan>(),
+                    style: TooltipThemeData(textStyle: baseStyle),
+                    child: result(),
+                  );
+                }
+
+                return result();
+              }(),
             ),
-          );
-          if (((isTop && !showTextOnTop) || isCompact) &&
-              titleText.isNotEmpty &&
-              !states.isDisabled) {
-            return Tooltip(
-              message: titleText,
-              style: TooltipThemeData(
-                textStyle: title is Text ? (title as Text).style : null,
+          ),
+        );
+      },
+    );
+
+    final int? index = () {
+      if (maybeBody?.pane?.indicator != null) {
+        return maybeBody!.pane!.effectiveIndexOf(this);
+      }
+    }();
+
+    dynamic paneItemKeys = maybeBody?.child; // type: _PaneItemKeys
+    late final GlobalKey? key;
+    // ignore: curly_braces_in_flow_control_structures
+    if (index != null) try {
+      key = paneItemKeys.keys[index];
+    } catch (_) {
+      key = null;
+    } else {
+      key = null;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4.0),
+      child: () {
+        // If there is an indicator and the item is an effective item
+        if (maybeBody?.pane?.indicator != null && index != -1) {
+          return Stack(children: [
+            button,
+            Positioned.fill(
+              child: InheritedNavigationView.merge(
+                currentItemIndex: index,
+                child: KeyedSubtree(
+                  key: index != null ? key : null,
+                  child: maybeBody!.pane!.indicator!,
+                ),
               ),
-              child: child,
-            );
-          }
-          return child;
-        },
-      ),
+            ),
+          ]);
+        }
+
+        return button;
+      }(),
     );
   }
 }

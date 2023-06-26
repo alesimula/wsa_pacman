@@ -6,15 +6,15 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
-  flutter: 2.10.5
+  sdk: '>=2.17.0 <3.0.0'
+  flutter: 3.0.0
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  fluent_ui: 3.7.0
+  fluent_ui: 3.12.0
     #git: https://github.com/bdlukaa/fluent_ui.git
   shared_value: ^2.1.2
   synchronized: ^3.0.0
@@ -26,6 +26,8 @@ dependencies:
       url: https://github.com/alesimula/bitsdojo_window.git
       path: bitsdojo_window
       ref: master
+  dyn_mouse_scroll:
+    git: https://github.com/alesimula/dyn_mouse_scroll.git
   flutter_acrylic: ^1.0.0+1
   url_strategy: ^0.2.0
   yaml: ^3.1.0
@@ -33,7 +35,7 @@ dependencies:
   archive: #3.1.11
     git: https://github.com/brendan-duncan/archive.git
   #flutter_svg: ^0.23.0+1
-  jovial_svg: ^1.0.8
+  jovial_svg: ^1.1.9
   protobuf: ^2.0.0
   #path_provider: ^2.0.6
   mdi: ^5.0.0-nullsafety.0
