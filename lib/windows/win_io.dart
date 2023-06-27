@@ -349,18 +349,18 @@ class WinIO {
     final ppf = calloc<COMObject>();
 
     try {
-      shellLink.SetPath(lpPath);
-      if (lpArgs != null) shellLink.SetArguments(lpArgs);
-      if (description != null) shellLink.SetDescription(lpDescription);
-      if (lpIcon != null) shellLink.SetIconLocation(lpIcon, 0);
+      shellLink.setPath(lpPath);
+      if (lpArgs != null) shellLink.setArguments(lpArgs);
+      if (description != null) shellLink.setDescription(lpDescription);
+      if (lpIcon != null) shellLink.setIconLocation(lpIcon, 0);
 
-      final hr = shellLink.QueryInterface(ptrIID_IPersistFile, ppf.cast());
+      final hr = shellLink.queryInterface(ptrIID_IPersistFile, ppf.cast());
       if (SUCCEEDED(hr)) {
         final persistFile = IPersistFile(ppf);
-        persistFile.Save(lpLinkPath, TRUE);
-        persistFile.Release();
+        persistFile.save(lpLinkPath, TRUE);
+        persistFile.release();
       }
-      shellLink.Release();
+      shellLink.release();
     } finally {
       free(lpPath);
       if (lpArgs != null) free(lpArgs);

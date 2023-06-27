@@ -22,7 +22,7 @@ class WinWMI {
 
     try {
       // For example, query for all the running processes
-      int hr = service.ExecQuery(TEXT('WQL'), TEXT('SELECT $valName FROM $wmiClass'),
+      int hr = service.execQuery(TEXT('WQL'), TEXT('SELECT $valName FROM $wmiClass'),
           WBEM_GENERIC_FLAG_TYPE.WBEM_FLAG_FORWARD_ONLY | WBEM_GENERIC_FLAG_TYPE.WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, pEnumerator);
 
       if (FAILED(hr)) {
@@ -36,7 +36,7 @@ class WinWMI {
 
         if (enumerator.ptr.address > 0) {
           final pClsObj = calloc<IntPtr>();
-          hr = enumerator.Next(WBEM_TIMEOUT_TYPE.WBEM_INFINITE, 1, pClsObj.cast(), uReturn);
+          hr = enumerator.next(WBEM_TIMEOUT_TYPE.WBEM_INFINITE, 1, pClsObj.cast(), uReturn);
 
           // Break out of the while loop if we've run out of processes to inspect
           if (uReturn.value == 0) {
@@ -47,19 +47,19 @@ class WinWMI {
           final clsObj = IWbemClassObject(pClsObj.cast());
 
           final vtProp = calloc<VARIANT>();
-          hr = clsObj.Get(TEXT(valName), 0, vtProp, nullptr, nullptr);
+          hr = clsObj.get(TEXT(valName), 0, vtProp, nullptr, nullptr);
           String? value = SUCCEEDED(hr) ? vtProp.ref.bstrVal.toDartString() : null;
           
           VariantClear(vtProp);
           free(vtProp);
-          clsObj.Release();
+          clsObj.release();
 
           return value;
         }
       }
     }
     finally {
-      enumerator?.Release() ?? free(pEnumerator);
+      enumerator?.release() ?? free(pEnumerator);
     }
   }
 
@@ -106,7 +106,7 @@ class WinWMI {
     if (FAILED(hr)) {
       log(WindowsException(hr).toString(), level: 1000);
 
-      pLoc.Release();
+      pLoc.release();
       free(clsid);
       free(iid);
       CoUninitialize();
@@ -118,12 +118,12 @@ class WinWMI {
     // Connect to the root\cimv2 namespace with the
     // current user and obtain pointer pSvc
     // to make IWbemServices calls.
-    hr = pLoc.ConnectServer(TEXT(_namespace), nullptr, nullptr, nullptr, NULL, nullptr, nullptr, proxy);
+    hr = pLoc.connectServer(TEXT(_namespace), nullptr, nullptr, nullptr, NULL, nullptr, nullptr, proxy);
 
     if (FAILED(hr)) {
       log(WindowsException(hr).toString(), level: 1000);
 
-      pLoc.Release();
+      pLoc.release();
       free(clsid);
       free(iid);
       free(proxy);
