@@ -3,6 +3,7 @@
 import 'dart:math' as math;
 import 'dart:ui' show window;
 
+import 'package:dyn_mouse_scroll/dyn_mouse_scroll.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -121,11 +122,11 @@ class _ComboboxItemButtonState<T> extends State<_ComboboxItemButton<T>> {
     if (focused && inTraditionalMode) {
       final _MenuLimits menuLimits = widget.route.getMenuLimits(
           widget.buttonRect, widget.constraints.maxHeight, widget.itemIndex);
-      widget.route.scrollController!.animateTo(
+      /*widget.route.scrollController!.animateTo(
         menuLimits.scrollOffset,
         curve: Curves.easeInOut,
         duration: const Duration(milliseconds: 100),
-      );
+      );*/
     }
   }
 
@@ -293,8 +294,8 @@ class _ComboboxMenuState<T> extends State<_ComboboxMenu<T>> {
               style: route.style,
               child: ScrollConfiguration(
                 behavior: const _ComboboxScrollBehavior(),
-                child: PrimaryScrollController(
-                  controller: widget.route.scrollController!,
+                child: DynMouseScroll(builder: (context, controller, physics) => PrimaryScrollController(
+                  controller: widget.route.scrollController = controller,
                   child: LayoutBuilder(
                     builder:
                         (BuildContext context, BoxConstraints constraints) {
@@ -304,18 +305,22 @@ class _ComboboxMenuState<T> extends State<_ComboboxMenu<T>> {
                       final bool isScrollable =
                           _kListPadding.vertical + menuTotalHeight >
                               constraints.maxHeight;
+                              
                       return Scrollbar(
                         timeToFade: (isScrollable) ? const Duration(milliseconds: 600) : const Duration(days: 9007199254740991),
+                        controller: controller,
                         //sAlwaysShown: isScrollable,
-                        child: SmoothListView(
+                        child: ListView(
                           padding: _kListPadding,
                           shrinkWrap: true,
+                          controller: controller,
+                          physics: physics,
                           children: children,
                         ),
                       );
                     },
                   ),
-                ),
+                )),
               ),
             ),
           ),
