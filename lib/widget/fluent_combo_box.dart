@@ -293,21 +293,13 @@ class _ComboboxMenuState<T> extends State<_ComboboxMenu<T>> {
             child: DefaultTextStyle(
               style: route.style,
               child: ScrollConfiguration(
-                behavior: const _ComboboxScrollBehavior(),
+                behavior: const FluentScrollBehavior(),
                 child: DynMouseScroll(builder: (context, controller, physics) => PrimaryScrollController(
                   controller: widget.route.scrollController = controller,
                   child: LayoutBuilder(
-                    builder:
-                        (BuildContext context, BoxConstraints constraints) {
-                      final double menuTotalHeight = widget.route.itemHeights
-                          .reduce(
-                              (double total, double height) => total + height);
-                      final bool isScrollable =
-                          _kListPadding.vertical + menuTotalHeight >
-                              constraints.maxHeight;
-                              
+                    builder: (BuildContext context, BoxConstraints constraints) {
                       return Scrollbar(
-                        timeToFade: (isScrollable) ? const Duration(milliseconds: 600) : const Duration(days: 9007199254740991),
+                        timeToFade: const Duration(milliseconds: 600),
                         controller: controller,
                         //sAlwaysShown: isScrollable,
                         child: ListView(
