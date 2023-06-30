@@ -23,7 +23,7 @@ enum InstallType {
   UNKNOWN, INSTALL, REINSTALL, UPDATE, DOWNGRADE
 }
 enum ResType {
-  COLOR, FILE
+  COLOR, POINTER, FILE
 }
 enum AppPackage {
   NONE, APK, XAPK
@@ -53,6 +53,7 @@ extension InstallTypeExt on InstallType {
 ResType getResType(String typeId) {switch (typeId) {
   case "1d": return ResType.COLOR;
   case "1c": return ResType.COLOR;
+  case "1": return ResType.POINTER;
   default: return ResType.FILE;
 }}
 Map<String, String> fillType = {

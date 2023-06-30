@@ -130,7 +130,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "8404d0513118dac1ae232cafae5cec0584dfc41b"
+      resolved-ref: f1f690bd3588ee63ec05881cfc8ca2716fd1d596
       url: "https://github.com/alesimula/dyn_mouse_scroll.git"
     source: git
     version: "1.0.8"
@@ -234,10 +234,12 @@ packages:
   jovial_svg:
     dependency: "direct main"
     description:
-      name: jovial_svg
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.9"
+      path: "."
+      ref: HEAD
+      resolved-ref: e8397954297dd7e47fd1804355cb5cf132b355c6
+      url: "https://github.com/alesimula/jovial_svg.git"
+    source: git
+    version: "1.1.16-rc.1"
   js:
     dependency: transitive
     description:

@@ -8,6 +8,7 @@ import 'dart:typed_data';
 import 'package:archive/archive_io.dart';
 import 'package:shared_value/shared_value.dart';
 import 'package:wsa_pacman/io/isolate_runner.dart';
+import 'package:wsa_pacman/utils/future_utils.dart';
 import 'package:wsa_pacman/utils/wsa_utils.dart';
 import 'package:wsa_pacman/windows/nt_io.dart';
 import 'package:wsa_pacman/windows/win_io.dart';
@@ -145,6 +146,9 @@ class ApkReader extends IsolateRunner<String, APK_READER_FLAGS> {
     if (resource != null) {
       if (DEBUG) log("found RES-VALUES: ${resource.values} of RES-TYPE: ${resource.type} for RES-ID: $resId");
       if (resource.type == ResType.COLOR) return resource;
+      // TODO I'm assuming the resource references are all of the same type
+      else if (resource.type == ResType.POINTER) return 
+        resource.values.map((e)=>getResources('0x$e')).foldFuturesSkipNulls((e1, e2) => e1..values = [...e1.values, ...e2.values]);
       Map<int, String> strings = await _stringDump;
       Iterable<String> files = strings.getAll(resource.values.map((e) => int.parse(e, radix: 16)));
       if (DEBUG) log("found RES-FILES: $files of RES-TYPE: ${resource.type} for RES-ID: $resId");
