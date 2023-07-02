@@ -96,7 +96,7 @@ class _ScreenWSAState extends State<ScreenWSA> {
             isButton: true,
             onPressed: connectionStatus.isDisconnected ? 
                 null : () => ADBUtils.shellToAddress(GState.ipAddress.of(context), GState.androidPort.of(context), 
-                  r'am start -n com.android.settings/.Settings\$ManageApplicationsActivity'),
+                  r'am start -f 0x10008000 -n com.android.settings/.Settings\$ManageApplicationsActivity'),
           ),
           smallSpacer,
           FluentCard(
