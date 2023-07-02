@@ -18,11 +18,12 @@ class WSAStatus {
   /// Checks if WSA is running, if booted but not running, it's in sleep mode
   static bool get isRunning {
     REG_VOLATILE_STORE_KEY ??= WinReg.openKeyLp(RegHKey.HKEY_LOCAL_MACHINE, REG_VOLATILE_STORE);
-    if (REG_VOLATILE_STORE_KEY == null) return false;
+    int? sessionId = NtIO.SESSION_ID;
+    if (REG_VOLATILE_STORE_KEY == null || sessionId == null) return false;
     String? wsaVmUUID = WSA_VM_UUID;
     List<String> runningVMs = wsaVmUUID == null ? WinReg.listSubkeys(REG_VOLATILE_STORE_KEY!, 36) : [wsaVmUUID];
     for (String uuid in runningVMs) {
-      bool isSubsystemVMRunning = NtIO.openSection("\\Sessions\\1\\BaseNamedObjects\\WSL\\$uuid\\latte\\gralloc_0", false);
+      bool isSubsystemVMRunning = NtIO.openSection("\\Sessions\\$sessionId\\BaseNamedObjects\\WSL\\$uuid\\latte\\gralloc_0", false);
       if (isSubsystemVMRunning) {
         WSA_VM_UUID = uuid;
         return true;

@@ -80,6 +80,13 @@ final _NtOpenSection = ntdll.lookupFunction<
     Uint32 Function(Uint32 dwFlags, Pointer<Utf16> lpDeviceName, Pointer<Utf16> lpTargetPath),
     int Function(int dwFlags, Pointer<Utf16> lpDeviceName, Pointer<Utf16> lpTargetPath)>('DefineDosDeviceW');*/
 
+/*final _GetSessionID = kernel32.lookupFunction<
+    Uint32 Function(),
+    int Function()>('WTSGetActiveConsoleSessionId');*/
+final _ProcessIdToSessionId = kernel32.lookupFunction<
+    Uint32 Function(Uint32 pid, Pointer<Uint32> lpSessionId),
+    int Function(int pid, Pointer<Uint32> lpSessionId)>('ProcessIdToSessionId');
+
 final _LookupPrivilegeValue = advapi32.lookupFunction<
     Uint32 Function(LPWSTR lpSystemName, LPWSTR lpName, Pointer<LUID> lpLuid),
     int Function(LPWSTR lpSystemName, LPWSTR lpName, Pointer<LUID> lpLuid)>('LookupPrivilegeValueW');
@@ -172,6 +179,20 @@ class NtIO {
   static late final _SE_BACKUP_NAME = TEXT("SeBackupPrivilege");
 
   static late final int? _NT_JUNCTION_HANDLE = (_DOS_DIRECTORY != null) ? createJunction(_DOS_DIRECTORY!, "${WinPath.tempSubdir}\\$NT_TEMP_DIR_NAME", true) : null;
+
+  static int? _SESSION_ID;
+  static late final int? SESSION_ID = () {
+    if (_SESSION_ID == null) {
+      Pointer<Uint32> lpSID  = malloc<Uint32>();
+      try {
+        lpSID = malloc<Uint32>();
+        int result = _ProcessIdToSessionId(pid, lpSID);
+        return result != 0 ? (_SESSION_ID = lpSID.value) : null;
+      } finally {
+        free(lpSID);
+      }
+    } else return _SESSION_ID;
+  }();
 
   /// Creates a temporary shortcut inside the object manager and links it inside %TEMP%
   /// Returns the relative path starting from WinPath.tempSubdir to access it
