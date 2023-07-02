@@ -32,6 +32,16 @@ class OBJECT_ATTRIBUTES extends Struct {
   external Pointer securityQualityOfService;
 }
 
+/*class _IO_STATUS_BLOCK extends Struct {
+  external _IO_STATUS_BLOCK__Anonymous_e__Union Anonymous;
+  @UintPtr() external int Information;
+}
+
+class _IO_STATUS_BLOCK__Anonymous_e__Union extends Union {
+  @NTSTATUS() external int hIcon;
+  @IntPtr() external int hMonitor;
+}*/
+
 class REPARSE_MOUNTPOINT_DATA_BUFFER extends Struct {
   @DWORD() external int reparseTag;
   @DWORD() external int reparseDataLength;
@@ -59,6 +69,12 @@ final _NtStatusToDosError = ntdll.lookupFunction<Uint32 Function(Int32 status), 
 final _CreateDirectoryObject = ntdll.lookupFunction<
     Uint32 Function(Pointer<IntPtr> lpHandle, Uint32 desiredAccess, Pointer<OBJECT_ATTRIBUTES> obj_attr, HANDLE shadowDirectoryHandle, Uint32 flags), 
     int Function(Pointer<IntPtr> lpHandle, int desiredAccess, Pointer<OBJECT_ATTRIBUTES> obj_attr, int shadowDirectoryHandle, int flags)>('NtCreateDirectoryObjectEx');
+/*final _NtOpenFile = ntdll.lookupFunction<
+    Uint32 Function(Pointer<IntPtr> lpHandle, Uint32 desiredAccess, Pointer<OBJECT_ATTRIBUTES> obj_attr, Pointer<_IO_STATUS_BLOCK> ioStatusBlock, Uint32 shareAccess, Uint32 openOptions), 
+    int Function(Pointer<IntPtr> lpHandle, int desiredAccess, Pointer<OBJECT_ATTRIBUTES> obj_attr, Pointer<_IO_STATUS_BLOCK> ioStatusBlock, int shareAccess, int openOptions)>('NtOpenFile');*/
+final _NtOpenSection = ntdll.lookupFunction<
+    Uint32 Function(Pointer<IntPtr> lpHandle, Uint32 desiredAccess, Pointer<OBJECT_ATTRIBUTES> obj_attr), 
+    int Function(Pointer<IntPtr> lpHandle, int desiredAccess, Pointer<OBJECT_ATTRIBUTES> obj_attr)>('NtOpenSection');
 
 /*final _DefineDosDevice = kernel32.lookupFunction<
     Uint32 Function(Uint32 dwFlags, Pointer<Utf16> lpDeviceName, Pointer<Utf16> lpTargetPath),
@@ -282,6 +298,51 @@ class NtIO {
       free(lpHandle);
     }
   }
+
+  /// Creates a directory inside the object manager
+  static bool openSection(String nativePath) {
+    final objectName = nativePath.toUnicodeString();
+    final objAttrs = _InitializeObjectAttributes(objectName, OBJ_CASE_INSENSITIVE, 0, nullptr);
+    final lpHandle = calloc<IntPtr>();
+    try {
+      int result = _NtOpenSection(lpHandle, GENERIC_READ, objAttrs);
+      if (result != 0) {
+        log("\x1B[91mNative directory cration failed: ${getMessageNt(result)}", level: 1000);
+        return false;
+      }
+      else {
+        CloseHandle(lpHandle.value);
+        return true;
+      }
+    }
+    finally {
+      objectName.free();
+      free(objAttrs);
+      free(lpHandle);
+    }
+  }
+
+
+  /// Creates a directory inside the object manager
+  /*static int? openNativeObject(String nativePath) {
+    final objectName = nativePath.toUnicodeString();
+    final objAttrs = _InitializeObjectAttributes(objectName, OBJ_CASE_INSENSITIVE, 0, nullptr);
+    final lpHandle = calloc<IntPtr>();
+    final lpStatusBlock = calloc<_IO_STATUS_BLOCK>();
+    try {
+      //int result = _CreateDirectoryObject(lpHandle, DIRECTORY_ALL_ACCESS, objAttrs, 0, 0);
+      int result = _NtOpenFile(lpHandle, FILE_READ_ATTRIBUTES | SYNCHRONIZE, objAttrs, lpStatusBlock, 0x00000007 /*FILE_SHARE_READ*/, 0x00200000 | 0x00000020 | 0x00004000/*0x00000040 | 0x00004000*/);
+      log("OPENED OBJECT: $result");
+      if (result != 0) log("\x1B[91mNative directory cration failed: ${getMessageNt(result)}", level: 1000);
+      else return lpHandle.value;
+    }
+    finally {
+      objectName.free();
+      free(objAttrs);
+      free(lpHandle);
+      free(lpStatusBlock);
+    }
+  }*/
 
   /// Creates a shortcut inside the object manager
   static int? createNativeSymlink(int rootDirHandle, String target, String symlink) {

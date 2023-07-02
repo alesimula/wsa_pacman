@@ -55,13 +55,6 @@ enum DRIVE_TYPE {
     DRIVE_UNKNOWN, DRIVE_NO_ROOT_DIR, DRIVE_REMOVABLE, DRIVE_FIXED, DRIVE_REMOTE, DRIVE_CDROM, DRIVE_RAMDISK
 }
 
-class RegistryKeyValuePair {
-  final String key;
-  final String value;
-
-  const RegistryKeyValuePair(this.key, this.value);
-}
-
 /// Locks files and marks them for deletion
 /// The files will be deleted if the application is closed or by calling dispose()
 /// The files cannot be opened unless unflagged by calling clear()

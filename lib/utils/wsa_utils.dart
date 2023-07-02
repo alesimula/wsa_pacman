@@ -15,6 +15,7 @@ class WSAUtils {
   static bool launchSystem() => launchApp("android.system");
   static bool shutdown() => launch("/shutdown");
   static bool modifyApp(String package) => launch("/modify $package");
+  static bool launchPartial() => launch("/partiallyrunning");
   //launch("/jump");    // No idea what this does
   //launch("/deeplink wsa-client://legal-settings");    // Legal settings, pretty useless stuff
 }

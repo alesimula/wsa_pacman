@@ -1,4 +1,4 @@
-// ignore_for_file: constant_identifier_names, non_constant_identifier_names
+// ignore_for_file: constant_identifier_names, non_constant_identifier_names, curly_braces_in_flow_control_structures
 
 import 'dart:developer';
 import 'dart:ffi';
@@ -8,7 +8,7 @@ import 'package:win32/win32.dart';
 
 const _MAX_ITEMLENGTH = 1024;
 
-extension on String {
+extension WinRegStringExtension on String {
   static final RegExp _KEY_PATH_NORMALIZER = RegExp(r'[\\]*(.*)');
   String? get normalizedRegKey => _KEY_PATH_NORMALIZER.firstMatch(this)?.group(1);
 }
@@ -31,6 +31,13 @@ extension on RegHKey {
     case RegHKey.HKEY_DYN_DATA: return HKEY_DYN_DATA;
     case RegHKey.HKEY_CURRENT_USER_LOCAL_SETTINGS: return HKEY_CURRENT_USER_LOCAL_SETTINGS;
   }}
+}
+
+class RegistryKeyValuePair {
+  final String key;
+  final String value;
+
+  const RegistryKeyValuePair(this.key, this.value);
 }
 
 class RegValue {
@@ -85,6 +92,50 @@ class WinReg {
       free(lpType);
       free(lpData);
       free(lpcbData);
+    }
+  }
+
+  static int? openKeyLp(RegHKey hKey, Pointer<Utf16> lpKeyPath) {
+    Pointer<HKEY> lpKey = calloc<HKEY>();
+    try {
+      int result = RegOpenKeyEx(hKey.value, lpKeyPath, 0, KEY_READ, lpKey);
+      return result == ERROR_SUCCESS ? lpKey.value : null;
+    } finally {
+      free(lpKey);
+    }
+  }
+
+  static int? openKey(RegHKey hKey, String keyPath) {
+    String? keyPathN = keyPath.normalizedRegKey;
+    if (keyPathN == null) return null;
+    final lpKeyPath = keyPathN.toNativeUtf16();
+
+    try {
+      return openKeyLp(hKey, lpKeyPath);
+    } finally {
+      free(lpKeyPath);
+    }
+  }
+
+  static List<String> listSubkeys(int key, [int? knownSize]) {
+    int actualSize = knownSize != null ? knownSize + 1 : MAX_PATH;
+    LPWSTR subkeyName = malloc<WCHAR>(actualSize).cast<Utf16>();
+    Pointer<Uint32> subkeyNameSize = malloc<Uint32>()..value = actualSize;
+
+    try {
+      return [...() sync* {for (int i = 0;;i++) {
+        int result = RegEnumKeyEx(key, i, subkeyName, subkeyNameSize, nullptr, nullptr, nullptr, nullptr);
+        if (result == ERROR_NO_MORE_ITEMS) break;  // All subkeys have been enumerated
+        else if (result != ERROR_SUCCESS) {
+          log("Failed to enumerate subkey. Error code: $result");
+          continue;
+        }
+        yield subkeyName.toDartString();
+      }}()];
+    }
+    finally {
+      free(subkeyNameSize);
+      free(subkeyName);
     }
   }
 }
