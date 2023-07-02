@@ -130,6 +130,7 @@ class WinReg {
           log("Failed to enumerate subkey. Error code: $result");
           continue;
         }
+        subkeyNameSize.value = actualSize;
         yield subkeyName.toDartString();
       }}()];
     }
