@@ -300,14 +300,14 @@ class NtIO {
   }
 
   /// Creates a directory inside the object manager
-  static bool openSection(String nativePath) {
+  static bool openSection(String nativePath, [bool logErrors = true]) {
     final objectName = nativePath.toUnicodeString();
     final objAttrs = _InitializeObjectAttributes(objectName, OBJ_CASE_INSENSITIVE, 0, nullptr);
     final lpHandle = calloc<IntPtr>();
     try {
       int result = _NtOpenSection(lpHandle, GENERIC_READ, objAttrs);
       if (result != 0) {
-        log("\x1B[91mNative directory cration failed: ${getMessageNt(result)}", level: 1000);
+        if (logErrors) log("\x1B[91mFailed to open section in object manager: ${getMessageNt(result)}", level: 1000);
         return false;
       }
       else {

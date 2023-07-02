@@ -102,6 +102,7 @@ class Env {
 
 class WSAPeriodicConnector {
   static const PERIODIC_CHECK_BOOT_DURATION = Duration(milliseconds: 500);
+  static const PERIODIC_CHECK_SLEEPING_DURATION = Duration(milliseconds: 750);
   static const PERIODIC_CHECK_CONNECT_DURATION = Duration(seconds: 5);
   static int lastStart = 0;
   static bool get shouldWaitStart => DateTime.now().millisecondsSinceEpoch - lastStart < 15000;
@@ -123,6 +124,12 @@ class WSAPeriodicConnector {
     if (!WSAStatus.isBooted) {
       timer.setDuration(PERIODIC_CHECK_BOOT_DURATION);
       ConnectionStatus newStatus = Env.WSA_INSTALLED ? ConnectionStatus.ARRESTED : WinVer.isWindows11OrGreater ? ConnectionStatus.MISSING : ConnectionStatus.UNSUPPORTED;
+      if (status != newStatus) GState.connectionStatus.$ = (status = newStatus).statusAlert;
+      return;
+    }
+    else if (!WSAStatus.isRunning) {
+      timer.setDuration(PERIODIC_CHECK_SLEEPING_DURATION);
+      ConnectionStatus newStatus = ConnectionStatus.ARRESTED;
       if (status != newStatus) GState.connectionStatus.$ = (status = newStatus).statusAlert;
       return;
     }

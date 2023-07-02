@@ -22,7 +22,7 @@ class WSAStatus {
     String? wsaVmUUID = WSA_VM_UUID;
     List<String> runningVMs = wsaVmUUID == null ? WinReg.listSubkeys(REG_VOLATILE_STORE_KEY!, 36) : [wsaVmUUID];
     for (String uuid in runningVMs) {
-      bool isSubsystemVMRunning = NtIO.openSection("\\Sessions\\1\\BaseNamedObjects\\WSL\\$uuid\\latte\\gralloc_0");
+      bool isSubsystemVMRunning = NtIO.openSection("\\Sessions\\1\\BaseNamedObjects\\WSL\\$uuid\\latte\\gralloc_0", false);
       if (isSubsystemVMRunning) {
         WSA_VM_UUID = uuid;
         return true;
