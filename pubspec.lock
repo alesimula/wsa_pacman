@@ -125,15 +125,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.2"
-  dyn_mouse_scroll:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: f1f690bd3588ee63ec05881cfc8ca2716fd1d596
-      url: "https://github.com/alesimula/dyn_mouse_scroll.git"
-    source: git
-    version: "1.0.8"
   fake_async:
     dependency: transitive
     description:
@@ -448,6 +439,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  smooth_scroll_multiplatform:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: dc7c8976fb7aa24254221c6a7921c885a9ab98b3
+      url: "https://github.com/alesimula/dyn_mouse_scroll.git"
+    source: git
+    version: "1.0.8"
   source_span:
     dependency: transitive
     description:
@@ -518,13 +518,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.2"
-  universal_io:
-    dependency: transitive
-    description:
-      name: universal_io
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.2.0"
   url_strategy:
     dependency: "direct main"
     description:

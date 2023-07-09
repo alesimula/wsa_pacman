@@ -3,7 +3,7 @@
 import 'dart:math' as math;
 import 'dart:ui' show window;
 
-import 'package:dyn_mouse_scroll/dyn_mouse_scroll.dart';
+import 'package:smooth_scroll_multiplatform/smooth_scroll_multiplatform.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';

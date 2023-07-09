@@ -1,4 +1,4 @@
-import 'package:dyn_mouse_scroll/dyn_mouse_scroll.dart';
+import 'package:smooth_scroll_multiplatform/smooth_scroll_multiplatform.dart';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';

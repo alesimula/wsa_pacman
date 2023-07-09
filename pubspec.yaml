@@ -26,7 +26,7 @@ dependencies:
       url: https://github.com/alesimula/bitsdojo_window.git
       path: bitsdojo_window
       ref: master
-  dyn_mouse_scroll:
+  smooth_scroll_multiplatform:
     git: https://github.com/alesimula/dyn_mouse_scroll.git
   flutter_acrylic: ^1.0.0+2
   url_strategy: ^0.2.0
