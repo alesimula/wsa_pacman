@@ -30,7 +30,7 @@
     "status_arrested": "مغلق",
     "status_arrested_desc": "النظام الفرعي غير مفعل",
     "status_offline": "غير متصل",
-    "status_offline_desc": "لا يمكن تكوين اتصال بالنظام الفرعي: ربما وضع المطور غير مفعل، أو تم تحديد مخرج خاطىء",
+    "status_offline_desc": "لا يمكن تكوين اتصال بالنظام الفرعي: ربما وضع المطور غير مفعل، أو تم تحديد بوابة خاطئة",
     "status_disconnected": "لا يمكن الاتصال",
     "status_disconnected_desc": "لا يمكن تكوين اتصال بالنظام الفرعي لسبب غير معروف",
     "status_connected": "متصل",
