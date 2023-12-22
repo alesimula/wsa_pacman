@@ -1,0 +1,108 @@
+{
+    "@@locale": "ua",
+    "@locale_desc": { "description": "Українська [ua_UA]"},
+    "locale_desc": "Українська",
+    "locale_system": "Як у системі",
+
+
+    "btn_boot": "Запустити",
+    "btn_auth": "Повторна аутентифікація",
+    "btn_dev_settings": "Налаштування розробника",
+    "btn_switch_on": "Ввімк.",
+    "btn_switch_off": "Вимк.",
+
+
+    "status_subtext_winver_10": "Windows 10",
+    "status_subtext_winver_older": "Застаріла версія Windows",
+
+
+    "status_unsupported": "Підсистема Windows під Android не підтримується",
+    "status_unsupported_desc": "Виявлено {windowsVersion} виявлено, а WSA не знайдено; ця програма залежить від WSA, який офіційно підтримується лише в Windows 11",
+    "status_unauthorized": "Неавторизований",
+    "status_unauthorized_desc": "Авторизацію для налагодження було відхилено або відкликано; натисніть першу кнопку, виберіть 'завжди дозволяти' і натисніть 'дозволити'; якщо не відображається спливаюче вікно, відкрийте налаштування розробника та вимкніть і знову ввімкніть 'налагодження USB'",
+    "status_missing": "Підсистема Windows під Android не встановлена",
+    "status_missing_desc": "Підсистема Windows під Android не знайдена: цей додаток залежить від WSA, встановіть підсистему Windows для Android (або Магазин додатків Amazon) з магазину Microsoft Store",
+    "status_unknown": "Підключення",
+    "status_unknown_desc": "Очікування з'єднання з підсистемою Windows під Android",
+    "status_starting": "Ініціалізація",
+    "status_starting_desc": "Підсистема Windows під Android запускається, зачекайте...",
+    "status_arrested": "Утримано",
+    "status_arrested_desc": "Підсистема Windows під Android вимкнена",
+    "status_offline": "Не в мережі",
+    "status_offline_desc": "Не вдалося встановити з'єднання з WSA: режим розробника та налагодження через USB вимкнено або вказано невірний порт",
+    "status_disconnected": "Від'єднаний",
+    "status_disconnected_desc": "З'єднання з підсистемою Windows під Android не вдалося встановити з невідомих причин",
+    "status_connected": "Підключено",
+    "status_connected_desc": "Успішно підключено до підсистеми Windows під Android, усі служби запущено",
+
+
+    "screen_wsa": "Менеджер пакетів для підсистеми Windows під Android",
+    "screen_settings": "Налаштування",
+
+
+    "wsa_manage": "Керування системою Android",
+    "wsa_manage_app": "Керування додатками",
+    "wsa_manage_settings": "Керування налаштуваннями системи",
+
+    
+    "settings_port": "Порт",
+    "settings_ip": "IP-адреса",
+    "settings_autostart": "Автоматично запускати підсистему Windows під Android перед установкою",
+    "settings_timeout": "Тайм-аут ({seconds} секунд)",
+    "settings_language": "Мова",
+    "settings_option_generic_system": "Як у системі",
+    "settings_option_generic_disabled": "Відключено",
+
+
+    "theme_mode": "Тема інтерфейсу",
+    "theme_mode_dark": "Темна",
+    "theme_mode_light": "Світла",
+    "theme_mica": "Прозорість вікна",
+    "theme_mica_full": "Повна",
+    "theme_mica_partial": "Часткова",
+    "theme_icon_adaptive": "Форма адаптивних значків",
+    "theme_icon_adaptive_squircle": "Квадратокружність",
+    "theme_icon_adaptive_circle": "Кружок",
+    "theme_icon_adaptive_rounded_square": "Округлений квадрат",
+
+
+    "installer_message": "Ви хочете встановити цей додаток?",
+    "installer_info_version": "Версія: {appVersion}",
+    "installer_info_version_change": "Версія: {appVersionOld} => {appVersionNew}",
+    "installer_info_package": "Ім'я пакету: {appPackage}",
+    "installer_installing": "Встановлення додатку {appTitle}...",
+    "installer_installed": "Додаток {appTitle} було успішно встановлено",
+    "installer_fail": "Додаток {appTitle} не було встановлено",
+    "installer_error_nomsg": "Встановлення не вдалося, але помилок не було виявлено",
+    "installer_error_timeout": "Встановлення перевищило час очікування, клієнт перестав чекати, але воно може тривати у фоновому режимі...",
+    "installer_warning_dirty": "Потрібно ручне очищення файлів у каталозі "{tempDir}"",
+    "installer_btn_starting": "Запуск...",
+    "installer_btn_loading": "Завантаження...",
+    "installer_btn_cancel": "Скасувати",
+    "installer_btn_install": "Встановити",
+    "installer_btn_reinstall": "Перевстановити",
+    "installer_btn_update": "Оновити",
+    "installer_btn_downgrade": "Знизити версію (не безпечно)",
+    "installer_btn_dismiss": "Відхилити",
+    "installer_btn_open": "Відкрити додаток",
+    "installer_btn_checkbox_shortcut": "Створити ярлик на робочому столі",
+
+
+    "android_permission_none": "Дозволи не потрібні",
+    "android_permission_admin": "Керувати пристроєм як адміністратор",
+    "android_permission_admin_brick": "Віддалено відключити або перезавантажити пристрій",
+    "android_permission_admin_lock": "Віддалено блокувати пристрій",
+    "android_permission_storage": "Файли та медіаконтент",
+    "android_permission_microphone": "Мікрофон",
+    "android_permission_camera": "Камера",
+    "android_permission_location": "Місцезнаходження",
+    "android_permission_phone": "Телефон",
+    "android_permission_call_log": "Журнал викликів",
+    "android_permission_sms": "Повідомлення",
+    "android_permission_contacts": "Контакти",
+    "android_permission_calendar": "Календар",
+    "android_permission_activity_recognition": "Фізична активність",
+    "android_permission_sensors": "Датчики пристрою",
+    "android_permission_sensors_body": "Датчики на тілі",
+    "android_permission_nearby_devices": "Пристрої поблизу"
+}
